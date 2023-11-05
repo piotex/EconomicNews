@@ -26,7 +26,7 @@ def get_url_and_header(driver_in, i):
     logo = driver_in.find_element(by=By.XPATH, value=x_path)
     for attr in logo.get_property('attributes'):
         attrs_list.append([attr['name'], attr['value']])
-    tmp_url_1 = f"https://www.bankier.pl/{get_val_from_attributes_list('href', attrs_list)}"
+    tmp_url_1 = f"https://www.bankier.pl{get_val_from_attributes_list('href', attrs_list)}"
     tmp_header_1 = get_val_from_attributes_list('title', attrs_list)
     return [tmp_url_1, tmp_header_1]
 
