@@ -1,3 +1,4 @@
+import dataclasses
 import json
 from datetime import datetime, timedelta
 
@@ -17,10 +18,17 @@ for elem in my_class_objects:
     try:
         formatted_date = datetime.fromisoformat(elem.creation_time)
         if formatted_date.date() >= yesterday.date():
-            res.append(my_class_objects)
+            res.append(elem)
     except Exception as exxx:
         pass
 
+dict_of_model_news = {}
+for obj in res:
+    if obj.url not in dict_of_model_news:
+        dict_of_model_news[obj.url] = obj
+res = list(dict_of_model_news.values())
+
 file_path = "important_files/2_filter_by_creation_time.json"
+res = [dataclasses.asdict(news) for news in res]
 with open(file_path, "w") as json_file:
     json.dump(res, json_file, indent=4)
