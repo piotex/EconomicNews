@@ -3,3 +3,9 @@ pip install -r requirements.txt
 https://betterprogramming.pub/how-to-use-selenium-to-simulate-manual-actions-c00aecbfbd45
 
 https://adamtheautomator.com/install-google-chrome-for-ubuntu/
+
+sudo apt install espeak
+
+pip install edge-tts
+edge-tts --text "Minister Izraela straszy? Użycie bomby jądrowej w Gazie jest "opcją"" --write-media hello.mp3 --write-subtitles hello.vtt --voice pl-PL-ZofiaNeural
+
