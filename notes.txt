@@ -9,3 +9,5 @@ sudo apt install espeak
 pip install edge-tts
 edge-tts --text "Minister Izraela straszy? Użycie bomby jądrowej w Gazie jest "opcją"" --write-media hello.mp3 --write-subtitles hello.vtt --voice pl-PL-ZofiaNeural
 
+https://www.youtube.com/watch?v=6BiaWTE6f00
+https://www.youtube.com/watch?v=Q2d1tYvTjRw
