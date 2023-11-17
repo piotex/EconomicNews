@@ -3,3 +3,5 @@ selenium~=4.14.0
 chromedriver_autoinstaller
 pytdm
 pyttsx3~=2.90
+edge-tts
+pydub

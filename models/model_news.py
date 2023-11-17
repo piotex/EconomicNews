@@ -11,6 +11,8 @@ class model_news:
     parser_quick_info: str = ""
     comments_number: int = -1
     screen_path: str = ""
+    audio_header_path: str = ""
+    audio_quick_info_path: str = ""
 
     # unit_price: float
     # quantity_on_hand: int = 0

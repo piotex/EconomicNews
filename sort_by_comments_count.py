@@ -9,6 +9,11 @@ with open(path_with_urls, "r") as json_file:
     data_from_json = json.load(json_file)
 my_class_objects = [model_news(**item) for item in data_from_json]
 
+for elem in my_class_objects:
+    elem.header = elem.header.replace("\"", "")
+    elem.quick_info = elem.quick_info.replace("\"", "")
+    elem.quick_info = elem.quick_info.replace("...", "")
+
 my_class_objects = sorted(my_class_objects, key=lambda obj: obj.comments_number, reverse=True)
 
 news_dict_list = [dataclasses.asdict(news) for news in my_class_objects]
