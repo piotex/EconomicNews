@@ -15,6 +15,8 @@ https://www.youtube.com/watch?v=Q2d1tYvTjRw
 
 
 =============================================================
-1) there is no need to accept cookies !
+1) there is no need to accept cookies - only for screenshots
+2) 00:02:30 wait for first page to load
+
 
 =============================================================

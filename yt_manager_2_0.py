@@ -24,10 +24,12 @@ def wait_until_elem_is_visible(driver_loc: WebDriver, x_path: str, time_out_int_
 def accept_cookies(driver_loc: WebDriver) -> None:
     yt_url = "https://www.bankier.pl/"
     driver_loc.get(yt_url)
-    for i in range(2, 5, 1):
+    time.sleep(10)
+    for i in [2, 4]:
         x_path = f"/html/body/div[{i}]/div[2]/div/div/div[2]/div/div/button"
         try:
             wait_until_elem_is_visible(driver_loc, x_path, 30)
+            driver_loc.find_element(By.XPATH, x_path).click()
             break
         except Exception as eeee:
             pass
@@ -39,11 +41,18 @@ def scroll_to_bottom(driver: WebDriver):
         driver.execute_script(f"window.scrollTo(0, {i * 1000})")
         time.sleep(0.5)
 
+def scroll_to_xxx(driver: WebDriver, xxx: int):
+    driver.execute_script(f"window.scrollTo(0, {xxx})")
+
 
 def get_init_driver() -> WebDriver:
+    y = 960
+    x = y * 9 / 16
+
     chromedriver_autoinstaller.install()
     driver = webdriver.Chrome()
     time.sleep(0.5)
+    driver.set_window_size(x, y)
     accept_cookies(driver)
     return driver
 

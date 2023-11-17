@@ -46,17 +46,20 @@ my_class_objects = [model_news(**item) for item in data_from_json]
 driver = get_init_driver()
 time.sleep(1)
 
-i = 0
+i = 1
 for elem in my_class_objects:
     try:
         driver.get(elem.url)
         time.sleep(1)
 
-        tmp_comment_count = get_comment_count(driver)
-        tmp_quick_desc = get_quick_desc(driver)
+        elem.comments_number = get_comment_count(driver)
+        elem.quick_info = get_quick_desc(driver)
 
-        elem.comments_number = tmp_comment_count
-        elem.quick_info = tmp_quick_desc
+        img_path = f"screen_shots/{i}.png"
+        scroll_to_xxx(driver, 400)
+        driver.save_screenshot(img_path)
+        elem.screen_path = img_path
+        i += 1
     except Exception as exxx:
         elem.comments_number = i * (-1)
         pass
