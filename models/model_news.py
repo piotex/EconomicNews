@@ -10,6 +10,7 @@ class model_news:
     parser_header: str = ""
     parser_quick_info: str = ""
     comments_number: int = -1
+    screen_path: str = ""
 
     # unit_price: float
     # quantity_on_hand: int = 0
