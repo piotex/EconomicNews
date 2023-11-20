@@ -46,12 +46,22 @@ def scroll_to_xxx(driver: WebDriver, xxx: int):
 
 
 def get_init_driver() -> WebDriver:
-    y = 960
-    x = y * 9 / 16
-
     chromedriver_autoinstaller.install()
     driver = webdriver.Chrome()
     time.sleep(0.5)
+
+    # driver.maximize_window()
+    driver.set_window_position(0,0)
+
+    # w_size = driver.get_window_size()
+    # cur_x = w_size["height"]
+    # cur_y = w_size["width"]
+    # x = int(cur_y * (1080+11) / (1920+124))
+
+    x = 500
+    y = 820 + 1000
+    # y = int(x * 1920 / 1080)
+
     driver.set_window_size(x, y)
     accept_cookies(driver)
     return driver

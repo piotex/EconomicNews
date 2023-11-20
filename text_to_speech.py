@@ -1,17 +1,23 @@
-import os
-import subprocess
-import time
 import dataclasses
 import json
 from models.model_news import model_news
-from pydub import AudioSegment
 import asyncio
 import edge_tts
-##########################################
 
-async def edge_tts_generate_to_file(text, voice, file) -> None:
+async def edge_tts_generate_to_file(text, voice, path_mp3, path_vvt) -> None:
     communicate = edge_tts.Communicate(text, voice, rate="+30%")
-    await communicate.save(file)
+    await communicate.save(path_mp3)
+
+    submaker = edge_tts.SubMaker()
+    with open(out_file_mp3, "wb") as file:
+        async for chunk in communicate.stream():
+            if chunk["type"] == "audio":
+                file.write(chunk["data"])
+            elif chunk["type"] == "WordBoundary":
+                submaker.create_sub((chunk["offset"], chunk["duration"]), chunk["text"])
+
+    with open(path_vvt, "w", encoding="utf-8") as file:
+        file.write(submaker.generate_subs())
 
 
 path_in_data = "important_files/4_sort_by_comments_count.json"
@@ -44,7 +50,7 @@ for elem in my_class_objects:
 
     loop = asyncio.get_event_loop_policy().get_event_loop()
     try:
-        loop.run_until_complete(edge_tts_generate_to_file(text_data, voice_model, out_file_mp3))
+        loop.run_until_complete(edge_tts_generate_to_file(text_data, voice_model, out_file_mp3, out_file_vvt))
     finally:
         loop.close()
 

@@ -166,5 +166,6 @@ screen_shots/*
 audio/*
 test.py
 google-chrome-stable_current_amd64.deb
-
+movies/*
+screen_shots_tmp/*
 

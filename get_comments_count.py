@@ -23,7 +23,8 @@ def get_comment_count(driver_in):
             return res
         except Exception as exx:
             pass
-    return -1
+    raise Exception("==== comment_count info not found ====")
+
 
 
 def get_quick_desc(driver_in):
@@ -34,7 +35,7 @@ def get_quick_desc(driver_in):
             return kom_text
         except Exception as exx:
             pass
-    return -1
+    raise Exception("==== Quick info not found ====")
 
 
 path_with_urls = "important_files/2_filter_by_creation_time.json"
@@ -63,6 +64,8 @@ for elem in my_class_objects:
     except Exception as exxx:
         elem.comments_number = i * (-1)
         pass
+
+    break
 
 news_dict_list = [dataclasses.asdict(news) for news in my_class_objects]
 with open(path_3_get_comments_count, "w") as json_file:

@@ -5,3 +5,6 @@ pytdm
 pyttsx3~=2.90
 edge-tts
 pydub
+opencv-python
+Pillow
+ffpyplayer
