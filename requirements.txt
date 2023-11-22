@@ -8,3 +8,5 @@ pydub
 opencv-python
 Pillow
 ffpyplayer
+scipy
+moviepy

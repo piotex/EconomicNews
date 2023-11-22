@@ -12,7 +12,7 @@ edge-tts --text "Minister Izraela straszy? Użycie bomby jądrowej w Gazie jest 
 https://www.youtube.com/watch?v=6BiaWTE6f00
 https://www.youtube.com/watch?v=Q2d1tYvTjRw
 
-
+sudo apt-get install imagemagick
 
 =============================================================
 1) there is no need to accept cookies - only for screenshots
@@ -20,3 +20,5 @@ https://www.youtube.com/watch?v=Q2d1tYvTjRw
 
 
 =============================================================
+
+https://github.com/JotJunior/PHP-Boleto-ZF2/blob/master/public/assets/fonts/arial.ttf
