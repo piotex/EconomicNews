@@ -7,6 +7,13 @@ sciezka_wyjsciowa = "movies/fimal.mp4"
 clip_gif = VideoFileClip(sciezka_gif)
 audio = AudioFileClip(sciezka_muzyki)
 
-film_z_muzyka = clip_gif.set_audio(audio)
+clip_gif = VideoFileClip(sciezka_gif)
+audio = AudioFileClip(sciezka_muzyki)
+
+wspolczynnik_przyspieszenia = clip_gif.duration / audio.duration
+
+przyspieszony_clip_gif = clip_gif.speedx(factor=wspolczynnik_przyspieszenia)
+
+film_z_muzyka = przyspieszony_clip_gif.set_audio(audio)
 
 film_z_muzyka.write_videofile(sciezka_wyjsciowa, codec='libx264', audio_codec='aac')
