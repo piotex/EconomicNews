@@ -5,7 +5,7 @@ video_fps = 30
 max_str_len = 20
 
 def draw_text(resized_image_in, text):
-    thickness = 1
+    thickness = 2
     draw = ImageDraw.Draw(resized_image_in)
     font_size = 44
     y_offset = resized_image_in.height // 2 + 250
@@ -101,6 +101,14 @@ def get_start_stop_text_tab(vvt_path):
 
     return res
 
+def update_time_quicker_subtitles(start_stop_text_tab):
+    d_klatka = 15
+    start_stop_text_tab[0][1] -= d_klatka
+    for i in range(1, len(start_stop_text_tab)):
+        start_stop_text_tab[i][0] -= d_klatka
+        start_stop_text_tab[i][1] -= d_klatka
+    return start_stop_text_tab
+
 
 def generate_gif_from_img_vvt(input_image_path, vvt_path, out_path):
     start_stop_text_tab = get_start_stop_text_tab(vvt_path)
@@ -112,6 +120,7 @@ def generate_gif_from_img_vvt(input_image_path, vvt_path, out_path):
     zoom_levels = np.linspace(1.5, 1, ilosc_klatek)
 
     zoomed_images = []
+    start_stop_text_tab = update_time_quicker_subtitles(start_stop_text_tab)
     for i in range(0, ilosc_klatek, 1):
 
         zoom_level = zoom_levels[i]
