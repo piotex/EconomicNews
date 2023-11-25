@@ -1,6 +1,6 @@
 import dataclasses
 import json
-from models.model_news import model_news
+from models.model_news import NewsModel
 from yt_manager_2_0 import *
 
 
@@ -31,30 +31,41 @@ def get_url_and_header(driver_in, i):
     return [tmp_url_1, tmp_header_1]
 
 
-path_with_urls = "bankier_url/bakier_url_format_1.txt"
-path_1_get_raw_info = "important_files/1_get_raw_info.json"
-list_of_model_news = []
-driver = get_init_driver()
-time.sleep(1)
-
-with open(path_with_urls, 'r') as file:
-    lines = file.readlines()
-
-for url in lines:
-    driver.get(url)
+def get_raw_info():
+    path_with_urls = "../data_files/bankier_url/bakier_url_format_1.txt"
+    path_1_get_raw_info = "../data_files/important_files/1_get_raw_info.json"
+    list_of_model_news = []
+    driver = get_init_driver()
     time.sleep(1)
-    for i in range(2, 23, 1):
-        try:
-            tmp_creation_time = get_creation_time(driver, i)
-            tmp_url = get_url_and_header(driver, i)[0]
-            tmp_header = get_url_and_header(driver, i)[1]
 
-            model = model_news(url=tmp_url, header=tmp_header, creation_time=tmp_creation_time)
-            list_of_model_news.append(model)
-        except Exception as exxx:
-            list_of_model_news.append(model_news(comments_number=i*(-1)))
-            pass
+    with open(path_with_urls, 'r') as file:
+        lines = file.readlines()
 
-news_dict_list = [dataclasses.asdict(news) for news in list_of_model_news]
-with open(path_1_get_raw_info, "w") as json_file:
-    json.dump(news_dict_list, json_file, indent=4)
+    index = 0
+    for url in lines:
+        driver.get(url)
+        time.sleep(1)
+        for i in range(2, 23, 1):
+            index += 1
+            try:
+                tmp_creation_time = get_creation_time(driver, i)
+                tmp_url = get_url_and_header(driver, i)[0]
+                tmp_header = get_url_and_header(driver, i)[1]
+
+                model = NewsModel(id=index, url=tmp_url, header=tmp_header, creation_time=tmp_creation_time)
+                list_of_model_news.append(model)
+            except Exception as exxx:
+                if tmp_creation_time != "" or tmp_url != "" or tmp_header != "":
+                    model = NewsModel(id=index, url=tmp_url, header=tmp_header, creation_time=tmp_creation_time)
+                    list_of_model_news.append(model)
+                pass
+
+    news_dict_list = [dataclasses.asdict(news) for news in list_of_model_news]
+    with open(path_1_get_raw_info, "w") as json_file:
+        json.dump(news_dict_list, json_file, indent=4)
+
+    driver.close()
+
+
+if __name__ == "__main__":
+    get_raw_info()

@@ -1,10 +1,16 @@
+import dataclasses
+import json
+
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
+
+from src.models.model_news import NewsModel
 
 video_fps = 30
 max_str_len = 20
 
 def draw_text(resized_image_in, text):
+    my_font = "../data_files/arial.ttf"
     thickness = 2
     draw = ImageDraw.Draw(resized_image_in)
     font_size = 44
@@ -12,15 +18,15 @@ def draw_text(resized_image_in, text):
     x_offset = resized_image_in.width // 2
 
     draw.text((x_offset - thickness, y_offset - thickness), text, fill="black",
-              font=ImageFont.truetype("arial.ttf", font_size), anchor="mm", align="center")
+              font=ImageFont.truetype(my_font, font_size), anchor="mm", align="center")
     draw.text((x_offset + thickness, y_offset - thickness), text, fill="black",
-              font=ImageFont.truetype("arial.ttf", font_size), anchor="mm", align="center")
+              font=ImageFont.truetype(my_font, font_size), anchor="mm", align="center")
     draw.text((x_offset - thickness, y_offset + thickness), text, fill="black",
-              font=ImageFont.truetype("arial.ttf", font_size), anchor="mm", align="center")
+              font=ImageFont.truetype(my_font, font_size), anchor="mm", align="center")
     draw.text((x_offset + thickness, y_offset + thickness), text, fill="black",
-              font=ImageFont.truetype("arial.ttf", font_size), anchor="mm", align="center")
+              font=ImageFont.truetype(my_font, font_size), anchor="mm", align="center")
 
-    draw.text((x_offset, y_offset), text, fill="white", font=ImageFont.truetype("arial.ttf", font_size), anchor="mm",
+    draw.text((x_offset, y_offset), text, fill="white", font=ImageFont.truetype(my_font, font_size), anchor="mm",
               align="center")
 
 
@@ -144,7 +150,21 @@ def generate_gif_from_img_vvt(input_image_path, vvt_path, out_path):
     # , loop=0
 
 
-image_path = 'screen_shots/1.png'
-vvt_pathh = 'audio/1.quick_info.vvt'
-out_pathh = "movies/animacja_z_napisem.gif"
-generate_gif_from_img_vvt(image_path, vvt_pathh, out_pathh)
+def gif_builder():
+    path_in_data = "../data_files/important_files/5_text_to_speech.json"
+    path_out_data = "../data_files/important_files/6_gif_builder.json"
+    with open(path_in_data, "r") as json_file:
+        data_from_json = json.load(json_file)
+    my_class_objects = [NewsModel(**item) for item in data_from_json]
+
+    for elem in my_class_objects:
+        elem.video_quick_info_gif_path = f"../data_files/gifs/{elem.id}.gif_builder.gif"
+        generate_gif_from_img_vvt(elem.screen_path, elem.audio_quick_info_vvt_path, elem.video_quick_info_gif_path)
+
+    news_dict_list = [dataclasses.asdict(news) for news in my_class_objects]
+    with open(path_out_data, "w") as json_file:
+        json.dump(news_dict_list, json_file, indent=4)
+
+
+if __name__ == "__main__":
+    gif_builder()

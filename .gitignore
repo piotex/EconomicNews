@@ -159,13 +159,6 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 
 .idea/
-bankier_url/*
 tmp_materials/*
-important_files/*
-screen_shots/*
-audio/*
-test.py
 google-chrome-stable_current_amd64.deb
-movies/*
-screen_shots_tmp/*
 data_files.backup.25.11.2023/

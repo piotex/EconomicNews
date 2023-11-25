@@ -1,8 +1,7 @@
 import dataclasses
 import json
 import re
-
-from models.model_news import model_news
+from models.model_news import NewsModel
 from yt_manager_2_0 import *
 
 
@@ -38,35 +37,42 @@ def get_quick_desc(driver_in):
     raise Exception("==== Quick info not found ====")
 
 
-path_with_urls = "important_files/2_filter_by_creation_time.json"
-path_3_get_comments_count = "important_files/3_get_comments_count.json"
 
-with open(path_with_urls, "r") as json_file:
-    data_from_json = json.load(json_file)
-my_class_objects = [model_news(**item) for item in data_from_json]
-driver = get_init_driver()
-time.sleep(1)
 
-i = 1
-for elem in my_class_objects:
-    try:
-        driver.get(elem.url)
-        time.sleep(1)
+def get_comments_count():
+    path_with_urls = "../data_files/important_files/2_filter_by_creation_time.json"
+    path_3_get_comments_count = "../data_files/important_files/3_get_comments_count.json"
 
-        elem.comments_number = get_comment_count(driver)
-        elem.quick_info = get_quick_desc(driver)
+    with open(path_with_urls, "r") as json_file:
+        data_from_json = json.load(json_file)
+    my_class_objects = [NewsModel(**item) for item in data_from_json]
 
-        img_path = f"screen_shots/{i}.png"
-        scroll_to_xxx(driver, 400)
-        driver.save_screenshot(img_path)
-        elem.screen_path = img_path
-        i += 1
-    except Exception as exxx:
-        elem.comments_number = i * (-1)
-        pass
+    driver = get_init_driver()
+    time.sleep(1)
+    for elem in my_class_objects:
+        try:
+            driver.get(elem.url)
+            # time.sleep(1)
+            scroll_to_xxx(driver, 600)
 
-    break
+            elem.quick_info = get_quick_desc(driver)
+            elem.comments_number = get_comment_count(driver)
 
-news_dict_list = [dataclasses.asdict(news) for news in my_class_objects]
-with open(path_3_get_comments_count, "w") as json_file:
-    json.dump(news_dict_list, json_file, indent=4)
+            img_path = f"../data_files/screen_shots/{elem.id}.png"
+            driver.save_screenshot(img_path)
+            elem.screen_path = img_path
+        except Exception as exxx:
+            print("=== error ===")
+            print(exxx)
+            print(elem)
+            print("=== error ===")
+            pass
+
+
+    news_dict_list = [dataclasses.asdict(news) for news in my_class_objects]
+    with open(path_3_get_comments_count, "w") as json_file:
+        json.dump(news_dict_list, json_file, indent=4)
+
+
+if __name__ == "__main__":
+    get_comments_count()
