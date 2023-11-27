@@ -8,6 +8,7 @@ from src.sort_by_comments_count import sort_by_comments_count
 from src.text_to_speech import text_to_speech
 from src.video_builder import video_builder
 from src.video_merge import video_merge
+from src.yt_publisher import yt_publisher
 
 
 def main():
@@ -20,6 +21,7 @@ def main():
     gif_builder()
     video_builder()
     video_merge()
+    yt_publisher()
 
 
 if __name__ == "__main__":

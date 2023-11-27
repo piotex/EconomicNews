@@ -9,7 +9,8 @@ def init_folders():
         'gifs',
         'important_files',
         'movies',
-        'screen_shots'
+        'screen_shots',
+        'logs'
     ]
     for folder in folders:
         sciezka_folderu = os.path.join(data_files, folder)
