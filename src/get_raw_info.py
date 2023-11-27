@@ -37,6 +37,8 @@ def get_raw_info():
     list_of_model_news = []
     driver = get_init_driver()
     time.sleep(1)
+    accept_cookies_bankier(driver)
+    time.sleep(1)
 
     with open(path_with_urls, 'r') as file:
         lines = file.readlines()

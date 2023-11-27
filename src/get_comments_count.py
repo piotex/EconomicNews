@@ -49,6 +49,8 @@ def get_comments_count():
 
     driver = get_init_driver()
     time.sleep(1)
+    accept_cookies_bankier(driver)
+    time.sleep(1)
     for elem in my_class_objects:
         try:
             driver.get(elem.url)

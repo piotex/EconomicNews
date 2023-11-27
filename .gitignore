@@ -162,3 +162,10 @@ cython_debug/
 tmp_materials/*
 google-chrome-stable_current_amd64.deb
 data_files.backup.25.11.2023/
+usr_pwd.py
+
+data_files/audio/
+data_files/gifs/
+data_files/important_files/
+data_files/movies/
+data_files/screen_shots/

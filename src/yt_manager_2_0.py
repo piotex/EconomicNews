@@ -21,7 +21,7 @@ def wait_until_elem_is_visible(driver_loc: WebDriver, x_path: str, time_out_int_
             pass
 
 
-def accept_cookies(driver_loc: WebDriver) -> None:
+def accept_cookies_bankier(driver_loc: WebDriver) -> None:
     yt_url = "https://www.bankier.pl/"
     driver_loc.get(yt_url)
     time.sleep(10)
@@ -34,6 +34,12 @@ def accept_cookies(driver_loc: WebDriver) -> None:
         except Exception as eeee:
             pass
         driver_loc.find_element(By.XPATH, x_path).click()
+
+def accept_cookies_youtube(driver_loc: WebDriver) -> None:
+    yt_url = "https://youtube.com"
+    x_path = "//*[@id=\"content\"]/div[2]/div[6]/div[1]/ytd-button-renderer[2]/yt-button-shape/button/yt-touch-feedback-shape/div/div[2]"
+    driver_loc.get(yt_url)
+    driver_loc.find_element(By.XPATH, x_path).click()
 
 
 def scroll_to_bottom(driver: WebDriver):
@@ -63,7 +69,7 @@ def get_init_driver() -> WebDriver:
     # y = int(x * 1920 / 1080)
 
     driver.set_window_size(x, y)
-    accept_cookies(driver)
+    # accept_cookies(driver)
     return driver
 
 
