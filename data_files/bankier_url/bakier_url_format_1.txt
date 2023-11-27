@@ -1,2 +1,6 @@
+https://www.bankier.pl/gospodarka/analizy
+https://www.bankier.pl/gospodarka/wiadomosci
+https://www.bankier.pl/surowce/wiadomosci
 https://www.bankier.pl/gielda/wiadomosci/wywiady-ze-spolek
-https://www.bankier.pl/rynki/wiadomosci
+https://www.bankier.pl/waluty/wiadomosci
+https://bankier.pl/rynki/wiadomosci
