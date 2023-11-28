@@ -1,9 +1,7 @@
 import dataclasses
 import json
-
 from moviepy.editor import VideoFileClip, AudioFileClip
-
-from src.models.model_news import NewsModel
+from models.model_news import NewsModel
 
 
 def video_builder():

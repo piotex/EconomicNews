@@ -1,10 +1,8 @@
 import dataclasses
 import json
-
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
-
-from src.models.model_news import NewsModel
+from models.model_news import NewsModel
 
 video_fps = 30
 max_str_len = 20
@@ -147,6 +145,8 @@ def generate_gif_from_img_vvt(input_image_path, vvt_path, out_path):
         zoomed_images.append(resized_image)
 
     zoomed_images[0].save(out_path, save_all=True, append_images=zoomed_images, optimize=False, duration=total_time_s)
+    del zoomed_images
+    zoomed_images = None
     # , loop=0
 
 
@@ -157,7 +157,10 @@ def gif_builder():
         data_from_json = json.load(json_file)
     my_class_objects = [NewsModel(**item) for item in data_from_json]
 
+    i = 0
     for elem in my_class_objects:
+        print(f"gif_builder: {i}")
+        i += 1
         elem.video_quick_info_gif_path = f"../data_files/gifs/{elem.id}.gif_builder.gif"
         generate_gif_from_img_vvt(elem.screen_path, elem.audio_quick_info_vvt_path, elem.video_quick_info_gif_path)
 

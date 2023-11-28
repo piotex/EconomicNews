@@ -1,7 +1,5 @@
 import json
-import time
-
-from src.models.model_news import NewsModel
+from models.model_news import NewsModel
 from yt_manager_2_0 import *
 from usr_pwd import *
 import logging
