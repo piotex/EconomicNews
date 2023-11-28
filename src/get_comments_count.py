@@ -1,6 +1,7 @@
 import dataclasses
 import json
 import re
+from data_files.screen_dimensions import width, height
 from models.model_news import NewsModel
 from yt_manager_2_0 import *
 
@@ -25,7 +26,6 @@ def get_comment_count(driver_in):
     raise Exception("==== comment_count info not found ====")
 
 
-
 def get_quick_desc(driver_in):
     for j in range(1, 4, 1):
         try:
@@ -35,8 +35,6 @@ def get_quick_desc(driver_in):
         except Exception as exx:
             pass
     raise Exception("==== Quick info not found ====")
-
-
 
 
 def get_comments_count():
@@ -51,10 +49,14 @@ def get_comments_count():
     time.sleep(1)
     accept_cookies_bankier(driver)
     time.sleep(1)
+
+    driver.set_window_size(width, height)
+    driver.set_window_position(0, 0)
+
     for elem in my_class_objects:
         try:
             driver.get(elem.url)
-            # time.sleep(1)
+            time.sleep(1)
             scroll_to_xxx(driver, 600)
 
             elem.quick_info = get_quick_desc(driver)
@@ -69,7 +71,6 @@ def get_comments_count():
             print(elem)
             print("=== error ===")
             pass
-
 
     news_dict_list = [dataclasses.asdict(news) for news in my_class_objects]
     with open(path_3_get_comments_count, "w") as json_file:

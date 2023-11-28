@@ -21,7 +21,7 @@ def main():
     gif_builder()
     video_builder()
     video_merge()
-    yt_publisher()
+    # yt_publisher()
 
 
 if __name__ == "__main__":

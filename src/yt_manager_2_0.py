@@ -55,14 +55,9 @@ def get_init_driver() -> WebDriver:
     chromedriver_autoinstaller.install()
     driver = webdriver.Chrome()
     time.sleep(0.5)
-
-    # driver.maximize_window()
-    driver.set_window_position(0,0)
-
-    x = 500
-    y = 820 + 1000
-
-    driver.set_window_size(x, y)
+    driver.maximize_window()
+    # driver.set_window_position(0,0)
+    # driver.set_window_size(x, y)
     return driver
 
 
