@@ -1,7 +1,6 @@
 import dataclasses
 import json
 import re
-from data_files.screen_dimensions import width, height
 from models.model_news import NewsModel
 from yt_manager_2_0 import *
 
@@ -50,6 +49,11 @@ def get_comments_count():
     accept_cookies_bankier(driver)
     time.sleep(1)
 
+    path_to_usr_pwd = "../data_files/screen_dimensions.txt"
+    with open(path_to_usr_pwd, "r") as file:
+        res = file.readlines()
+        width = int(res[0].strip())
+        height = int(res[1].strip())
     driver.set_window_size(width, height)
     driver.set_window_position(0, 0)
 

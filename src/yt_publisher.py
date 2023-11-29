@@ -1,11 +1,9 @@
 import json
 from models.model_news import NewsModel
 from yt_manager_2_0 import *
-from usr_pwd import *
 import logging
 import os
 from datetime import date
-
 
 def yt_publisher():
     file_log_name = f'../data_files/logs/log-{str(date.today())}.log'
@@ -19,6 +17,12 @@ def yt_publisher():
     with open(path_in_data, "r") as json_file:
         data_from_json = json.load(json_file)
     my_class_objects = [NewsModel(**item) for item in data_from_json]
+
+    path_to_usr_pwd = "../../usr_pwd.txt"
+    with open(path_to_usr_pwd, "r") as file:
+        res = file.readlines()
+        usr = res[0].strip()
+        pwd = res[1].strip()
 
     driver = get_init_driver()
     time.sleep(1)

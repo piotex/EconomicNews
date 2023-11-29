@@ -71,12 +71,14 @@ def login(driver_loc: WebDriver, usr: str, pwd: str) -> None:
     x_path = "/html/body/div[1]/div[1]/div[2]/div/c-wiz/div/div[2]/div/div[1]/div/form/span/section/div/div/div[1]/div/div[1]/div/div[1]/input"
     driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(usr)
     logging.debug('login() - inserted user name')
+    time.sleep(1)
 
     x_path = "/html/body/div[1]/div[1]/div[2]/div/c-wiz/div/div[2]/div/div[2]/div/div[1]/div/div/button/span"
     driver_loc.find_element(By.XPATH, x_path).click()
     logging.debug('login() - clicked NEXT')
-    time.sleep(5)
+    time.sleep(2)
 
+    x_path = "/html/body/div[1]/div[1]/div[2]/div/c-wiz/div/div[2]/div/div[1]/div/form/span/section[2]/div/div/div[1]/div[1]/div/div/div/div/div[1]/div/div[1]/input"
     x_path = "/html/body/div[1]/div[1]/div[2]/div/c-wiz/div/div[2]/div/div[1]/div/form/span/section[2]/div/div/div[1]/div[1]/div/div/div/div/div[1]/div/div[1]/input"
     driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(pwd)
     logging.debug('login() - inserted password')
