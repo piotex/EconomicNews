@@ -5,16 +5,14 @@ from PIL import Image, ImageDraw, ImageFont
 from models.model_news import NewsModel
 
 video_fps = 30
-max_str_len = 20
+max_str_len = 25
+font_size = 44
+font_size = 70
+thickness = 3
+my_font = "../data_files/arial.ttf"
 
-def draw_text(resized_image_in, text):
-    my_font = "../data_files/arial.ttf"
-    thickness = 2
-    draw = ImageDraw.Draw(resized_image_in)
-    font_size = 44
-    y_offset = resized_image_in.height // 2 + 250
-    x_offset = resized_image_in.width // 2
 
+def draw_text_line(draw, x_offset, y_offset, text):
     draw.text((x_offset - thickness, y_offset - thickness), text, fill="black",
               font=ImageFont.truetype(my_font, font_size), anchor="mm", align="center")
     draw.text((x_offset + thickness, y_offset - thickness), text, fill="black",
@@ -26,6 +24,18 @@ def draw_text(resized_image_in, text):
 
     draw.text((x_offset, y_offset), text, fill="white", font=ImageFont.truetype(my_font, font_size), anchor="mm",
               align="center")
+
+def draw_text(resized_image_in, text: str):
+    draw = ImageDraw.Draw(resized_image_in)
+    y_offset = resized_image_in.height // 2 + 450
+    x_offset = resized_image_in.width // 2
+
+    text_tab = text.split("\n")
+    i = 0
+    for data in text_tab:
+        draw_text_line(draw, x_offset, y_offset+(i*font_size), data)
+        i += 1
+
 
 
 def get_klatka_start(data: str):
@@ -48,7 +58,7 @@ def get_klatka_end(data: str):
     return klatka_end
 
 
-def get_start_stop_text_tab(vvt_path):
+def get_start_stop_text_tab(vvt_path, raw_text):
     time_tab = []
     data_tab = []
     raw_data = []
@@ -69,17 +79,16 @@ def get_start_stop_text_tab(vvt_path):
                 i += 1
             data_tab.append(tmp_str)
 
-    ###########################################################
     res = []                            # [start | stop | text]
-    for i in range(len(time_tab)):
-        row_time = time_tab[i]
-
-        start = get_klatka_start(row_time)
-        end = get_klatka_end(row_time)
-        row_text = data_tab[i]
+    end_tmppp = get_klatka_end(time_tab[-1])
+    data_tab = raw_text.split(". ")
+    chunk_tmppp = end_tmppp // len(data_tab)
+    for i in range(len(data_tab)):
+        start = chunk_tmppp * i + 0
+        stop = chunk_tmppp * i + chunk_tmppp - 1
 
         row_text_tab = []
-        row_text_split = row_text.split()
+        row_text_split = data_tab[i].split()
         tmp_str = ""
         for j in range(len(row_text_split)-1):
             tmp_str += row_text_split[j] + " "
@@ -93,17 +102,50 @@ def get_start_stop_text_tab(vvt_path):
             row_text_tab.append(last_word)
         else:
             row_text_tab.append(tmp_str + " " + last_word)
-
-        #####################
-
-        step = (end - start) // len(row_text_tab)
-        for row in row_text_tab:
-            tmp_end = start + step
-            res.append([start, tmp_end, row])
-            start = tmp_end + 1
-        res[-1][1] = end-1
-
+        tmp_str_2 = '\n'.join(row_text_tab)
+        res.append([start, stop, tmp_str_2])
     return res
+    ###########################################################
+    # res = []                            # [start | stop | text]
+    # for i in range(len(time_tab)):
+    #     row_time = time_tab[i]
+    #
+    #     start = get_klatka_start(row_time)
+    #     end = get_klatka_end(row_time)
+    #     row_text = data_tab[i]
+    #
+    #     row_text_tab = []
+    #     row_text_split = row_text.split()
+    #     tmp_str = ""
+    #     for j in range(len(row_text_split)-1):
+    #         tmp_str += row_text_split[j] + " "
+    #         if len(row_text_split[j+1] + tmp_str) > max_str_len:
+    #             row_text_tab.append(tmp_str[:-1])
+    #             tmp_str = ""
+    #
+    #     last_word = row_text_split[-1]
+    #     if len(last_word + tmp_str) > max_str_len:
+    #         row_text_tab.append(tmp_str)
+    #         row_text_tab.append(last_word)
+    #     else:
+    #         row_text_tab.append(tmp_str + " " + last_word)
+    #
+    #     #####################
+    #
+    #     ### show one line #########################################
+    #     # step = (end - start) // len(row_text_tab)
+    #     # for row in row_text_tab:
+    #     #     tmp_end = start + step
+    #     #     res.append([start, tmp_end, row])
+    #     #     start = tmp_end + 1
+    #     # res[-1][1] = end-1
+    #
+    #     ### show all lines #########################################
+    #     tmp_str_2 = '\n'.join(row_text_tab)
+    #     res.append([start, end, tmp_str_2])
+    #
+    #
+    # return res
 
 def update_time_quicker_subtitles(start_stop_text_tab):
     d_klatka = 15
@@ -114,8 +156,8 @@ def update_time_quicker_subtitles(start_stop_text_tab):
     return start_stop_text_tab
 
 
-def generate_gif_from_img_vvt(input_image_path, vvt_path, out_path):
-    start_stop_text_tab = get_start_stop_text_tab(vvt_path)
+def generate_gif_from_img_vvt(input_image_path, vvt_path, out_path, raw_text):
+    start_stop_text_tab = get_start_stop_text_tab(vvt_path, raw_text)
     input_image = Image.open(input_image_path)
     width, height = input_image.size
 
@@ -124,7 +166,7 @@ def generate_gif_from_img_vvt(input_image_path, vvt_path, out_path):
     zoom_levels = np.linspace(1.5, 1, ilosc_klatek)
 
     zoomed_images = []
-    start_stop_text_tab = update_time_quicker_subtitles(start_stop_text_tab)
+    # start_stop_text_tab = update_time_quicker_subtitles(start_stop_text_tab)
     for i in range(0, ilosc_klatek, 1):
 
         zoom_level = zoom_levels[i]
@@ -162,7 +204,7 @@ def gif_builder():
         print(f"gif_builder: {i}")
         i += 1
         elem.video_quick_info_gif_path = f"../data_files/gifs/{elem.id}.gif_builder.gif"
-        generate_gif_from_img_vvt(elem.screen_path, elem.audio_quick_info_vvt_path, elem.video_quick_info_gif_path)
+        generate_gif_from_img_vvt(elem.screen_path, elem.audio_quick_info_vvt_path, elem.video_quick_info_gif_path, elem.quick_info)
 
     news_dict_list = [dataclasses.asdict(news) for news in my_class_objects]
     with open(path_out_data, "w") as json_file:

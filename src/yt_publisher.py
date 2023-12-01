@@ -44,7 +44,7 @@ def yt_publisher():
     tags = "short, shorts, biznes"
     send_video(driver_loc=driver, file_path=filepath, title=title, description=description, tags=tags)
 
-    time.sleep(1000)
+    time.sleep(100)
 
 if __name__ == "__main__":
     yt_publisher()

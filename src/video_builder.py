@@ -12,7 +12,10 @@ def video_builder():
         data_from_json = json.load(json_file)
     my_class_objects = [NewsModel(**item) for item in data_from_json]
 
+    i = 0
     for elem in my_class_objects:
+        print(f"video_builder: {i}")
+        i += 1
         elem.video_quick_info_mp4_path = f"../data_files/movies/{elem.id}.video_builder.mp4"
         clip_gif = VideoFileClip(elem.video_quick_info_gif_path)
         audio = AudioFileClip(elem.audio_quick_info_mp3_path)

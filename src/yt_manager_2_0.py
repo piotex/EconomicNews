@@ -202,6 +202,8 @@ def send_video(driver_loc: WebDriver, file_path, title, description, tags):
     driver_loc.find_element(By.XPATH, x_path).click()
     logging.debug('send_video() - Clicked NEXT')
 
+    time.sleep(30)
+
     x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[2]/div/div[2]/ytcp-button[3]/div"
     wait_until_elem_is_visible(driver_loc, x_path, 100)
     driver_loc.find_element(By.XPATH, x_path).click()
