@@ -1,0 +1,34 @@
+version: "3.8"
+services:
+  jenkins:
+    image: jenkins:jenkins_04122023
+    container_name: jenkins
+    user: root
+    restart: always
+    volumes:
+      - /home/pkubon/Desktop/docker_volumes/jenkins_home:/var/jenkins_home
+      - /home/pkubon/Desktop/docker_volumes/jenkins_ssh:/root/.ssh
+    ports:
+      - 8080:8080
+      - 50000:50000
+
+#  selenium_hub:
+#    image: selenium/hub:3.141.59-20210929
+#    container_name: selenium_hub
+#    ports:
+#      - "4442:4442"
+#      - "4443:4443"
+#      - "4444:4444"
+#
+#  chrome:
+#    image: selenium/node-chrome:3.141.59-20210929
+#    shm_size: 2gb
+#    depends_on:
+#      - selenium_hub
+#    environment:
+#      - HUB_HOST=selenium_hub
+#      - SE_EVENT_BUS_HOST=selenium_hub
+#      - SE_EVENT_BUS_PUBLISH_PORT=4442
+#      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+
+# Jenkins: 192.168.56.56:8482

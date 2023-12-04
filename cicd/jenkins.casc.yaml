@@ -1,0 +1,33 @@
+unclassified:
+  location:
+    url: http://server_ip:8080/
+
+jenkins:
+  systemMessage: "========\r\nJenkins as a Code by peter\r\n========"
+  globalNodeProperties:
+    - envVars:
+          env:
+              - key: VARIABLE_1
+                value: val_1
+              - key: VARIABLE_2
+                value: val_2
+
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        — id: ${JENKINS_ADMIN_ID}
+          password: ${JENKINS_ADMIN_PASSWORD}
+
+jobs:
+  — file: /usr/local/seedjob.groovy
+
+authorizationStrategy:
+  globalMatrix:
+  permissions:
+    — “Overall/Administer:admin”
+    — “Overall/Read:authenticated”
+
+
+
+
