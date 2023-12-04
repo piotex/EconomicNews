@@ -1,33 +1,43 @@
-unclassified:
-  location:
-    url: http://server_ip:8080/
-
 jenkins:
-  systemMessage: "========\r\nJenkins as a Code by peter\r\n========"
-  globalNodeProperties:
-    - envVars:
-          env:
-              - key: VARIABLE_1
-                value: val_1
-              - key: VARIABLE_2
-                value: val_2
+  systemMessage: "\n\n=== Jenkins Configuration as Code ===\n\n"
+
+  numExecutors: 1
+  mode: NORMAL
+  scmCheckoutRetryCount: 3
+  labelString: "master-label"
 
   securityRealm:
     local:
       allowsSignup: false
       users:
-        — id: ${JENKINS_ADMIN_ID}
-          password: ${JENKINS_ADMIN_PASSWORD}
+        - id: "${JENKINS_ADMIN_ID}"
+          password: "${adminpw:-${JENKINS_ADMIN_PASSWORD}}"
 
-jobs:
-  — file: /usr/local/seedjob.groovy
+  authorizationStrategy:
+    globalMatrix:
+      permissions:
+        - "USER:Overall/Read:anonymous"
+        - "GROUP:Overall/Administer:authenticated"
+        - "USER:Overall/Administer:admin"
 
-authorizationStrategy:
-  globalMatrix:
-  permissions:
-    — “Overall/Administer:admin”
-    — “Overall/Read:authenticated”
+  crumbIssuer: "standard"
 
+  remotingSecurity:
+    enabled: true
 
+credentials:
+  system:
+    domainCredentials:
+      - credentials:
+        - usernamePassword:
+            scope:    GLOBAL
+            id:       github-user
+            username: ewelina
+            password: ${github:-githubPassw0rd}
+            description: github username/password
 
-
+tool:
+  git:
+    installations:
+      - name: Default
+        home: "git"

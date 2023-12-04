@@ -5,9 +5,9 @@ services:
     container_name: jenkins
     user: root
     restart: always
-    volumes:
-      - /home/pkubon/Desktop/docker_volumes/jenkins_home:/var/jenkins_home
-      - /home/pkubon/Desktop/docker_volumes/jenkins_ssh:/root/.ssh
+#    volumes:
+#      - /home/pkubon/Desktop/docker_volumes/jenkins_home:/var/jenkins_home
+#      - /home/pkubon/Desktop/docker_volumes/jenkins_ssh:/root/.ssh
     ports:
       - 8080:8080
       - 50000:50000
