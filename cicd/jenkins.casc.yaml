@@ -41,3 +41,17 @@ tool:
     installations:
       - name: Default
         home: "git"
+
+jobs:
+  - script: |
+      multibranchPipelineJob('configuration-as-code') {
+          branchSources {
+              git {
+                  id = 'configuration-as-code'
+                  remote('https://github.com/piotex/EconomicNews.git')
+                  traits {
+                      jenkinsFileFolder('cicd')
+                  }
+              }
+          }
+      }
