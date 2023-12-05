@@ -1,0 +1,11 @@
+
+docker exec --user root -it jenkins /bin/bash
+su jenkins
+ssh-keygen
+cat /var/jenkins_home/.ssh/id_rsa.pub
+cat /var/jenkins_home/.ssh/id_rsa
+ssh jenkins@192.168.56.104
+yes
+ls -la ../
+exit
+

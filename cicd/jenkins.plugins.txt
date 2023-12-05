@@ -21,3 +21,4 @@ ws-cleanup:latest
 job-dsl:latest
 blueocean:latest
 authorize-project:latest
+locale:latest

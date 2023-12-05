@@ -1,14 +1,61 @@
 pipeline {
-    agent any
+    agent {
+        label 'my-slave'
+    }
     stages {
-        stage('List Files') {
+        stage('init_folders') {
             steps {
-                sh 'ls -l'
+                sh 'cd /home/pkubon/Desktop/git/EconomicNews/src && python3 init_folders.py'
             }
         }
-        stage('Build and Test') {
+        stage('get_raw_info') {
             steps {
-                echo "build ..."
+                sh 'cd /home/pkubon/Desktop/git/EconomicNews/src && python3 get_raw_info.py'
+            }
+        }
+        stage('filter_by_creation_time') {
+            steps {
+                sh 'cd /home/pkubon/Desktop/git/EconomicNews/src && python3 filter_by_creation_time.py'
+            }
+        }
+        stage('get_comments_count') {
+            steps {
+                sh 'cd /home/pkubon/Desktop/git/EconomicNews/src && python3 get_comments_count.py'
+            }
+        }
+        stage('sort_by_comments_count') {
+            steps {
+                sh 'cd /home/pkubon/Desktop/git/EconomicNews/src && python3 sort_by_comments_count.py'
+            }
+        }
+        stage('text_to_speech') {
+            steps {
+                sh 'cd /home/pkubon/Desktop/git/EconomicNews/src && python3 text_to_speech.py'
+            }
+        }
+        stage('gif_builder') {
+            steps {
+                sh 'cd /home/pkubon/Desktop/git/EconomicNews/src && python3 gif_builder.py'
+            }
+        }
+        stage('video_builder') {
+            steps {
+                sh 'cd /home/pkubon/Desktop/git/EconomicNews/src && python3 video_builder.py'
+            }
+        }
+        stage('video_merge') {
+            steps {
+                sh 'cd /home/pkubon/Desktop/git/EconomicNews/src && python3 video_merge.py'
+            }
+        }
+        stage('yt_publisher') {
+            steps {
+                sh 'cd /home/pkubon/Desktop/git/EconomicNews/src && python3 yt_publisher.py'
+            }
+        }
+        stage('END') {
+            steps {
+                echo "=== END ==="
             }
         }
     }
