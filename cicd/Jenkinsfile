@@ -8,54 +8,66 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/piotex/EconomicNews.git'
             }
         }
+        stage('Create virtual env') {
+            steps {
+                script {
+                    sh 'python3 -m venv myenv'
+                }
+            }
+        }
+        stage('Install requirements.txt') {
+            steps {
+                sh 'source myenv/bin/activate && pip install -r requirements.txt'
+            }
+        }
         stage('init_folders') {
             steps {
-                sh 'cd src && python3 init_folders.py'
+                sh 'cd src && source myenv/bin/activate && python3 init_folders.py'
             }
         }
         stage('get_raw_info') {
             steps {
-                sh 'cd src && python3 get_raw_info.py'
+                sh 'cd src && source myenv/bin/activate && python3 get_raw_info.py'
             }
         }
         stage('filter_by_creation_time') {
             steps {
-                sh 'cd src && python3 filter_by_creation_time.py'
+                sh 'cd src && source myenv/bin/activate && python3 filter_by_creation_time.py'
             }
         }
         stage('get_comments_count') {
             steps {
-                sh 'cd src && python3 get_comments_count.py'
+                sh 'cd src && source myenv/bin/activate && python3 get_comments_count.py'
             }
         }
         stage('sort_by_comments_count') {
             steps {
-                sh 'cd src && python3 sort_by_comments_count.py'
+                sh 'cd src && source myenv/bin/activate && python3 sort_by_comments_count.py'
             }
         }
         stage('text_to_speech') {
             steps {
-                sh 'cd src && python3 text_to_speech.py'
+                sh 'cd src && source myenv/bin/activate && python3 text_to_speech.py'
             }
         }
         stage('gif_builder') {
             steps {
-                sh 'cd src && python3 gif_builder.py'
+                sh 'cd src && source myenv/bin/activate && python3 gif_builder.py'
             }
         }
         stage('video_builder') {
             steps {
-                sh 'cd src && python3 video_builder.py'
+                sh 'cd src && source myenv/bin/activate && python3 video_builder.py'
             }
         }
         stage('video_merge') {
             steps {
-                sh 'cd src && python3 video_merge.py'
+                sh 'cd src && source myenv/bin/activate && python3 video_merge.py'
             }
         }
         stage('yt_publisher') {
             steps {
-                sh 'cd src && python3 yt_publisher.py'
+                sh 'cd src && source myenv/bin/activate && python3 yt_publisher.py'
             }
         }
         stage('END') {
