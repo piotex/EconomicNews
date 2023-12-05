@@ -6,7 +6,8 @@ pyttsx3~=2.90
 edge-tts
 pydub
 opencv-python
-Pillow
+Pillow~=10.0.1
 ffpyplayer
 scipy
-moviepy
+moviepy~=1.0.3
+numpy~=1.26.1

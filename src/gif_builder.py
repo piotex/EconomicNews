@@ -1,12 +1,13 @@
-import dataclasses
 import json
+import sys
+import dataclasses
 import numpy as np
-from PIL import Image, ImageDraw, ImageFont
 from models.model_news import NewsModel
+from PIL import Image, ImageDraw, ImageFont
+from general_utils import get_idx_to_process
 
 video_fps = 30
 max_str_len = 25
-font_size = 44
 font_size = 70
 thickness = 3
 my_font = "../data_files/arial.ttf"
@@ -25,6 +26,7 @@ def draw_text_line(draw, x_offset, y_offset, text):
     draw.text((x_offset, y_offset), text, fill="white", font=ImageFont.truetype(my_font, font_size), anchor="mm",
               align="center")
 
+
 def draw_text(resized_image_in, text: str):
     draw = ImageDraw.Draw(resized_image_in)
     y_offset = resized_image_in.height // 2 + 450
@@ -33,9 +35,8 @@ def draw_text(resized_image_in, text: str):
     text_tab = text.split("\n")
     i = 0
     for data in text_tab:
-        draw_text_line(draw, x_offset, y_offset+(i*font_size), data)
+        draw_text_line(draw, x_offset, y_offset + (i * font_size), data)
         i += 1
-
 
 
 def get_klatka_start(data: str):
@@ -79,7 +80,7 @@ def get_start_stop_text_tab(vvt_path, raw_text):
                 i += 1
             data_tab.append(tmp_str)
 
-    res = []                            # [start | stop | text]
+    res = []  # [start | stop | text]
     end_tmppp = get_klatka_end(time_tab[-1])
     data_tab = raw_text.split(". ")
     chunk_tmppp = end_tmppp // len(data_tab)
@@ -89,10 +90,13 @@ def get_start_stop_text_tab(vvt_path, raw_text):
 
         row_text_tab = []
         row_text_split = data_tab[i].split()
+        if len(row_text_split) == 0:
+            continue
+
         tmp_str = ""
-        for j in range(len(row_text_split)-1):
+        for j in range(len(row_text_split) - 1):
             tmp_str += row_text_split[j] + " "
-            if len(row_text_split[j+1] + tmp_str) > max_str_len:
+            if len(row_text_split[j + 1] + tmp_str) > max_str_len:
                 row_text_tab.append(tmp_str[:-1])
                 tmp_str = ""
 
@@ -105,47 +109,7 @@ def get_start_stop_text_tab(vvt_path, raw_text):
         tmp_str_2 = '\n'.join(row_text_tab)
         res.append([start, stop, tmp_str_2])
     return res
-    ###########################################################
-    # res = []                            # [start | stop | text]
-    # for i in range(len(time_tab)):
-    #     row_time = time_tab[i]
-    #
-    #     start = get_klatka_start(row_time)
-    #     end = get_klatka_end(row_time)
-    #     row_text = data_tab[i]
-    #
-    #     row_text_tab = []
-    #     row_text_split = row_text.split()
-    #     tmp_str = ""
-    #     for j in range(len(row_text_split)-1):
-    #         tmp_str += row_text_split[j] + " "
-    #         if len(row_text_split[j+1] + tmp_str) > max_str_len:
-    #             row_text_tab.append(tmp_str[:-1])
-    #             tmp_str = ""
-    #
-    #     last_word = row_text_split[-1]
-    #     if len(last_word + tmp_str) > max_str_len:
-    #         row_text_tab.append(tmp_str)
-    #         row_text_tab.append(last_word)
-    #     else:
-    #         row_text_tab.append(tmp_str + " " + last_word)
-    #
-    #     #####################
-    #
-    #     ### show one line #########################################
-    #     # step = (end - start) // len(row_text_tab)
-    #     # for row in row_text_tab:
-    #     #     tmp_end = start + step
-    #     #     res.append([start, tmp_end, row])
-    #     #     start = tmp_end + 1
-    #     # res[-1][1] = end-1
-    #
-    #     ### show all lines #########################################
-    #     tmp_str_2 = '\n'.join(row_text_tab)
-    #     res.append([start, end, tmp_str_2])
-    #
-    #
-    # return res
+
 
 def update_time_quicker_subtitles(start_stop_text_tab):
     d_klatka = 15
@@ -180,7 +144,7 @@ def generate_gif_from_img_vvt(input_image_path, vvt_path, out_path, raw_text):
         resized_image = resized_image.crop((x_offset, y_offset, width + x_offset, height + y_offset))
 
         for start, stop, text in start_stop_text_tab:
-            if i >= start and i <= stop:
+            if start <= i <= stop:
                 draw_text(resized_image, text)
                 break
 
@@ -192,24 +156,33 @@ def generate_gif_from_img_vvt(input_image_path, vvt_path, out_path, raw_text):
     # , loop=0
 
 
-def gif_builder():
-    path_in_data = "../data_files/important_files/5_text_to_speech.json"
-    path_out_data = "../data_files/important_files/6_gif_builder.json"
-    with open(path_in_data, "r") as json_file:
+def gif_builder(idx_to_process):
+    func_name = "gif_builder"
+    print(f"{func_name}: {idx_to_process}")
+
+    path_news_list = "../data_files/important_files/news_list.json"
+    with open(path_news_list, "r") as json_file:
         data_from_json = json.load(json_file)
     my_class_objects = [NewsModel(**item) for item in data_from_json]
 
-    i = 0
+    idx = 0
     for elem in my_class_objects:
-        print(f"gif_builder: {i}")
-        i += 1
-        elem.video_quick_info_gif_path = f"../data_files/gifs/{elem.id}.gif_builder.gif"
-        generate_gif_from_img_vvt(elem.screen_path, elem.audio_quick_info_vvt_path, elem.video_quick_info_gif_path, elem.quick_info)
+        if idx == idx_to_process:
+            elem.video_quick_info_gif_path = f"../data_files/gifs/{elem.id}.gif_builder.gif"
+            generate_gif_from_img_vvt(elem.screen_path, elem.audio_quick_info_vvt_path, elem.video_quick_info_gif_path,
+                                      elem.quick_info)
+            break
+        idx += 1
 
     news_dict_list = [dataclasses.asdict(news) for news in my_class_objects]
-    with open(path_out_data, "w") as json_file:
+    with open(path_news_list, "w") as json_file:
         json.dump(news_dict_list, json_file, indent=4)
 
 
 if __name__ == "__main__":
-    gif_builder()
+    if len(sys.argv) > 1:
+        idx_to_process_arg = get_idx_to_process()
+        gif_builder(idx_to_process_arg)
+    else:
+        for i in range(5):
+            gif_builder(i)

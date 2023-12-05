@@ -32,8 +32,9 @@ def get_url_and_header(driver_in, i):
 
 
 def get_raw_info():
+    print(f"get_raw_info")
     path_with_urls = "../data_files/bankier_url/bakier_url_format_1.txt"
-    path_1_get_raw_info = "../data_files/important_files/1_get_raw_info.json"
+    path_news_list = "../data_files/important_files/news_list.json"
     list_of_model_news = []
     driver = get_init_driver()
     time.sleep(1)
@@ -63,7 +64,7 @@ def get_raw_info():
                 pass
 
     news_dict_list = [dataclasses.asdict(news) for news in list_of_model_news]
-    with open(path_1_get_raw_info, "w") as json_file:
+    with open(path_news_list, "w") as json_file:
         json.dump(news_dict_list, json_file, indent=4)
 
     driver.close()

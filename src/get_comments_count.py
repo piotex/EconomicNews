@@ -37,10 +37,10 @@ def get_quick_desc(driver_in):
 
 
 def get_comments_count():
-    path_with_urls = "../data_files/important_files/2_filter_by_creation_time.json"
-    path_3_get_comments_count = "../data_files/important_files/3_get_comments_count.json"
+    print(f"get_comments_count")
+    path_news_list = "../data_files/important_files/news_list.json"
 
-    with open(path_with_urls, "r") as json_file:
+    with open(path_news_list, "r") as json_file:
         data_from_json = json.load(json_file)
     my_class_objects = [NewsModel(**item) for item in data_from_json]
 
@@ -57,8 +57,11 @@ def get_comments_count():
     driver.set_window_size(width, height)
     driver.set_window_position(0, 0)
 
+    i = 0
     for elem in my_class_objects:
         try:
+            print(f"get_comments_count: {i} z {len(my_class_objects)}")
+            i += 1
             driver.get(elem.url)
             time.sleep(1)
             scroll_to_xxx(driver, 600)
@@ -77,7 +80,7 @@ def get_comments_count():
             pass
 
     news_dict_list = [dataclasses.asdict(news) for news in my_class_objects]
-    with open(path_3_get_comments_count, "w") as json_file:
+    with open(path_news_list, "w") as json_file:
         json.dump(news_dict_list, json_file, indent=4)
 
 

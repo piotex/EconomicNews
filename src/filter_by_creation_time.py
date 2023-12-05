@@ -35,17 +35,17 @@ def filter_by_unique_url(res):
 
 
 def filter_by_creation_time():
-    in_file_path = "../data_files/important_files/1_get_raw_info.json"
-    out_file_path = "../data_files/important_files/2_filter_by_creation_time.json"
+    print(f"filter_by_creation_time")
+    path_news_list = "../data_files/important_files/news_list.json"
 
-    with open(in_file_path, "r") as json_file:
+    with open(path_news_list, "r") as json_file:
         data_from_json = json.load(json_file)
     my_class_objects = [NewsModel(**item) for item in data_from_json]
 
     res = filter_by_date(my_class_objects)
     res = filter_by_unique_url(res)
 
-    with open(out_file_path, "w") as json_file:
+    with open(path_news_list, "w") as json_file:
         json.dump(res, json_file, indent=4)
 
 

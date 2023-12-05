@@ -3,6 +3,7 @@ import shutil
 
 
 def init_folders():
+    print(f"init_folders")
     data_files = '../data_files'
     folders = [
         'audio',

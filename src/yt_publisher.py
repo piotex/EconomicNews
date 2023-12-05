@@ -6,6 +6,7 @@ import os
 from datetime import date
 
 def yt_publisher():
+    print(f"yt_publisher")
     file_log_name = f'../data_files/logs/log-{str(date.today())}.log'
     if os.path.isfile(file_log_name):
         os.remove(file_log_name)
@@ -13,8 +14,8 @@ def yt_publisher():
     logging.debug('============== App Started ==============')
 
 
-    path_in_data = "../data_files/important_files/7_video_builder.json"
-    with open(path_in_data, "r") as json_file:
+    path_news_list = "../data_files/important_files/news_list.json"
+    with open(path_news_list, "r") as json_file:
         data_from_json = json.load(json_file)
     my_class_objects = [NewsModel(**item) for item in data_from_json]
 

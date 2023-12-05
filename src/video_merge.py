@@ -6,10 +6,11 @@ from models.model_news import NewsModel
 
 
 def video_merge():
+    print(f"video_merge")
     video_fps = 30
-    path_in_data = "../data_files/important_files/7_video_builder.json"
+    path_news_list = "../data_files/important_files/news_list.json"
 
-    with open(path_in_data, "r") as json_file:
+    with open(path_news_list, "r") as json_file:
         data_from_json = json.load(json_file)
     my_class_objects = [NewsModel(**item) for item in data_from_json]
 
