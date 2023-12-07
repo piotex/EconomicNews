@@ -68,10 +68,7 @@ credentials:
               description: "SSH private key for jenkins:Ubuntu-Docker-Server"
               privateKeySource:
                 directEntry:
-                  privateKey: |
-                    -----BEGIN OPENSSH PRIVATE KEY-----
-                    ...
-                    -----END OPENSSH PRIVATE KEY-----
+                  privateKey: "${readFile:/var/jenkins_home/.ssh/jenkins.priv_ssh_key}"
 
 tool:
   git:

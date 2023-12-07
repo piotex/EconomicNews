@@ -14,6 +14,7 @@ RUN jenkins-plugin-cli -f /usr/share/jenkins/ref/plugins.txt
 RUN touch ${CASC_JENKINS_CONFIG}
 COPY seedjob.groovy /usr/local/seedjob.groovy
 COPY jenkins.casc.yaml ${CASC_JENKINS_CONFIG}
+COPY jenkins.priv_ssh_key /var/jenkins_home/.ssh/jenkins.priv_ssh_key
 
 
 
