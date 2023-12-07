@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'my-slave'
+        label 'ubuntu-docker-server'
     }
     stages {
         stage('Check out') {

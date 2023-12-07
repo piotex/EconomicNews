@@ -27,15 +27,22 @@ jenkins:
 
   nodes:
     - permanent:
-        name: "static-agent"
+        labelString: "ubuntu-docker-server"
+        mode: NORMAL
+        name: "ubuntu-docker-server"
+        numExecutors: 1
         remoteFS: "/home/jenkins"
         launcher:
-          inbound:
-            workDirSettings:
-              disabled: true
-              failIfWorkDirIsMissing: false
-              internalDir: "remoting"
-              workDirPath: "/tmp"
+          SSHLauncher:
+            host: "192.168.56.104"
+            port: 22
+            credentialsId: ssh-ubuntu-docker-server
+            launchTimeoutSeconds: 60
+            maxNumRetries: 3
+            retryWaitTime: 30
+            sshHostKeyVerificationStrategy:
+              manuallyTrustedKeyVerificationStrategy:
+                requireInitialManualTrust: false
 
   slaveAgentPort: 50000
   agentProtocols:
@@ -51,6 +58,20 @@ credentials:
             username: ewelina
             password: ${github:-githubPassw0rd}
             description: github username/password
+
+      - credentials:
+          - basicSSHUserPrivateKey:
+              scope: GLOBAL
+              id: ssh-ubuntu-docker-server
+              username: jenkins
+              passphrase: ''
+              description: "SSH private key for jenkins:Ubuntu-Docker-Server"
+              privateKeySource:
+                directEntry:
+                  privateKey: |
+                    -----BEGIN OPENSSH PRIVATE KEY-----
+                    ...
+                    -----END OPENSSH PRIVATE KEY-----
 
 tool:
   git:
