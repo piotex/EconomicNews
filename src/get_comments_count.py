@@ -26,13 +26,31 @@ def get_comment_count(driver_in):
 
 
 def get_quick_desc(driver_in):
-    for j in range(1, 4, 1):
+    kom_text = ""
+    for j in range(4, 0, -1):
         try:
             x_path = f"/html/body/div[1]/div[{j}]/main/article/section/p[1]/span"
-            kom_text = driver_in.find_element(by=By.XPATH, value=x_path).text
-            return kom_text
+            kom_text += driver_in.find_element(by=By.XPATH, value=x_path).text
+            kom_text += "\n"
+
+            x_path = f"/html/body/div[1]/div[{j}]/main/article/section/p[2]"
+            kom_text += driver_in.find_element(by=By.XPATH, value=x_path).text
+            kom_text += "\n"
+
+            x_path = f"/html/body/div[1]/div[{j}]/main/article/section/p[3]"
+            kom_text += driver_in.find_element(by=By.XPATH, value=x_path).text
+            kom_text += "\n"
+
+            x_path = f"/html/body/div[1]/div[{j}]/main/article/section/p[4]"
+            kom_text += driver_in.find_element(by=By.XPATH, value=x_path).text
+            kom_text += "\n"
+
         except Exception as exx:
             pass
+
+    if kom_text != "":
+        return kom_text
+
     raise Exception("==== Quick info not found ====")
 
 
@@ -49,13 +67,13 @@ def get_comments_count():
     accept_cookies_bankier(driver)
     time.sleep(1)
 
-    path_to_usr_pwd = "../data_files/screen_dimensions.txt"
-    with open(path_to_usr_pwd, "r") as file:
-        res = file.readlines()
-        width = int(res[0].strip())
-        height = int(res[1].strip())
-    driver.set_window_size(width, height)
-    driver.set_window_position(0, 0)
+    # path_to_usr_pwd = "../data_files/screen_dimensions.txt"
+    # with open(path_to_usr_pwd, "r") as file:
+    #     res = file.readlines()
+    #     width = int(res[0].strip())
+    #     height = int(res[1].strip())
+    # driver.set_window_size(width, height)
+    # driver.set_window_position(0, 0)
 
     i = 0
     for elem in my_class_objects:
@@ -69,9 +87,9 @@ def get_comments_count():
             elem.quick_info = get_quick_desc(driver)
             elem.comments_number = get_comment_count(driver)
 
-            img_path = f"../data_files/screen_shots/{elem.id}.png"
-            driver.save_screenshot(img_path)
-            elem.screen_path = img_path
+            # img_path = f"../data_files/screen_shots/{elem.id}.png"
+            # driver.save_screenshot(img_path)
+            # elem.screen_path = img_path
         except Exception as exxx:
             print("=== error ===")
             print(exxx)
