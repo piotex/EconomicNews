@@ -33,6 +33,7 @@ def yt_publisher():
     login(driver, usr, pwd)
 
     filepath = "/home/pkubon/Desktop/EconomicNews/data_files/movies/final.mp4"
+    filepath = "/home/pkubon/Desktop/git/EconomicNews/data_files/movies/final.mp4"
     title_tags = "#shorts #biznes"
     title = f"{my_class_objects[0].header[0:-(len(title_tags)+2)]} {title_tags}"
     description = (f"{my_class_objects[0].header} \n"

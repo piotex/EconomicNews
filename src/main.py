@@ -19,22 +19,27 @@ def main():
     get_comments_count()
     sort_by_comments_count()
 
-    for i in range(5):
-        text_to_speech(i)
-        gif_builder(i)
-
-    for i in range(5):
-        video_builder(i)
-
-    video_merge()
-    yt_publisher()
+    # start = 4
+    # end = start+1
+    # for i in range(start, end):
+    #     text_to_speech(i)
+    #     gif_builder(i)
+    #
+    # for i in range(5):
+    #     video_builder(i)
+    #
+    # video_merge()
+    # yt_publisher()
 
 
 if __name__ == "__main__":
     start_time = time.time()
     main()
     end_time = time.time()
+    total_s = end_time - start_time
+    total_m = int(total_s / 60)
+    total_s = int(total_s - total_m * 60)
     print(f"")
     print(f"#####################################")
-    print(f"Total time: {end_time - start_time} s")
+    print(f"Total time: {total_m}m {total_s}s")
     print(f"#####################################")
