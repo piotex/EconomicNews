@@ -54,7 +54,7 @@ def get_quick_desc(driver_in):
     raise Exception("==== Quick info not found ====")
 
 
-def get_comments_count():
+def get_comments_count(start_elem_in: int):
     print(f"get_comments_count")
     path_news_list = "../data_files/important_files/news_list.json"
 
@@ -77,6 +77,10 @@ def get_comments_count():
 
     i = 0
     for elem in my_class_objects:
+        if i < start_elem_in:
+            i += 1
+            continue
+
         try:
             print(f"get_comments_count: {i} z {len(my_class_objects)}")
             i += 1
@@ -103,4 +107,5 @@ def get_comments_count():
 
 
 if __name__ == "__main__":
-    get_comments_count()
+    start_elem = 0
+    get_comments_count(start_elem)

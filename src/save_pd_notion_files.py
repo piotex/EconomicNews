@@ -12,19 +12,21 @@ def save_pd_notion_files():
         data_from_json = json.load(json_file)
     my_class_objects = [NewsModel(**item) for item in data_from_json]
 
+    tekst = ""
     for my_obj in my_class_objects:
-        tekst = ""
-        tekst += "RAW:\n\n"
-        tekst += "URL:\n"
+        tekst += "======================================================\n"
+        tekst += "========= Comments  =========\n"
+        tekst += f"{my_obj.comments_number}\n\n"
+        tekst += "========= URL =========\n"
         tekst += f"{my_obj.url}\n\n"
-        tekst += "Tytuł:\n"
+        tekst += "========= Tytuł =========\n"
         tekst += f"{my_obj.header}\n\n"
-        tekst += "Treść:\n"
+        tekst += "========= Treść =========\n"
         tekst += f"{my_obj.quick_info}\n\n"
 
-        nazwa_pliku = f"../data_files/important_files/{my_obj.comments_number}-{my_obj.header[:20]}.txt"
-        with open(nazwa_pliku, 'w') as plik:
-            plik.write(tekst)
+    nazwa_pliku = f"../data_files/important_files/top_x_notion.txt"
+    with open(nazwa_pliku, 'w') as plik:
+        plik.write(tekst)
 
 
 

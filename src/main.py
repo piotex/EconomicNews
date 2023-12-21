@@ -5,7 +5,7 @@ from get_raw_info import get_raw_info
 from gif_builder import gif_builder
 from init_folders import init_folders
 from limit_resp import limit_resp
-from  save_pd_notion_files import save_pd_notion_files
+from save_pd_notion_files import save_pd_notion_files
 from sort_by_comments_count import sort_by_comments_count
 from text_to_speech import text_to_speech
 from video_builder import video_builder
@@ -18,7 +18,9 @@ def main():
     # init_folders()
     # get_raw_info()
     # filter_by_creation_time()
-    get_comments_count()
+
+    start_elem = 22
+    get_comments_count(start_elem)
     sort_by_comments_count()
     limit_resp()
     save_pd_notion_files()
