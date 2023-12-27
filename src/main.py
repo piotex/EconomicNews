@@ -15,14 +15,16 @@ from yt_publisher import yt_publisher
 
 def main():
     print(f"")
-    # init_folders()
-    # get_raw_info()
-    # filter_by_creation_time()
+    init_folders()
+    get_raw_info()
 
-    start_elem = 22
+    day_to_see_in_past = 1
+    filter_by_creation_time(day_to_see_in_past)
+
+    start_elem = 1
     get_comments_count(start_elem)
     sort_by_comments_count()
-    limit_resp()
+    # limit_resp()
     save_pd_notion_files()
 
 

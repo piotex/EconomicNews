@@ -4,9 +4,9 @@ from datetime import datetime, timedelta
 from models.model_news import NewsModel
 
 
-def filter_by_date(my_class_objects):
+def filter_by_date(my_class_objects, day_to_see_in_past_in_in):
     res = []
-    yesterday = datetime.now() - timedelta(days=1)
+    yesterday = datetime.now() - timedelta(days=day_to_see_in_past_in_in)
     for elem in my_class_objects:
         if elem.creation_time == '':
             continue
@@ -34,7 +34,7 @@ def filter_by_unique_url(res):
     return res
 
 
-def filter_by_creation_time():
+def filter_by_creation_time(day_to_see_in_past_in):
     print(f"filter_by_creation_time")
     path_news_list = "../data_files/important_files/news_list.json"
 
@@ -42,7 +42,7 @@ def filter_by_creation_time():
         data_from_json = json.load(json_file)
     my_class_objects = [NewsModel(**item) for item in data_from_json]
 
-    res = filter_by_date(my_class_objects)
+    res = filter_by_date(my_class_objects, day_to_see_in_past_in)
     res = filter_by_unique_url(res)
 
     with open(path_news_list, "w") as json_file:
@@ -50,4 +50,5 @@ def filter_by_creation_time():
 
 
 if __name__ == "__main__":
-    filter_by_creation_time()
+    day_to_see_in_past = 1
+    filter_by_creation_time(day_to_see_in_past)

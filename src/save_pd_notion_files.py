@@ -2,7 +2,6 @@ import dataclasses
 import json
 from models.model_news import NewsModel
 
-MAX_COUNT = 12
 
 def save_pd_notion_files():
     print(f"sort_by_comments_count")
@@ -13,22 +12,18 @@ def save_pd_notion_files():
     my_class_objects = [NewsModel(**item) for item in data_from_json]
 
     tekst = ""
+    tekst += """Streść poniższy artykuł, tak, żeby dobrze się tego słuchało na TikTok.
+Chcę, żebyś wybrał najciekawsze wątki z całego materiału i podsumował je w angażujący sposób do 5 zdań maksymalnie.
+Unikaj zbędnych przymiotników.
+Przedstaw poniższe informacje w rzetelny, obiektywny i angażujący widza TikToka sposób."""
+    tekst += "\n\n"
     for my_obj in my_class_objects:
-        tekst += "======================================================\n"
-        tekst += "========= Comments  =========\n"
-        tekst += f"{my_obj.comments_number}\n\n"
-        tekst += "========= URL =========\n"
-        tekst += f"{my_obj.url}\n\n"
-        tekst += "========= Tytuł =========\n"
-        tekst += f"{my_obj.header}\n\n"
-        tekst += "========= Treść =========\n"
+        tekst += f"{my_obj.header}\n"
         tekst += f"{my_obj.quick_info}\n\n"
 
-    nazwa_pliku = f"../data_files/important_files/top_x_notion.txt"
+    nazwa_pliku = f"../data_files/top_x_notion.txt"
     with open(nazwa_pliku, 'w') as plik:
         plik.write(tekst)
-
-
 
 
 if __name__ == "__main__":
