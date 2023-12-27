@@ -15,7 +15,7 @@ def save_pd_notion_files():
     tekst += """Streść poniższy artykuł, tak, żeby dobrze się tego słuchało na TikTok.
 Chcę, żebyś wybrał najciekawsze wątki z całego materiału i podsumował je w angażujący sposób do 5 zdań maksymalnie.
 Unikaj zbędnych przymiotników.
-Przedstaw poniższe informacje w rzetelny, obiektywny i angażujący widza TikToka sposób."""
+Przedstaw poniższe informacje w rzetelny, obiektywny i angażujący widza TikToka sposób. """
     tekst += "\n\n"
     for my_obj in my_class_objects:
         tekst += f"{my_obj.header}\n"
