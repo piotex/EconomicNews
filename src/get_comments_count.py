@@ -2,6 +2,7 @@ import dataclasses
 import json
 import re
 from models.model_news import NewsModel
+from a_data import MAX_ARTICLE_CHARS_LEN
 from yt_manager_2_0 import *
 
 
@@ -29,22 +30,11 @@ def get_quick_desc(driver_in):
     kom_text = ""
     for j in range(4, 0, -1):
         try:
-            x_path = f"/html/body/div[1]/div[{j}]/main/article/section/p[1]/span"
-            kom_text += driver_in.find_element(by=By.XPATH, value=x_path).text
-            kom_text += "\n"
-
-            x_path = f"/html/body/div[1]/div[{j}]/main/article/section/p[2]"
-            kom_text += driver_in.find_element(by=By.XPATH, value=x_path).text
-            kom_text += "\n"
-
-            x_path = f"/html/body/div[1]/div[{j}]/main/article/section/p[3]"
-            kom_text += driver_in.find_element(by=By.XPATH, value=x_path).text
-            kom_text += "\n"
-
-            x_path = f"/html/body/div[1]/div[{j}]/main/article/section/p[4]"
-            kom_text += driver_in.find_element(by=By.XPATH, value=x_path).text
-            kom_text += "\n"
-
+            for i in range(1,15,1):
+                x_path = f"/html/body/div[1]/div[{j}]/main/article/section/p[{i}]"
+                kom_text += driver_in.find_element(by=By.XPATH, value=x_path).text
+                kom_text += "\n"
+            break
         except Exception as exx:
             pass
 
@@ -90,6 +80,8 @@ def get_comments_count(start_elem_in: int):
 
             elem.quick_info = get_quick_desc(driver)
             elem.comments_number = get_comment_count(driver)
+
+            elem.quick_info = elem.quick_info[:MAX_ARTICLE_CHARS_LEN]
 
             # img_path = f"../data_files/screen_shots/{elem.id}.png"
             # driver.save_screenshot(img_path)

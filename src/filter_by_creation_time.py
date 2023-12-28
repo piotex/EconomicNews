@@ -2,11 +2,12 @@ import dataclasses
 import json
 from datetime import datetime, timedelta
 from models.model_news import NewsModel
+from a_data import DAYS_TO_SEE_IN_PAST
 
 
-def filter_by_date(my_class_objects, day_to_see_in_past_in_in):
+def filter_by_date(my_class_objects):
     res = []
-    yesterday = datetime.now() - timedelta(days=day_to_see_in_past_in_in)
+    yesterday = datetime.now() - timedelta(days=DAYS_TO_SEE_IN_PAST)
     for elem in my_class_objects:
         if elem.creation_time == '':
             continue
@@ -34,7 +35,7 @@ def filter_by_unique_url(res):
     return res
 
 
-def filter_by_creation_time(day_to_see_in_past_in):
+def filter_by_creation_time():
     print(f"filter_by_creation_time")
     path_news_list = "../data_files/important_files/news_list.json"
 
@@ -42,7 +43,7 @@ def filter_by_creation_time(day_to_see_in_past_in):
         data_from_json = json.load(json_file)
     my_class_objects = [NewsModel(**item) for item in data_from_json]
 
-    res = filter_by_date(my_class_objects, day_to_see_in_past_in)
+    res = filter_by_date(my_class_objects)
     res = filter_by_unique_url(res)
 
     with open(path_news_list, "w") as json_file:
@@ -50,5 +51,4 @@ def filter_by_creation_time(day_to_see_in_past_in):
 
 
 if __name__ == "__main__":
-    day_to_see_in_past = 1
-    filter_by_creation_time(day_to_see_in_past)
+    filter_by_creation_time()

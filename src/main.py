@@ -18,8 +18,7 @@ def main():
     init_folders()
     get_raw_info()
 
-    day_to_see_in_past = 1
-    filter_by_creation_time(day_to_see_in_past)
+    filter_by_creation_time()
 
     start_elem = 1
     get_comments_count(start_elem)
@@ -27,7 +26,10 @@ def main():
     # limit_resp()
     save_pd_notion_files()
 
-
+    #
+    #
+    #
+    #
     # ==============================
     # start = 4
     # end = start+1

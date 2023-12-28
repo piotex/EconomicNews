@@ -1,6 +1,7 @@
 import dataclasses
 import json
 from models.model_news import NewsModel
+from a_data import MAX_ARTICLE_IN_NOTION, NOTION_SENTENCE
 
 
 def save_pd_notion_files():
@@ -11,19 +12,21 @@ def save_pd_notion_files():
         data_from_json = json.load(json_file)
     my_class_objects = [NewsModel(**item) for item in data_from_json]
 
-    tekst = ""
-    tekst += """Streść poniższy artykuł, tak, żeby dobrze się tego słuchało na TikTok.
-Chcę, żebyś wybrał najciekawsze wątki z całego materiału i podsumował je w angażujący sposób do 5 zdań maksymalnie.
-Unikaj zbędnych przymiotników.
-Przedstaw poniższe informacje w rzetelny, obiektywny i angażujący widza TikToka sposób. """
-    tekst += "\n\n"
-    for my_obj in my_class_objects:
-        tekst += f"{my_obj.header}\n"
-        tekst += f"{my_obj.quick_info}\n\n"
+    main_sub_list = [
+        my_class_objects[i:i + MAX_ARTICLE_IN_NOTION]
+        for i in range(0, len(my_class_objects), MAX_ARTICLE_IN_NOTION)
+    ]
 
-    nazwa_pliku = f"../data_files/top_x_notion.txt"
-    with open(nazwa_pliku, 'w') as plik:
-        plik.write(tekst)
+    for i, sub_list in enumerate(main_sub_list):
+        tekst = ""
+        tekst += NOTION_SENTENCE + "\n\n"
+        for my_obj in sub_list:
+            tekst += f"{my_obj.header}\n"
+            tekst += f"{my_obj.quick_info}\n\n"
+
+        nazwa_pliku = f"../data_files/important_files/top_x_notion_{i}.txt"
+        with open(nazwa_pliku, 'w') as plik:
+            plik.write(tekst)
 
 
 if __name__ == "__main__":
