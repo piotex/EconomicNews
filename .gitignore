@@ -164,9 +164,10 @@ google-chrome-stable_current_amd64.deb
 data_files.backup.25.11.2023/
 usr_pwd.py
 
-data_files/audio/
-data_files/gifs/
-data_files/important_files/
-data_files/movies/
-data_files/screen_shots/
-cicd/jenkins.priv_ssh_key
+.archiv/data_files/audio/
+.archiv/data_files/gifs/
+.archiv/data_files/important_files/
+.archiv/data_files/movies/
+.archiv/data_files/screen_shots/
+.archiv/cicd/jenkins.priv_ssh_key
+.archiv/*

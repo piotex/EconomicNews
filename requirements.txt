@@ -1,4 +1,4 @@
-requests
+requests~=2.32.3
 selenium~=4.14.0
 chromedriver_autoinstaller
 pytdm
@@ -11,3 +11,4 @@ ffpyplayer
 scipy
 moviepy~=1.0.3
 numpy~=1.26.1
+beautifulsoup4~=4.12.3
