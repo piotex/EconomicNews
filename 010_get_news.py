@@ -7,15 +7,18 @@ from typing import List
 
 from bs4 import BeautifulSoup
 import requests
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from dataclasses import dataclass
 
 
 @dataclass
 class NewsModel:
     url: str = ""
+    creation_date: datetime = datetime.now()
     actualization_date: datetime = datetime.now()
     comments_count: int = -1
+    article_text: str = ""
+    article_img: str = ""
 
 
 main_url = "https://www.bankier.pl"
@@ -51,37 +54,25 @@ def init_folders():
         os.makedirs(os.path.join(data_files, folder))
 
 
-def get_article_params(soup):
-    article_main = [
-        ["div", "article"],
-        ["li", "m-listing-article-list__item"]
-    ]
-    for art in article_main:
-        articles = soup.find_all(art[0], class_=art[1])
-        if len(articles) > 0:
-            return art
-
-
-def get_urls_from_site(url: str) -> list[NewsModel]:
+def get_obj_from_main_site(url: str) -> list[NewsModel]:
     response = requests.get(url)
     if response.status_code == 200:
         html_content = response.text
         soup = BeautifulSoup(html_content, "html.parser")
-        # art_params = get_article_params(soup)
         articles = soup.find_all("div", class_="article")
         result = []
         for article in articles:
             href = article.find("a")["href"] if article.find("a") else None
-            event_date = datetime.strptime(article.find_all("time")[-1]["datetime"][:-6], "%Y-%m-%dT%H:%M:%S")
-            model = NewsModel(url=main_url + href, actualization_date=event_date)
-            result.append(model)
+            creation_date = datetime.strptime(article.find_all("time")[0]["datetime"][:-6], "%Y-%m-%dT%H:%M:%S")
+            actualization_date = datetime.strptime(article.find_all("time")[1]["datetime"][:-6], "%Y-%m-%dT%H:%M:%S") if len(article.find_all("time")) > 1 else datetime(1901, 1, 1)
+            result.append(NewsModel(url=main_url + href, creation_date=creation_date, actualization_date=actualization_date))
         return result
     raise Exception(f"Other response code: {response.status_code} \n\n message: {response.text}")
 
 
 def get_valid_obj_from_home_page(news_list: list[NewsModel]) -> list[NewsModel]:
     date_to_compare = datetime.now() - timedelta(days=1)
-    return [x for x in news_list if x.actualization_date > date_to_compare]
+    return [x for x in news_list if x.creation_date > date_to_compare]
 
 
 def get_todays_obj_list() -> list[NewsModel]:
@@ -90,7 +81,7 @@ def get_todays_obj_list() -> list[NewsModel]:
         print(f"{idx + 1} / {len(bankier_urls)}", end="\r")
         for i in range(1, 5, 1):
             time.sleep(random.uniform(1.0, 1.5))
-            list_of_obj = get_urls_from_site(f"{url}/{i}")
+            list_of_obj = get_obj_from_main_site(f"{url}/{i}")
             list_of_obj = get_valid_obj_from_home_page(list_of_obj)
             main_list_of_obj += list_of_obj
             if len(list_of_obj) < 15:
@@ -100,7 +91,7 @@ def get_todays_obj_list() -> list[NewsModel]:
 
 
 def save_obj_list(news_list: list[NewsModel]):
-    with open(obj_list_path, "w") as f:
+    with open(obj_list_path, "w", encoding="utf-8") as f:
         json.dump([item.__dict__ for item in news_list], f, indent=4, default=str)
 
 
@@ -109,22 +100,25 @@ def load_obj_list() -> list[NewsModel]:
         list_of_users = json.load(f)
         list_of_users = [NewsModel(**item) for item in list_of_users]
         for a in list_of_users:
+            a.creation_date = datetime.strptime(str(a.creation_date), "%Y-%m-%d %H:%M:%S")
             a.actualization_date = datetime.strptime(str(a.actualization_date), "%Y-%m-%d %H:%M:%S")
     return list_of_users
 
 
-def get_comments_number(news_model: NewsModel) -> int:
+def get_obj_from_news_page(url: str) -> NewsModel:
     mandatory_txt = "Komentarze"
-    response = requests.get(news_model.url)
+    response = requests.get(url)
     if response.status_code == 200:
+        comments_count = -1
+        html_content = response.text
+        in_text = BeautifulSoup(html_content, "html.parser").find_all("section", class_='o-article-content')[-1].text
         try:
-            html_content = response.text
-            soup = BeautifulSoup(html_content, "html.parser")
-            comment_txt = soup.find_all("h3")[-1].text
-            if mandatory_txt in comment_txt:
-                return int(comment_txt.split("(")[-1].replace(")", "").strip())
+            comment_txt = BeautifulSoup(html_content, "html.parser").find_all("h3")[-1].text
+            comments_count = int(
+                comment_txt.split("(")[-1].replace(")", "").strip()) if mandatory_txt in comment_txt else -1
         except:
-            return 0
+            pass
+        return NewsModel(url=url, comments_count=comments_count, article_text=in_text)
     raise Exception("=== idk why 4638546854 ===")
 
 
@@ -133,26 +127,30 @@ def sort_obj_list_by_comments(news_model_list: list[NewsModel]) -> list[NewsMode
 
 
 def main():
-    get_news_list_from_internet = False
-    main_list_of_obj = []
-
-    if get_news_list_from_internet:
-        print(f"")
-        init_folders()
-        main_list_of_obj = get_todays_obj_list()
-        for idx, tmp_obj in enumerate(main_list_of_obj):
-            print(f"{idx+1} / {len(main_list_of_obj)}", end="\r")
-            tmp_obj.comments_count = get_comments_number(tmp_obj)
-            save_obj_list(main_list_of_obj)
-            time.sleep(random.uniform(1.0, 1.5))
-        print("")
-        main_list_of_obj = sort_obj_list_by_comments(main_list_of_obj)
+    init_folders()
+    main_list_of_obj = get_todays_obj_list()
+    for idx, obj1 in enumerate(main_list_of_obj):
+        print(f"{idx + 1} / {len(main_list_of_obj)}", end="\r")
+        tmp_obj = get_obj_from_news_page(obj1.url)
+        obj1.comments_count = tmp_obj.comments_count
+        obj1.article_text = tmp_obj.article_text
         save_obj_list(main_list_of_obj)
+        time.sleep(random.uniform(1.0, 1.5))
+    main_list_of_obj = sort_obj_list_by_comments(main_list_of_obj)
+    save_obj_list(main_list_of_obj)
 
-    if not get_news_list_from_internet:
-        main_list_of_obj = load_obj_list()
 
-    a = 0
+if __name__ == "__main__":
+    start_time = time.time()
+    main()
+    end_time = time.time()
+    total_s = end_time - start_time
+    total_m = int(total_s / 60)
+    total_s = int(total_s - total_m * 60)
+    print(f"")
+    print(f"#####################################")
+    print(f"Total time: {total_m}m {total_s}s")
+    print(f"#####################################")
 
     # resp_obj = get_data_from_page()
 
@@ -182,16 +180,3 @@ def main():
     #
     # video_merge()
     # yt_publisher()
-
-
-if __name__ == "__main__":
-    start_time = time.time()
-    main()
-    end_time = time.time()
-    total_s = end_time - start_time
-    total_m = int(total_s / 60)
-    total_s = int(total_s - total_m * 60)
-    print(f"")
-    print(f"#####################################")
-    print(f"Total time: {total_m}m {total_s}s")
-    print(f"#####################################")
