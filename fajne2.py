@@ -10,8 +10,7 @@ height = 1920
 background_clip = VideoFileClip('3.mp4').subclip(0, length)
 main_clip = VideoFileClip('1.mp4')
 
-from moviepy.editor import *
-txt_clip = TextClip("GeeksforGeeks", fontsize=75, color='black')
+txt_clip = TextClip("ala ma kota", fontsize=75, color='black')
 txt_clip = txt_clip.set_pos('center').set_duration(10)
 
 
