@@ -1,3 +1,6 @@
+install https://imagemagick.org/script/download.php
+
+
 python -m venv venv3
 
 Windows:

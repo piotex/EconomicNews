@@ -13,12 +13,17 @@ obj_list_path = "data/obj_list.json"
 
 @dataclass
 class NewsModel:
+    idx: str = ""
     url: str = ""
-    creation_date: datetime = datetime.now()
-    actualization_date: datetime = datetime.now()
     comments_count: int = -1
     article_text: str = ""
-    article_img: str = ""
+
+    creation_date: datetime = datetime.now()
+    actualization_date: datetime = datetime.now()
+
+    img_dir_path: str = ""
+    vvt_path: str = ""
+    mp3_path: str = ""
 
 
 def load_obj_list() -> list[NewsModel]:
@@ -104,18 +109,18 @@ def main():
     driver.get(obj_list[0].url)
     close_cookies(driver)
     close_break_message(driver)
-    for idx, m_obj in enumerate(obj_list):
-        print(f"{idx + 1} / {len(obj_list)}", end="\r")
-        driver.get(m_obj.url)
-        time.sleep(1)
-        close_advertisement(driver)
-        open_news_full_width(driver)
-        screenshot_path = os.getcwd()+f"\\data\\screen_shots\\{m_obj.url.split("/")[-1].split(".")[0][:50]}.png"
-        screenshot = driver.save_screenshot(screenshot_path)
-        m_obj.article_img = screenshot_path
-        if not screenshot:
-            raise Exception("Didn't create snapshot")
-        save_obj_list(obj_list)
+    m_obj = obj_list[0]
+    m_obj.img_dir_path = f"data\\screen_shots"
+    driver.get(m_obj.url)
+    time.sleep(1)
+    close_advertisement(driver)
+    open_news_full_width(driver)
+    screenshot_path = f"data\\screen_shots\\0-screen-{m_obj.idx}.png"
+    screenshot = driver.save_screenshot(screenshot_path)
+    if not screenshot:
+        raise Exception("Didn't create snapshot")
+    save_obj_list(obj_list)
+
 
 if __name__ == "__main__":
     start_time = time.time()

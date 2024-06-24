@@ -13,12 +13,17 @@ from dataclasses import dataclass
 
 @dataclass
 class NewsModel:
+    idx: str = ""
     url: str = ""
-    creation_date: datetime = datetime.now()
-    actualization_date: datetime = datetime.now()
     comments_count: int = -1
     article_text: str = ""
-    article_img: str = ""
+
+    creation_date: datetime = datetime.now()
+    actualization_date: datetime = datetime.now()
+
+    img_dir_path: str = ""
+    vvt_path: str = ""
+    mp3_path: str = ""
 
 
 main_url = "https://www.bankier.pl"
@@ -45,6 +50,7 @@ def init_folders():
         'important_files',
         'movies',
         'screen_shots',
+        'text_for_gemini',
         'logs'
     ]
     for folder in folders:
@@ -65,7 +71,7 @@ def get_obj_from_main_site(url: str) -> list[NewsModel]:
             href = article.find("a")["href"] if article.find("a") else None
             creation_date = datetime.strptime(article.find_all("time")[0]["datetime"][:-6], "%Y-%m-%dT%H:%M:%S")
             actualization_date = datetime.strptime(article.find_all("time")[1]["datetime"][:-6], "%Y-%m-%dT%H:%M:%S") if len(article.find_all("time")) > 1 else datetime(1901, 1, 1)
-            result.append(NewsModel(url=main_url + href, creation_date=creation_date, actualization_date=actualization_date))
+            result.append(NewsModel(idx=href.split("/")[-1].split(".")[0][:50] ,url=main_url + href, creation_date=creation_date, actualization_date=actualization_date))
         return result
     raise Exception(f"Other response code: {response.status_code} \n\n message: {response.text}")
 

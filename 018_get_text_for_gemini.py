@@ -1,7 +1,8 @@
 import json
+import os
 import time
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import datetime
 from selenium.webdriver.common.by import By
 import chromedriver_autoinstaller
 from selenium import webdriver
@@ -30,49 +31,42 @@ def load_obj_list() -> list[NewsModel]:
         list_of_users = json.load(f)
         list_of_users = [NewsModel(**item) for item in list_of_users]
         for a in list_of_users:
-            a.creation_date = datetime.strptime(str(a.creation_date), "%Y-%m-%d %H:%M:%S")
             a.actualization_date = datetime.strptime(str(a.actualization_date), "%Y-%m-%d %H:%M:%S")
     return list_of_users
 
-
-def limit_1(news: NewsModel):
-    return news.creation_date < datetime.now() - timedelta(days=1)
 
 
 def save_obj_list(news_list: list[NewsModel]):
     with open(obj_list_path, "w", encoding="utf-8") as f:
         json.dump([item.__dict__ for item in news_list], f, indent=4, default=str)
 
-def get_unique(news_list: list[NewsModel]):
-    unique_news = []
-    dict_m = {}
-    for elem in news_list:
-        if elem.url not in dict_m:
-            unique_news.append(elem)
-            dict_m[elem.url] = 0
-    return unique_news
-
-def sort_by_comments_count(news_list: list[NewsModel]):
-    return sorted(news_list, key=lambda news: news.comments_count, reverse=True)
-
 
 def main():
-    limit_news_to_proceed = 1
-    result = []
     obj_list = load_obj_list()
-    obj_list = get_unique(obj_list)
-    obj_list = sort_by_comments_count(obj_list)
-    count = 1
-    for obj_m in obj_list:
-        if count > limit_news_to_proceed:
-            break
 
-        if limit_1(obj_m):
-            continue
+    txt = """
+Streść poniższy artykuł, tak, żeby dobrze się tego słuchało na TikTok.
+Chcę, żebyś wybrał najciekawsze wątki z całego materiału i podsumował je w angażujący sposób do 5 zdań maksymalnie.
+Unikaj zbędnych przymiotników.
+Przedstaw poniższe informacje w rzetelny, obiektywny i angażujący widza TikToka sposób. 
+    """
 
-        result.append(obj_m)
-        count += 1
-    save_obj_list(result)
+    with open(f"data/text_for_gemini/{obj_list[0].idx}.txt", "w", encoding="utf-8") as f:
+        f.write(txt+obj_list[0].article_text)
+
+    print("""
+Czekam na twoją akcje...
+Skopiuj tekst z data/text_for_gemini
+Uruchom polecenie w gemini
+Zapisz w tym samym pliku rezultat wygenerowany przez gemini
+Po zapisaniu wciśnij ENTER w konsoli
+""")
+    a = input()
+
+    with open(f"data/text_for_gemini/{obj_list[0].idx}.txt", "r", encoding="utf-8") as f:
+        obj_list[0].article_text = f.read()
+
+    save_obj_list(obj_list)
 
 
 if __name__ == "__main__":
