@@ -1,30 +1,9 @@
-import json
-import os
 import random
 import shutil
-import time
-from typing import List
-
 from bs4 import BeautifulSoup
 import requests
-from datetime import datetime, timedelta, date
-from dataclasses import dataclass
-
-
-@dataclass
-class NewsModel:
-    idx: str = ""
-    url: str = ""
-    comments_count: int = -1
-    article_text: str = ""
-
-    creation_date: datetime = datetime.now()
-    actualization_date: datetime = datetime.now()
-
-    img_dir_path: str = ""
-    vvt_path: str = ""
-    mp3_path: str = ""
-
+from datetime import timedelta
+from news_model import *
 
 main_url = "https://www.bankier.pl"
 obj_list_path = "data/obj_list.json"
@@ -39,6 +18,11 @@ bankier_urls = [
     "https://www.bankier.pl/gielda/wiadomosci/wywiady-ze-spolek",
     "https://www.bankier.pl/waluty/wiadomosci",
 ]
+
+
+def get_valid_obj_from_home_page(news_list: list[NewsModel]) -> list[NewsModel]:
+    date_to_compare = datetime.now() - timedelta(hours=6)
+    return [x for x in news_list if x.creation_date > date_to_compare]
 
 
 def init_folders():
@@ -70,15 +54,14 @@ def get_obj_from_main_site(url: str) -> list[NewsModel]:
         for article in articles:
             href = article.find("a")["href"] if article.find("a") else None
             creation_date = datetime.strptime(article.find_all("time")[0]["datetime"][:-6], "%Y-%m-%dT%H:%M:%S")
-            actualization_date = datetime.strptime(article.find_all("time")[1]["datetime"][:-6], "%Y-%m-%dT%H:%M:%S") if len(article.find_all("time")) > 1 else datetime(1901, 1, 1)
-            result.append(NewsModel(idx=href.split("/")[-1].split(".")[0][:50] ,url=main_url + href, creation_date=creation_date, actualization_date=actualization_date))
+            actualization_date = datetime.strptime(article.find_all("time")[1]["datetime"][:-6],
+                                                   "%Y-%m-%dT%H:%M:%S") if len(
+                article.find_all("time")) > 1 else datetime(1901, 1, 1)
+            result.append(
+                NewsModel(idx=href.split("/")[-1].split(".")[0][:50], url=main_url + href, creation_date=creation_date,
+                          actualization_date=actualization_date))
         return result
     raise Exception(f"Other response code: {response.status_code} \n\n message: {response.text}")
-
-
-def get_valid_obj_from_home_page(news_list: list[NewsModel]) -> list[NewsModel]:
-    date_to_compare = datetime.now() - timedelta(days=1)
-    return [x for x in news_list if x.creation_date > date_to_compare]
 
 
 def get_todays_obj_list() -> list[NewsModel]:
@@ -94,21 +77,6 @@ def get_todays_obj_list() -> list[NewsModel]:
                 break
     print("")
     return main_list_of_obj
-
-
-def save_obj_list(news_list: list[NewsModel]):
-    with open(obj_list_path, "w", encoding="utf-8") as f:
-        json.dump([item.__dict__ for item in news_list], f, indent=4, default=str)
-
-
-def load_obj_list() -> list[NewsModel]:
-    with open(obj_list_path, "r") as f:
-        list_of_users = json.load(f)
-        list_of_users = [NewsModel(**item) for item in list_of_users]
-        for a in list_of_users:
-            a.creation_date = datetime.strptime(str(a.creation_date), "%Y-%m-%d %H:%M:%S")
-            a.actualization_date = datetime.strptime(str(a.actualization_date), "%Y-%m-%d %H:%M:%S")
-    return list_of_users
 
 
 def get_obj_from_news_page(url: str) -> NewsModel:

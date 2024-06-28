@@ -1,47 +1,10 @@
-import json
-import time
-from dataclasses import dataclass
-from datetime import datetime, timedelta
-from selenium.webdriver.common.by import By
-import chromedriver_autoinstaller
-from selenium import webdriver
-from selenium.webdriver.chrome.webdriver import WebDriver
-
-obj_list_path = "data/obj_list.json"
-
-
-@dataclass
-class NewsModel:
-    idx: str = ""
-    url: str = ""
-    comments_count: int = -1
-    article_text: str = ""
-
-    creation_date: datetime = datetime.now()
-    actualization_date: datetime = datetime.now()
-
-    img_dir_path: str = ""
-    vvt_path: str = ""
-    mp3_path: str = ""
-
-
-def load_obj_list() -> list[NewsModel]:
-    with open(obj_list_path, "r") as f:
-        list_of_users = json.load(f)
-        list_of_users = [NewsModel(**item) for item in list_of_users]
-        for a in list_of_users:
-            a.creation_date = datetime.strptime(str(a.creation_date), "%Y-%m-%d %H:%M:%S")
-            a.actualization_date = datetime.strptime(str(a.actualization_date), "%Y-%m-%d %H:%M:%S")
-    return list_of_users
+from datetime import timedelta
+from news_model import *
 
 
 def limit_1(news: NewsModel):
     return news.creation_date < datetime.now() - timedelta(days=1)
 
-
-def save_obj_list(news_list: list[NewsModel]):
-    with open(obj_list_path, "w", encoding="utf-8") as f:
-        json.dump([item.__dict__ for item in news_list], f, indent=4, default=str)
 
 def get_unique(news_list: list[NewsModel]):
     unique_news = []
@@ -51,6 +14,7 @@ def get_unique(news_list: list[NewsModel]):
             unique_news.append(elem)
             dict_m[elem.url] = 0
     return unique_news
+
 
 def sort_by_comments_count(news_list: list[NewsModel]):
     return sorted(news_list, key=lambda news: news.comments_count, reverse=True)
