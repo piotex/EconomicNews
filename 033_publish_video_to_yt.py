@@ -1,3 +1,5 @@
+import time
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.webdriver import WebDriver
 from news_model import *
@@ -5,7 +7,7 @@ from seleniumbase import Driver
 from selenium.webdriver.common.keys import Keys
 
 obj_list_path = "data/obj_list.json"
-file_path = ""
+file_path = r"C:\Users\pkubo\Desktop\filmy\24.05.29-Linux-Dockerfile syntax and basic commands\24.05.29-Linux-Dockerfile syntax and basic commands.mp4"
 
 
 def wait_for_element(driver: WebDriver, x_path: str, max_wait_time_s: float):
@@ -72,11 +74,14 @@ def click_create_button(driver_loc: WebDriver):
 
 def click_send_file(driver_loc: WebDriver):
     x_path = "/html/body/ytcp-app/ytcp-entity-page/div/ytcp-header/header/div/ytcp-text-menu/tp-yt-paper-dialog/tp-yt-paper-listbox/tp-yt-paper-item[1]/ytcp-ve/tp-yt-paper-item-body/div/div/div/yt-formatted-string"
+    # x_path = "/html/body/ytcp-app/ytcp-entity-page/div/ytcp-header/header/div/ytcp-text-menu/tp-yt-paper-dialog/tp-yt-paper-listbox/tp-yt-paper-item[1]/ytcp-ve/tp-yt-paper-item-body/div/div/div/yt-formatted-string"
+    # x_path = "/html/body/ytcp-app/ytcp-entity-page/div/ytcp-header/header/div/ytcp-text-menu/tp-yt-paper-dialog/tp-yt-paper-listbox/tp-yt-paper-item[1]/ytcp-ve/tp-yt-iron-icon"
     wait_for_element(driver_loc, x_path, 100)
     driver_loc.find_element(By.XPATH, x_path).click()
-def click_send_file(driver_loc: WebDriver):
+def send_file_from_disk(driver_loc: WebDriver):
     button = driver_loc.find_element(By.XPATH, "//input[@type='file']")
     button.send_keys(file_path)
+    time.sleep(10)
 def insert_video_title(driver_loc: WebDriver, title: str):
     x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[1]/ytcp-ve/ytcp-video-metadata-editor/div/ytcp-video-metadata-editor-basics/div[1]/ytcp-video-title/ytcp-social-suggestions-textbox/ytcp-form-input-container/div[1]/div[2]/div/ytcp-social-suggestion-input/div"
     wait_for_element(driver_loc, x_path, 200)
@@ -196,9 +201,14 @@ def click_set_category(driver_loc: WebDriver):
     x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[1]/ytcp-ve/ytcp-video-metadata-editor/div/ytcp-video-metadata-editor-advanced/div[11]/div[3]/ytcp-form-select/ytcp-select/ytcp-text-dropdown-trigger/ytcp-dropdown-trigger/div/div[3]/tp-yt-iron-icon"
     driver_loc.find_element(By.XPATH, x_path).click()
     time.sleep(1)
-    x_path = "/html/body/ytcp-text-menu[5]/tp-yt-paper-dialog/tp-yt-paper-listbox/tp-yt-paper-item[11]/ytcp-ve/tp-yt-paper-item-body/div/div/div/yt-formatted-string"  # Rozrywka
-    driver_loc.find_element(By.XPATH, x_path).click()
-    time.sleep(1)
+    for i in range(3,6,1):
+        try:
+            x_path = f"/html/body/ytcp-text-menu[{i}]/tp-yt-paper-dialog/tp-yt-paper-listbox/tp-yt-paper-item[11]/ytcp-ve/tp-yt-paper-item-body/div/div/div/yt-formatted-string"
+            driver_loc.find_element(By.XPATH, x_path).click()
+            time.sleep(1)
+        except:
+            pass
+
 
 def click_allow_comments(driver_loc: WebDriver):
     x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[1]/ytcp-ve/ytcp-video-metadata-editor/div/ytcp-video-metadata-editor-advanced/div[12]/div[3]/ytcp-comment-moderation-settings/div/tp-yt-paper-radio-button[1]/div[1]/div[1]"
@@ -208,7 +218,7 @@ def click_show_likes(driver_loc: WebDriver):
     x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[1]/ytcp-ve/ytcp-video-metadata-editor/div/ytcp-video-metadata-editor-advanced/div[12]/div[5]/ytcp-form-checkbox/ytcp-checkbox-lit/div/div[1]/div/div/div"
     driver_loc.find_element(By.XPATH, x_path).click()
     time.sleep(1)
-def click_NEXT(driver_loc: WebDriver):
+def click_next_from_details_to_edit(driver_loc: WebDriver):
     x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[2]/div/div[2]/ytcp-button[2]/div"
     wait_for_element(driver_loc, x_path, 100)
     driver_loc.find_element(By.XPATH, x_path).click()
@@ -220,6 +230,65 @@ def login(driver_loc: WebDriver) -> None:
     insert_password(driver_loc)
     # click_proceed_after_login(driver_loc)
 
+def click_add_subtitles(driver_loc: WebDriver):
+    x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[1]/ytcp-uploads-video-elements/div[2]/ytcp-button/div"
+    wait_for_element(driver_loc, x_path, 100)
+    driver_loc.find_element(By.XPATH, x_path).click()
+    time.sleep(5)
+def click_send_file_2(driver_loc: WebDriver):
+    x_path = "/html/body/ytve-captions-editor-modal/ytcp-dialog/tp-yt-paper-dialog/div[2]/div/ytve-editor/div[1]/div/ytve-captions-editor-options-panel/div[2]/div/ul/li[1]/ytcp-ve/a/tp-yt-iron-icon"
+    wait_for_element(driver_loc, x_path, 100)
+    driver_loc.find_element(By.XPATH, x_path).click()
+    time.sleep(1)
+
+def click_next_2(driver_loc: WebDriver):
+    x_path = "/html/body/ytve-captions-editor-upload-dialog/ytcp-dialog/tp-yt-paper-dialog/div[3]/div/ytcp-button[2]/div"
+    wait_for_element(driver_loc, x_path, 100)
+    driver_loc.find_element(By.XPATH, x_path).click()
+    time.sleep(1)
+def subtitles_page_1(driver_loc: WebDriver):
+    # TODO: dodać ekran końcowy
+    pass
+def subtitles_page_2(driver_loc: WebDriver):
+    # TODO: dodać karty
+    pass
+def click_next_from_edit_to_verification(driver_loc: WebDriver):
+    x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[2]/div/div[2]/ytcp-button[2]/div"
+    wait_for_element(driver_loc, x_path, 100)
+    driver_loc.find_element(By.XPATH, x_path).click()
+    time.sleep(1)
+def click_next_from_verification_to_visibility(driver_loc: WebDriver):
+    x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[2]/div/div[2]/ytcp-button[2]/div"
+    wait_for_element(driver_loc, x_path, 100)
+    driver_loc.find_element(By.XPATH, x_path).click()
+    time.sleep(1)
+def click_publish(driver_loc: WebDriver):
+    x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[1]/ytcp-uploads-review/div[2]/div[1]/ytcp-video-visibility-select/div[2]/tp-yt-paper-radio-group/tp-yt-paper-radio-button[3]/div[1]/div[1]"
+    wait_for_element(driver_loc, x_path, 100)
+    driver_loc.find_element(By.XPATH, x_path).click()
+    time.sleep(1)
+
+    x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[2]/div/div[2]/ytcp-button[3]/div"
+    wait_for_element(driver_loc, x_path, 100)
+    driver_loc.find_element(By.XPATH, x_path).click()
+    time.sleep(10)
+
+def get_share_link(driver_loc: WebDriver):
+    x_path = "/html/body/ytcp-video-share-dialog/ytcp-dialog/tp-yt-paper-dialog/div[2]/div/div/div/a"
+    wait_for_element(driver_loc, x_path, 100)
+    href = driver_loc.find_element(By.XPATH, x_path).get_attribute('href')
+    return href
+
+
+# def subtitles_page(driver_loc: WebDriver):
+#     # click_add_subtitles(driver_loc)
+#     # click_send_file_2(driver_loc)
+#     # click_next_2(driver_loc)
+#     # TODO: dodać przesłanie pliku z napisami
+#     click_next_from_subtitles_to_verification(driver_loc)
+#     pass
+
+
 
 def send_video(driver_loc: WebDriver):
     title = "a"
@@ -230,74 +299,81 @@ def send_video(driver_loc: WebDriver):
     go_to_youtube_studio(driver_loc)
     click_create_button(driver_loc)
     click_send_file(driver_loc)
+    send_file_from_disk(driver_loc)
     insert_video_title(driver_loc, title)
-    insert_video_description(driver_loc, description)
+    insert_video_description(driver_loc, description)       # TODO: click playlist !!!
     select_not_for_kids(driver_loc)
     click_show_more(driver_loc)
-    # click_my_video_contain_paied_promotion(driver_loc)
+    # # click_my_video_contain_paied_promotion(driver_loc)
     click_video_is_unedited_with_ai(driver_loc)
-    # click_automatic_chapters(driver_loc)
-    # click_allow_mentioned_places(driver_loc)
-    # click_automatic_concepts(driver_loc)
+    # # click_automatic_chapters(driver_loc)
+    # # click_allow_mentioned_places(driver_loc)
+    # # click_automatic_concepts(driver_loc)
     set_tags(driver_loc,tags)
     set_language(driver_loc)
     click_not_published_in_usa_tv(driver_loc)
-    click_todays_date(driver_loc)
+    click_todays_date(driver_loc)                           # TODO: poprawić wybór daty - teraz wybiera ostatni wiersz i 28.06.2024
     set_film_location(driver_loc)
-    # click_standard_licence(driver_loc)
-    # click_allow_to_insert_on_different_pages(driver_loc)
-    # click_publish_in_subscription_section(driver_loc)
-    # click_allow_remix(driver_loc)
+    # # click_standard_licence(driver_loc)
+    # # click_allow_to_insert_on_different_pages(driver_loc)
+    # # click_publish_in_subscription_section(driver_loc)
+    # # click_allow_remix(driver_loc)
     click_set_category(driver_loc)
-    click_allow_comments(driver_loc)
-    click_show_likes(driver_loc)
+    # click_allow_comments(driver_loc)
+    # click_show_likes(driver_loc)
 
-    click_NEXT(driver_loc)
+    click_next_from_details_to_edit(driver_loc)
+    # add_subtitles(driver_loc)
+    click_next_from_edit_to_verification(driver_loc)
+    click_next_from_verification_to_visibility(driver_loc)
+    click_publish(driver_loc)
+
+    href = get_share_link(driver_loc)
+
+    a = 9
 
 
-    # napisy | subtitles
-
-    x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[2]/div/div[2]/ytcp-button[2]/div"
-    wait_for_element(driver_loc, x_path, 100)
-    driver_loc.find_element(By.XPATH, x_path).click()
-    logging.debug('send_video() - Clicked NEXT')
-
-    # weryfikacja
-
-    x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[2]/div/div[2]/ytcp-button[2]/div"
-    wait_for_element(driver_loc, x_path, 100)
-    driver_loc.find_element(By.XPATH, x_path).click()
-    logging.debug('send_video() - Clicked NEXT')
-
-    # widocznosc
-
-    x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[1]/ytcp-uploads-review/div[2]/div[1]/ytcp-video-visibility-select/div[2]/tp-yt-paper-radio-group/tp-yt-paper-radio-button[3]/div[1]/div[1]"  # publiczny
-    wait_for_element(driver_loc, x_path, 100)
-    driver_loc.find_element(By.XPATH, x_path).click()
-    logging.debug('send_video() - Clicked NEXT')
-
-    time.sleep(30)
-
-    x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[2]/div/div[2]/ytcp-button[3]/div"
-    wait_for_element(driver_loc, x_path, 100)
-    driver_loc.find_element(By.XPATH, x_path).click()
-    logging.debug('send_video() - Clicked PUBLISH')
-
-    # x_path = "/html/body/ytcp-uploads-still-processing-dialog/ytcp-dialog/tp-yt-paper-dialog/div[3]/ytcp-button/div"
-    x_path = "/html/body/ytcp-video-share-dialog/ytcp-dialog/tp-yt-paper-dialog/div[3]/ytcp-button/div"
-    wait_for_element(driver_loc, x_path, 100)
-    driver_loc.find_element(By.XPATH, x_path).click()
-    logging.debug('send_video() - Clicked Close')
+    #
+    # x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[2]/div/div[2]/ytcp-button[2]/div"
+    # wait_for_element(driver_loc, x_path, 100)
+    # driver_loc.find_element(By.XPATH, x_path).click()
+    # logging.debug('send_video() - Clicked NEXT')
+    #
+    # # weryfikacja
+    #
+    # x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[2]/div/div[2]/ytcp-button[2]/div"
+    # wait_for_element(driver_loc, x_path, 100)
+    # driver_loc.find_element(By.XPATH, x_path).click()
+    # logging.debug('send_video() - Clicked NEXT')
+    #
+    # # widocznosc
+    #
+    # x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[1]/ytcp-uploads-review/div[2]/div[1]/ytcp-video-visibility-select/div[2]/tp-yt-paper-radio-group/tp-yt-paper-radio-button[3]/div[1]/div[1]"  # publiczny
+    # wait_for_element(driver_loc, x_path, 100)
+    # driver_loc.find_element(By.XPATH, x_path).click()
+    # logging.debug('send_video() - Clicked NEXT')
+    #
+    # time.sleep(30)
+    #
+    # x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[2]/div/div[2]/ytcp-button[3]/div"
+    # wait_for_element(driver_loc, x_path, 100)
+    # driver_loc.find_element(By.XPATH, x_path).click()
+    # logging.debug('send_video() - Clicked PUBLISH')
+    #
+    # # x_path = "/html/body/ytcp-uploads-still-processing-dialog/ytcp-dialog/tp-yt-paper-dialog/div[3]/ytcp-button/div"
+    # x_path = "/html/body/ytcp-video-share-dialog/ytcp-dialog/tp-yt-paper-dialog/div[3]/ytcp-button/div"
+    # wait_for_element(driver_loc, x_path, 100)
+    # driver_loc.find_element(By.XPATH, x_path).click()
+    # logging.debug('send_video() - Clicked Close')
 
 def main():
     result = []
     obj_list = load_obj_list()
-    file_path = obj_list[0].
 
     driver = get_init_driver()
     accept_cookies_youtube(driver)
     login(driver)
-
+    send_video(driver)
 
 
 
