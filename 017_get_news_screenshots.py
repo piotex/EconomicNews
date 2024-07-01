@@ -51,6 +51,7 @@ def close_break_message(driver: WebDriver):
 
 def close_cookies(driver: WebDriver):
     x_path = "/html/body/div[6]/div[2]/div/div/div[2]/div/div/button"
+    x_path = "/html/body/div[6]/div[2]/div/div/div[2]/div/div/button"
     wait_for_element(driver, x_path, 10)
     driver.find_element(By.XPATH, x_path).click()
 
@@ -72,9 +73,14 @@ def open_news_full_width(driver: WebDriver):
 def main():
     obj_list = load_obj_list()
     driver = get_init_driver()
-    driver.get(obj_list[0].url)
-    close_cookies(driver)
-    close_break_message(driver)
+    for i in range(2):
+        try:
+            driver.get(obj_list[0].url)
+            close_cookies(driver)
+            close_break_message(driver)
+            break
+        except:
+            pass
     m_obj = obj_list[0]
     m_obj.img_dir_path = f"data\\screen_shots"
     driver.get(m_obj.url)

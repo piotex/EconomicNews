@@ -11,6 +11,8 @@ class NewsModel:
     url: str = ""
     comments_count: int = -1
     article_text: str = ""
+    gemini_in_text: str = ""
+    gemini_out_text: str = ""
 
     creation_date: datetime = datetime.now()
     actualization_date: datetime = datetime.now()
@@ -24,10 +26,11 @@ obj_list_path = "data/obj_list.json"
 
 
 def load_obj_list() -> list[NewsModel]:
-    with open(obj_list_path, "r") as f:
+    with open(obj_list_path, "r", encoding="utf-8") as f:
         list_of_users = json.load(f)
         list_of_users = [NewsModel(**item) for item in list_of_users]
         for a in list_of_users:
+            a.creation_date = datetime.strptime(str(a.creation_date), "%Y-%m-%d %H:%M:%S")
             a.actualization_date = datetime.strptime(str(a.actualization_date), "%Y-%m-%d %H:%M:%S")
     return list_of_users
 

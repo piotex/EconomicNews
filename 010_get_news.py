@@ -103,6 +103,7 @@ def sort_obj_list_by_comments(news_model_list: list[NewsModel]) -> list[NewsMode
 def main():
     init_folders()
     main_list_of_obj = get_todays_obj_list()
+    # main_list_of_obj = load_obj_list()
     for idx, obj1 in enumerate(main_list_of_obj):
         print(f"{idx + 1} / {len(main_list_of_obj)}", end="\r")
         tmp_obj = get_obj_from_news_page(obj1.url)
