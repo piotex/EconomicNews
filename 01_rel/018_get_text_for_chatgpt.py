@@ -51,7 +51,7 @@ def click_sign_in(driver_loc: WebDriver):
 
 
 def insert_email(driver_loc: WebDriver):
-    with open("../secrets/chatgpt.pwd", "r", encoding="utf-8") as f:
+    with open("../../secrets/chatgpt.pwd", "r", encoding="utf-8") as f:
         lines = f.readlines()
     usr = lines[0]
     x_path = "/html/body/div/div/main/section/div[2]/div[1]/input"  # email input
@@ -61,7 +61,7 @@ def insert_email(driver_loc: WebDriver):
 
 
 def insert_password(driver_loc: WebDriver):
-    with open("../secrets/chatgpt.pwd", "r", encoding="utf-8") as f:
+    with open("../../secrets/chatgpt.pwd", "r", encoding="utf-8") as f:
         lines = f.readlines()
     pwd = lines[1]
     x_path = "/html/body/div[1]/main/section/div/div/div/form/div[1]/div/div[2]/div/input"  # pwd input

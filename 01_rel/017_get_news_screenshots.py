@@ -82,7 +82,7 @@ def main():
         except:
             pass
     m_obj = obj_list[0]
-    m_obj.img_dir_path = f"data\\screen_shots"
+    m_obj.img_dir_path = f"../data/screen_shots"
     driver.get(m_obj.url)
     time.sleep(1)
     close_advertisement(driver)

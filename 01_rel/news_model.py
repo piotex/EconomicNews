@@ -22,7 +22,7 @@ class NewsModel:
     mp3_path: str = ""
 
 
-obj_list_path = "data/obj_list.json"
+obj_list_path = "../data/obj_list.json"
 
 
 def load_obj_list() -> list[NewsModel]:

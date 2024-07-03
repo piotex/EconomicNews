@@ -6,7 +6,7 @@ from news_model import *
 from seleniumbase import Driver
 from selenium.webdriver.common.keys import Keys
 
-obj_list_path = "data/obj_list.json"
+obj_list_path = "../data/obj_list.json"
 file_path = r"C:\Users\pkubo\Desktop\filmy\24.05.29-Linux-Dockerfile syntax and basic commands\24.05.29-Linux-Dockerfile syntax and basic commands.mp4"
 
 
@@ -35,7 +35,7 @@ def accept_cookies_youtube(driver_loc: WebDriver) -> None:
     time.sleep(10)
 
 def insert_email(driver_loc: WebDriver):
-    with open("../secrets/youtube.pwd", "r", encoding="utf-8") as f:
+    with open("../../secrets/youtube.pwd", "r", encoding="utf-8") as f:
         lines = f.readlines()
     usr = lines[0]
     x_path = "/html/body/div[1]/div[1]/div[2]/c-wiz/div/div[2]/div/div/div[1]/form/span/section/div/div/div[1]/div/div[1]/div/div[1]/input"         # email input
@@ -43,7 +43,7 @@ def insert_email(driver_loc: WebDriver):
     driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(usr)
     time.sleep(5)
 def insert_password(driver_loc: WebDriver):
-    with open("../secrets/youtube.pwd", "r", encoding="utf-8") as f:
+    with open("../../secrets/youtube.pwd", "r", encoding="utf-8") as f:
         lines = f.readlines()
     pwd = lines[1]
     x_path = "/html/body/div[1]/div[1]/div[2]/c-wiz/div/div[2]/div/div/div/form/span/section[2]/div/div/div[1]/div[1]/div/div/div/div/div[1]/div/div[1]/input"  # pwd input

@@ -6,7 +6,7 @@ from datetime import timedelta
 from news_model import *
 
 main_url = "https://www.bankier.pl"
-obj_list_path = "data/obj_list.json"
+obj_list_path = "../data/obj_list.json"
 bankier_urls = [
     "https://bankier.pl/rynki/wiadomosci",
     "https://www.bankier.pl/gielda/wiadomosci",
