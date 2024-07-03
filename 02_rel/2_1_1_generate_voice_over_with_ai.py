@@ -1,35 +1,39 @@
 import asyncio
 import edge_tts
+from unidecode import unidecode
+
 from news_model import *
 
 
-async def edge_tts_generate_to_file(model: NewsModel) -> None:
-    voice_model = "pl-PL-ZofiaNeural"  # pl-PL-MarekNeural
+async def edge_tts_generate_to_file(text: str, path:str, voice_model:str) -> None:
     speed = "+25%"
 
-    communicate = edge_tts.Communicate(model.article_text, voice_model, rate=speed)
-    await communicate.save(model.mp3_path)
+    communicate = edge_tts.Communicate(text, voice_model, rate=speed)
+    await communicate.save(path+".mp3")
 
-    communicate = edge_tts.Communicate(model.article_text, voice_model, rate=speed)
+    communicate = edge_tts.Communicate(text, voice_model, rate=speed)
     sub_maker = edge_tts.SubMaker()
-    with open(model.mp3_path, "wb") as file:
+    with open(path+".mp3", "wb") as file:
         async for chunk in communicate.stream():
             if chunk["type"] == "audio":
                 file.write(chunk["data"])
             elif chunk["type"] == "WordBoundary":
                 sub_maker.create_sub((chunk["offset"], chunk["duration"]), chunk["text"])
 
-    with open(model.vvt_path, "w", encoding="utf-8") as file:
+    with open(path+".vvt", "w", encoding="utf-8") as file:
         file.write(sub_maker.generate_subs())
 
 
 async def wrapper_edge_tts_generate_to_file(elem: NewsModel):
-    await edge_tts_generate_to_file(elem)
+    voice_models = ["pl-PL-MarekNeural","pl-PL-ZofiaNeural"]
+    text_list = elem.gemini_out_text.split(".")
+    text_list = [a for a in text_list if a != ""]
+
+    for i, text in enumerate(text_list):
+        await edge_tts_generate_to_file(text, f"data/audios/{i}_{unidecode(text.replace(' ','_'))[:15]}",voice_models[i%len(voice_models)])
 
 
 def text_to_speech(elem: NewsModel):
-    elem.mp3_path = f"data/audio/{elem.idx}.mp3"
-    elem.vvt_path = f"data/audio/{elem.idx}.vvt"
     try:
         asyncio.run(wrapper_edge_tts_generate_to_file(elem))
     except Exception as exxx:
@@ -38,10 +42,9 @@ def text_to_speech(elem: NewsModel):
 
 
 def main():
-    obj_list = load_obj_list()
-    m_obj = obj_list[0]
+    m_obj = load_obj()
     text_to_speech(m_obj)
-    save_obj_list(obj_list)
+    save_obj(m_obj)
 
 
 if __name__ == "__main__":

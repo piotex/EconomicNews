@@ -1,6 +1,5 @@
-import time
-
-from news_model import *
+import random
+from unidecode import unidecode
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.webdriver import WebDriver
 from news_model import *
@@ -28,19 +27,11 @@ def get_init_driver() -> WebDriver:
     return driver
 
 
-def go_to_gemini_and_wait_for_captcha_to_be_solved(driver_loc: WebDriver):
+def go_to_home_page(driver_loc: WebDriver):
     yt_url = "https://chatgpt.com/"
     driver_loc.get(yt_url)
     # print("\n\nWaiting for captcha to be solved...\n\n")
     # a = input()
-
-
-def accept_cookies_youtube(driver_loc: WebDriver) -> None:
-    # x_path = "/html/body/c-wiz/div/div/div/div[2]/div[1]/div[3]/div[1]/div[1]/form[2]/div/div/button/span"  # accept
-    # x_path = "/html/body/c-wiz/div/div/div/div[2]/div[1]/div[3]/div[1]/div[1]/form[1]/div/div/button"  # not accept
-    # wait_for_element(driver_loc, x_path, 10)
-    # driver_loc.find_element(By.XPATH, x_path).click()
-    time.sleep(1)
 
 
 def click_sign_in(driver_loc: WebDriver):
@@ -73,42 +64,12 @@ def insert_password(driver_loc: WebDriver):
     x_path = "/html/body/div[5]/div/div/div/div[1]/button"
 
 
-def click_new_chat_icon(driver_loc: WebDriver):
-    # x_path = "/html/body/chat-app/main/side-navigation-v2/bard-sidenav-container/bard-sidenav/div/div/div[1]/div/expandable-button/button"  # new chat button
-    # wait_for_element(driver_loc, x_path, 10)
-    # try:
-    #     driver_loc.find_element(By.XPATH, x_path).click()
-    # except:
-    #     pass
-    time.sleep(1)
-
-def slice_text(input_text:str):
-    text_len = 50
-    parts = [input_text[0:text_len-1]]
-    i = 1
-    while len(parts[-1]) == text_len-1:
-        parts.append(input_text[i*text_len:(i+1)*text_len-1])
-        i += 1
-    return parts
-
-# def make_input_bigger(driver_loc: WebDriver):
-#     x_path = "/html/body/chat-app/main/side-navigation-v2/bard-sidenav-container/bard-sidenav-content/div/div/div[2]/chat-window/div[1]/div[2]/div[1]/input-area-v2/div/div"
-#     wait_for_element(driver_loc, x_path, 10)
-#     element = driver_loc.find_element(By.XPATH, x_path)
-#     driver_loc.execute_script(f"arguments[0].setAttribute('style', 'height: 500px')", element)
-
 def set_input_text_and_go(driver_loc: WebDriver, input_text: str):
     x_path = "/html/body/div[1]/div[1]/div[2]/main/div[1]/div[2]/div[1]/div/form/div/div[2]/div/div/div[2]/textarea"
-    # driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(Keys.CONTROL, 'a')
-    # driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(Keys.BACKSPACE)
-    sliced = slice_text(input_text)
-    # driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(input_text)
-    for text in sliced:
-        for c in text:
-            driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(c)
-            driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(Keys.ARROW_RIGHT)
-            time.sleep(0.005)
-        # driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(Keys.LEFT_SHIFT+Keys.ENTER)
+    for c in input_text:
+        driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(c)
+        driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(Keys.ARROW_RIGHT)
+        time.sleep(random.uniform(0.001, 0.005))
     time.sleep(1)
 
 
@@ -130,24 +91,30 @@ def get_all_output_text(driver_loc: WebDriver):
             return old_text
 
 
+def get_chatgpt_input() -> str:
+    with open("data/urls/input_for_chatgpt.txt", "r", encoding="utf-8") as f:
+        return f.readlines()[0]
+
+
+def parse_text_with_polish_special_char(in_str: str):
+    return unidecode(in_str)
+
+
 def main():
-    txt = "Streść poniższy artykuł, tak, żeby dobrze się tego słuchało na TikTok. Chcę, żebyś wybrał najciekawsze wątki z całego materiału i podsumował je w angażujący sposób do 5 zdań maksymalnie. Unikaj zbędnych przymiotników. Przedstaw poniższe informacje w rzetelny, obiektywny i angażujący widza TikToka sposób."""
-    obj_list = load_obj_list()
-    model = obj_list[0]
-    model.gemini_in_text = txt + model.article_text.replace("\n","").replace("\r","") + "\n"
+    model = load_obj()
+    model.gemini_in_text = get_chatgpt_input() + model.article_text.replace("\n", "").replace("\r", "") + "\n"
+    model.gemini_in_text = parse_text_with_polish_special_char(model.gemini_in_text)
 
     driver = get_init_driver()
-    go_to_gemini_and_wait_for_captcha_to_be_solved(driver)
+    go_to_home_page(driver)
     click_sign_in(driver)
     insert_email(driver)
     insert_password(driver)
-    # accept_cookies_youtube(driver)
-    # click_new_chat_icon(driver)
     set_input_text_and_go(driver, model.gemini_in_text)
     time.sleep(10)
     model.gemini_out_text = get_all_output_text(driver)
 
-    save_obj_list(obj_list)
+    save_obj(model)
 
 
 if __name__ == "__main__":

@@ -5,10 +5,14 @@ pytdm
 pyttsx3~=2.90
 edge-tts
 pydub
-opencv-python
+opencv-python~=4.10.0.84
 Pillow~=10.0.1
 ffpyplayer
 scipy
 moviepy~=1.0.3
 numpy~=1.26.1
 beautifulsoup4~=4.12.3
+seleniumbase~=4.28.0
+pytube~=15.0.0
+Unidecode~=1.3.8
+mutagen~=1.47.0

@@ -3,6 +3,9 @@ from selenium.webdriver.common.by import By
 from selenium import webdriver
 from selenium.webdriver.chrome.webdriver import WebDriver
 from news_model import *
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
 
 
 def get_init_driver() -> WebDriver:
@@ -32,7 +35,9 @@ def close_advertisement(driver: WebDriver):
         "/html/body/div[1]/header",
         "/html/body/div[1]/div[3]/aside[1]",
         "/html/body/div[1]/div[4]/aside[1]",
-        "/html/body/div[1]/div[3]/main/article/section/div[1]"
+        "/html/body/div[1]/div[3]/main/article/section/div[1]",
+        "/html/body/div[1]/div[4]/main/article/section/section[2]",
+        "/html/body/div[1]/div[3]/main/article/section/section[2]",
     ]
 
     for x_path in x_path_list:
@@ -42,18 +47,6 @@ def close_advertisement(driver: WebDriver):
             time.sleep(0.5)
         except:
             pass
-
-
-def close_break_message(driver: WebDriver):
-    x_path = "/html/body/div[1]/div[7]"
-    wait_for_element(driver, x_path, 30)
-
-
-def close_cookies(driver: WebDriver):
-    x_path = "/html/body/div[6]/div[2]/div/div/div[2]/div/div/button"
-    x_path = "/html/body/div[6]/div[2]/div/div/div[2]/div/div/button"
-    wait_for_element(driver, x_path, 10)
-    driver.find_element(By.XPATH, x_path).click()
 
 
 def open_news_full_width(driver: WebDriver):
@@ -70,28 +63,59 @@ def open_news_full_width(driver: WebDriver):
             pass
 
 
-def main():
-    obj_list = load_obj_list()
-    driver = get_init_driver()
-    for i in range(2):
+def close_break_message(driver: WebDriver):
+    x_path = "/html/body/div[1]/div[7]"
+    wait_for_element(driver, x_path, 10)
+    try:
+        driver.find_element(By.XPATH, x_path).click()
+    except:
+        pass
+
+
+def close_cookies(driver: WebDriver):
+    for i in range(1, 15):
+        x_path = f"/html/body/div[{i}]/div[2]/div/div/div[2]/div/div/button"
         try:
-            driver.get(obj_list[0].url)
-            close_cookies(driver)
-            close_break_message(driver)
-            break
+            driver.find_element(By.XPATH, x_path).click()
+            return 0
         except:
             pass
-    m_obj = obj_list[0]
-    m_obj.img_dir_path = f"../data/screen_shots"
-    driver.get(m_obj.url)
+
+
+def find_xpath_idx(driver: WebDriver):
+    for i in range(1, 15, 1):
+        x_path = f"/html/body/div[1]/div[{i}]/main/article/header"
+        try:
+            driver.find_element(By.XPATH, x_path)
+            return i
+        except:
+            pass
+    raise Exception("=== Can't find idx ===")
+
+
+def make_screenshots(driver: WebDriver):
+    idx = find_xpath_idx(driver)
+
+    x_paths = [
+        f"/html/body/div[1]/div[{idx}]/main/article/header",
+        f"/html/body/div[1]/div[{idx}]/main/article/section/p[1]",
+        f"/html/body/div[1]/div[{idx}]/main/article/section",
+    ]
+    for i, x_path in enumerate(x_paths):
+        screenshot_path = f"data/images/screenshot-{i + 1}.png"
+        driver.find_element(By.XPATH, x_path).screenshot(screenshot_path)
+
+
+def main():
+    model = load_obj()
+    driver = get_init_driver()
+    driver.get(model.url)
     time.sleep(1)
+    close_cookies(driver)
+    close_break_message(driver)
     close_advertisement(driver)
     open_news_full_width(driver)
-    screenshot_path = f"data\\screen_shots\\0-screen-{m_obj.idx}.png"
-    screenshot = driver.save_screenshot(screenshot_path)
-    if not screenshot:
-        raise Exception("Didn't create snapshot")
-    save_obj_list(obj_list)
+    make_screenshots(driver)
 
 
 if __name__ == "__main__":
