@@ -229,11 +229,7 @@ def click_show_likes(driver_loc: WebDriver):
     x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[1]/ytcp-ve/ytcp-video-metadata-editor/div/ytcp-video-metadata-editor-advanced/div[12]/div[5]/ytcp-form-checkbox/ytcp-checkbox-lit/div/div[1]/div/div/div"
     driver_loc.find_element(By.XPATH, x_path).click()
     time.sleep(1)
-def click_next_from_details_to_edit(driver_loc: WebDriver):
-    x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[2]/div/div[2]/ytcp-button[2]/div"
-    wait_for_element(driver_loc, x_path, 100)
-    driver_loc.find_element(By.XPATH, x_path).click()
-    time.sleep(1)
+
 
 def login(driver_loc: WebDriver) -> None:
     click_sign_in(driver_loc)
@@ -263,13 +259,25 @@ def subtitles_page_1(driver_loc: WebDriver):
 def subtitles_page_2(driver_loc: WebDriver):
     # TODO: dodać karty
     pass
+
+
+def click_next_from_details_to_edit(driver_loc: WebDriver):
+    x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[2]/div/div[2]/ytcp-button[2]/div"
+    x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[2]/div/div[2]/ytcp-button[2]/ytcp-button-shape/button"
+    wait_for_element(driver_loc, x_path, 100)
+    driver_loc.find_element(By.XPATH, x_path).click()
+    time.sleep(1)
+
+
 def click_next_from_edit_to_verification(driver_loc: WebDriver):
     x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[2]/div/div[2]/ytcp-button[2]/div"
+    x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[2]/div/div[2]/ytcp-button[2]/ytcp-button-shape/button"
     wait_for_element(driver_loc, x_path, 100)
     driver_loc.find_element(By.XPATH, x_path).click()
     time.sleep(1)
 def click_next_from_verification_to_visibility(driver_loc: WebDriver):
     x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[2]/div/div[2]/ytcp-button[2]/div"
+    x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[2]/div/div[2]/ytcp-button[2]/ytcp-button-shape/button"
     wait_for_element(driver_loc, x_path, 100)
     driver_loc.find_element(By.XPATH, x_path).click()
     time.sleep(1)
@@ -280,6 +288,7 @@ def click_publish(driver_loc: WebDriver):
     time.sleep(1)
 
     x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[2]/div/div[2]/ytcp-button[3]/div"
+    x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[2]/div/div[2]/ytcp-button[3]/ytcp-button-shape/button"
     wait_for_element(driver_loc, x_path, 100)
     driver_loc.find_element(By.XPATH, x_path).click()
     time.sleep(10)
@@ -310,7 +319,7 @@ def send_video(driver_loc: WebDriver):
     click_create_button(driver_loc)
     click_send_file(driver_loc)
     send_file_from_disk(driver_loc)
-    insert_video_title(driver_loc, parse_text_with_polish_special_char(model.title_text[:100]))
+    insert_video_title(driver_loc, parse_text_with_polish_special_char(model.title_text[:95]))
     insert_video_description(driver_loc, parse_text_with_polish_special_char(model.description_text))       # TODO:  click playlist !!!
     select_not_for_kids(driver_loc)
     click_show_more(driver_loc)
