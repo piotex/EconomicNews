@@ -1,13 +1,15 @@
+import random
 import time
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.webdriver import WebDriver
+from unidecode import unidecode
+
 from news_model import *
 from seleniumbase import Driver
 from selenium.webdriver.common.keys import Keys
 
 obj_list_path = "../data/obj_list.json"
-file_path = r"C:\Users\pkubo\Desktop\filmy\24.05.29-Linux-Dockerfile syntax and basic commands\24.05.29-Linux-Dockerfile syntax and basic commands.mp4"
 
 
 def wait_for_element(driver: WebDriver, x_path: str, max_wait_time_s: float):
@@ -80,6 +82,8 @@ def click_send_file(driver_loc: WebDriver):
     driver_loc.find_element(By.XPATH, x_path).click()
 def send_file_from_disk(driver_loc: WebDriver):
     button = driver_loc.find_element(By.XPATH, "//input[@type='file']")
+    file_path = "data/result.mp4"
+    file_path = os.path.abspath(file_path)
     button.send_keys(file_path)
     time.sleep(10)
 def insert_video_title(driver_loc: WebDriver, title: str):
@@ -91,7 +95,11 @@ def insert_video_title(driver_loc: WebDriver, title: str):
 def insert_video_description(driver_loc: WebDriver, description: str):
     x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[1]/ytcp-ve/ytcp-video-metadata-editor/div/ytcp-video-metadata-editor-basics/div[2]/ytcp-video-description/div/ytcp-social-suggestions-textbox/ytcp-form-input-container/div[1]/div[2]/div/ytcp-social-suggestion-input/div"
     wait_for_element(driver_loc, x_path, 100)
-    driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(description)
+    # driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(description)
+    for c in description:
+        driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(c)
+        driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(Keys.ARROW_RIGHT)
+        time.sleep(random.uniform(0.001, 0.005))
 def select_playlist(driver_loc: WebDriver):
     playlist_idx = 1
     x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[1]/ytcp-ve/ytcp-video-metadata-editor/div/ytcp-video-metadata-editor-basics/div[4]/div[3]/div[1]/ytcp-video-metadata-playlists/ytcp-text-dropdown-trigger/ytcp-dropdown-trigger/div/div[3]/tp-yt-iron-icon"
@@ -116,6 +124,7 @@ def click_show_more(driver_loc: WebDriver):
         driver_loc.execute_script(f"window.scrollTo(0, {i * 1000})")
         time.sleep(0.5)
     x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[1]/ytcp-ve/ytcp-video-metadata-editor/div/div/ytcp-button/div"
+    x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[1]/ytcp-ve/ytcp-video-metadata-editor/div/div/ytcp-button/ytcp-button-shape/button"
     wait_for_element(driver_loc, x_path, 100)
     driver_loc.find_element(By.XPATH, x_path).click()
     time.sleep(1)
@@ -166,7 +175,9 @@ def click_todays_date(driver_loc: WebDriver):
     x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[1]/ytcp-ve/ytcp-video-metadata-editor/div/ytcp-video-metadata-editor-advanced/div[8]/div[3]/div/ytcp-text-dropdown-trigger/ytcp-dropdown-trigger/div/div[3]/tp-yt-iron-icon"
     driver_loc.find_element(By.XPATH, x_path).click()
     time.sleep(1)
-    x_path = "/html/body/ytcp-date-picker/tp-yt-paper-dialog/ytcp-scrollable-calendar/div/tp-yt-iron-list/div/div[3]/div[6]/span[5]"
+    x_path = "/html/body/ytcp-date-picker/tp-yt-paper-dialog/ytcp-scrollable-calendar/div/tp-yt-iron-list/div/div[2]/div[6]/span[5]" # 28-06-24
+    x_path = "/html/body/ytcp-date-picker/tp-yt-paper-dialog/ytcp-scrollable-calendar/div/tp-yt-iron-list/div/div[3]/div[2]/span[4]" # 04-07-24
+    x_path = "/html/body/ytcp-date-picker/tp-yt-paper-dialog/ytcp-scrollable-calendar/div/tp-yt-iron-list/div/div[3]/div[2]/span[5]" # 05-07-24
     driver_loc.find_element(By.XPATH, x_path).click()
     time.sleep(1)
 def set_film_location(driver_loc: WebDriver):
@@ -278,7 +289,9 @@ def get_share_link(driver_loc: WebDriver):
     wait_for_element(driver_loc, x_path, 100)
     href = driver_loc.find_element(By.XPATH, x_path).get_attribute('href')
     return href
-
+def parse_text_with_polish_special_char(in_str: str):
+    # in_str_c = in_str.replace('\r','').replace('\n','')
+    return unidecode(in_str)
 
 # def subtitles_page(driver_loc: WebDriver):
 #     # click_add_subtitles(driver_loc)
@@ -291,17 +304,14 @@ def get_share_link(driver_loc: WebDriver):
 
 
 def send_video(driver_loc: WebDriver):
-    title = "a"
-    description = "a"
-    tags = "a,b"
-
+    model = load_obj()
 
     go_to_youtube_studio(driver_loc)
     click_create_button(driver_loc)
     click_send_file(driver_loc)
     send_file_from_disk(driver_loc)
-    insert_video_title(driver_loc, title)
-    insert_video_description(driver_loc, description)       # TODO: click playlist !!!
+    insert_video_title(driver_loc, parse_text_with_polish_special_char(model.title_text[:100]))
+    insert_video_description(driver_loc, parse_text_with_polish_special_char(model.description_text))       # TODO:  click playlist !!!
     select_not_for_kids(driver_loc)
     click_show_more(driver_loc)
     # # click_my_video_contain_paied_promotion(driver_loc)
@@ -309,7 +319,7 @@ def send_video(driver_loc: WebDriver):
     # # click_automatic_chapters(driver_loc)
     # # click_allow_mentioned_places(driver_loc)
     # # click_automatic_concepts(driver_loc)
-    set_tags(driver_loc,tags)
+    set_tags(driver_loc,parse_text_with_polish_special_char(model.tags_text))
     set_language(driver_loc)
     click_not_published_in_usa_tv(driver_loc)
     click_todays_date(driver_loc)                           # TODO: poprawić wybór daty - teraz wybiera ostatni wiersz i 28.06.2024
@@ -367,17 +377,10 @@ def send_video(driver_loc: WebDriver):
     # logging.debug('send_video() - Clicked Close')
 
 def main():
-    result = []
-    obj_list = load_obj_list()
-
     driver = get_init_driver()
     accept_cookies_youtube(driver)
     login(driver)
     send_video(driver)
-
-
-
-    save_obj_list(result)
 
 
 if __name__ == "__main__":

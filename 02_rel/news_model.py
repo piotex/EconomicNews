@@ -11,15 +11,15 @@ class NewsModel:
     url: str = ""
     comments_count: int = -1
     article_text: str = ""
-    gemini_in_text: str = ""
-    gemini_out_text: str = ""
 
     creation_date: datetime = datetime.now()
     actualization_date: datetime = datetime.now()
 
-    img_dir_path: str = ""
-    vvt_path: str = ""
-    mp3_path: str = ""
+    parsed_text: str = ""
+    description_text: str = ""
+    tags_text: str = ""
+    title_text: str = ""
+
 
 
 obj_list_path = "data/obj_list.json"
