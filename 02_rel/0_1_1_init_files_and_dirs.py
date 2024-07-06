@@ -102,9 +102,9 @@ def download_files_from_youtube():
 
 
 def main():
-    # init_folders()
-    # init_files()
-    # download_files_from_github()
+    init_folders()
+    init_files()
+    download_files_from_github()
     download_files_from_youtube()
 
 
