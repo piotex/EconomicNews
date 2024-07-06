@@ -47,21 +47,16 @@ def download_files_from_github_folder(url, dest):
     allowed_file_types = [".png", ".jgp", ".yml", ".yaml"]
     html_content = requests.get(url).content
     all_links = BeautifulSoup(html_content, 'html.parser').find_all('a')
-    res = []
-    for link in all_links:
-        href = link.get('href')
-        if not href:
-            continue
-        if url.split("/")[-1] not in href:
-            continue
+    all_links = [a.get('href') for a in all_links if a.get('href') and url.split("/")[-1] in a.get('href')]
 
+    res = []
+    for href in all_links:
         file_is_ok = False
         for allowed_file_type in allowed_file_types:
             if allowed_file_type in href:
                 file_is_ok = True
         if not file_is_ok:
             continue
-
         res.append("https://github.com" + href + "?raw=true")
     res = list(set(res))
 
