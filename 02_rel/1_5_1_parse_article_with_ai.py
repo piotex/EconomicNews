@@ -44,7 +44,7 @@ def click_sign_in(driver_loc: WebDriver):
 def insert_email(driver_loc: WebDriver):
     with open("../../secrets/chatgpt.pwd", "r", encoding="utf-8") as f:
         lines = f.readlines()
-    usr = lines[0]
+    usr = lines[0] if "\n" in lines[0] else lines[0] + "\n"
     x_path = "/html/body/div/div/main/section/div[2]/div[1]/input"  # email input
     wait_for_element(driver_loc, x_path, 10)
     driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(usr)
@@ -54,7 +54,7 @@ def insert_email(driver_loc: WebDriver):
 def insert_password(driver_loc: WebDriver):
     with open("../../secrets/chatgpt.pwd", "r", encoding="utf-8") as f:
         lines = f.readlines()
-    pwd = lines[1]
+    pwd = lines[1] if "\n" in lines[1] else lines[1] + "\n"
     x_path = "/html/body/div[1]/main/section/div/div/div/form/div[1]/div/div[2]/div/input"  # pwd input
     wait_for_element(driver_loc, x_path, 10)
     driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(pwd)
@@ -140,7 +140,7 @@ def __parse_tags(tags: str):
 def main():
     model = load_obj()
     [parse_text, description_text, tags_text, title_text] = get_chatgpt_input()
-    parse_text = parse_text_with_polish_special_char(parse_text+model.article_text[:500])
+    parse_text = parse_text_with_polish_special_char(parse_text+model.article_text[:3000])
     description_text = parse_text_with_polish_special_char(description_text)
     tags_text = parse_text_with_polish_special_char(tags_text)
     title_text = parse_text_with_polish_special_char(title_text)
