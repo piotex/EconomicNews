@@ -39,7 +39,7 @@ def accept_cookies_youtube(driver_loc: WebDriver) -> None:
 def insert_email(driver_loc: WebDriver):
     with open("../../secrets/youtube.pwd", "r", encoding="utf-8") as f:
         lines = f.readlines()
-    usr = lines[0]
+    usr = lines[0] if "\n" in lines[0] else lines[0] + "\n"
     x_path = "/html/body/div[1]/div[1]/div[2]/c-wiz/div/div[2]/div/div/div[1]/form/span/section/div/div/div[1]/div/div[1]/div/div[1]/input"         # email input
     wait_for_element(driver_loc,x_path,10)
     driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(usr)
@@ -47,7 +47,7 @@ def insert_email(driver_loc: WebDriver):
 def insert_password(driver_loc: WebDriver):
     with open("../../secrets/youtube.pwd", "r", encoding="utf-8") as f:
         lines = f.readlines()
-    pwd = lines[1]
+    pwd = lines[1] if "\n" in lines[1] else lines[1] + "\n"
     x_path = "/html/body/div[1]/div[1]/div[2]/c-wiz/div/div[2]/div/div/div/form/span/section[2]/div/div/div[1]/div[1]/div/div/div/div/div[1]/div/div[1]/input"  # pwd input
     wait_for_element(driver_loc,x_path,10)
     driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(pwd)
