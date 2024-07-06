@@ -99,11 +99,22 @@ def make_screenshots(driver: WebDriver):
     x_paths = [
         f"/html/body/div[1]/div[{idx}]/main/article/header",
         f"/html/body/div[1]/div[{idx}]/main/article/section/p[1]",
-        f"/html/body/div[1]/div[{idx}]/main/article/section",
+        f"/html/body/div[1]/div[{idx}]/main/article/section/p[2]",
+        f"/html/body/div[1]/div[{idx}]/main/article/section/p[3]",
+        f"/html/body/div[1]/div[{idx}]/main/article/section/p[4]",
+        f"/html/body/div[1]/div[{idx}]/main/article/section/p[5]",
+        f"/html/body/div[1]/div[{idx}]/main/article/section/p[6]",
+        f"/html/body/div[1]/div[{idx}]/main/article/section/p[7]",
+        # f"/html/body/div[1]/div[{idx}]/main/article/section",
     ]
     for i, x_path in enumerate(x_paths):
         screenshot_path = f"data/images/screenshot-{i + 1}.png"
-        driver.find_element(By.XPATH, x_path).screenshot(screenshot_path)
+        try:
+            element = driver.find_element(By.XPATH, x_path)
+            driver.execute_script(f"arguments[0].setAttribute('style', 'padding: 15px')", element)
+            driver.find_element(By.XPATH, x_path).screenshot(screenshot_path)
+        except:
+            pass
 
 
 def main():

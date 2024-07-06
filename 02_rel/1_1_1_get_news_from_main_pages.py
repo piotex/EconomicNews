@@ -7,6 +7,9 @@ from news_model import *
 
 main_url = "https://www.bankier.pl"
 obj_list_path = "data/obj_list.json"
+hours = 24
+max_date_in_past = datetime.now() - timedelta(hours=hours)
+max_sub_sites = 5
 
 
 def get_articles_from_main_site(url: str) -> ResultSet:
@@ -46,9 +49,6 @@ def get_urls() -> list[str]:
 
 
 def main():
-    max_date_in_past = datetime.now()-timedelta(hours=3)
-    max_sub_sites = 5
-
     urls = get_urls()
     result = []
     for idx, url in enumerate(urls):
