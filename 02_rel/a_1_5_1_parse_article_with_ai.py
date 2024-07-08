@@ -5,6 +5,7 @@ from selenium.webdriver.chrome.webdriver import WebDriver
 from news_model import *
 from seleniumbase import Driver
 from selenium.webdriver.common.keys import Keys
+import time
 
 
 def wait_for_element(driver: WebDriver, x_path: str, max_wait_time_s: float):
@@ -80,7 +81,7 @@ def set_input_text_and_go(driver_loc: WebDriver, input_text: str):
 def get_all_parsed_text(driver_loc: WebDriver):
     old_text = ".."
     while True:
-        x_path = "/html/body/div[1]/div[1]/div[2]/main/div[1]/div[1]/div/div/div/div/div[3]/div/div/div[2]"
+        x_path = "/html/body/div[1]/div[1]/div[2]/main/div[1]/div[1]/div/div/div/div/div[3]/div/div/div[2]/div/div[1]/div/div/div/p"
         wait_for_element(driver_loc, x_path, 10)
         new_text = driver_loc.find_element(By.XPATH, x_path).get_attribute("innerText")
         if len(new_text) > len(old_text):
@@ -90,7 +91,7 @@ def get_all_parsed_text(driver_loc: WebDriver):
 def get_all_description_text(driver_loc: WebDriver):
     old_text = ".."
     while True:
-        x_path = "/html/body/div[1]/div[1]/div[2]/main/div[1]/div[1]/div/div/div/div/div[5]/div/div/div[2]"
+        x_path = "/html/body/div[1]/div[1]/div[2]/main/div[1]/div[1]/div/div/div/div/div[5]/div/div/div[2]/div/div[1]/div/div/div/p"
         wait_for_element(driver_loc, x_path, 10)
         new_text = driver_loc.find_element(By.XPATH, x_path).get_attribute("innerText")
         if len(new_text) > len(old_text):
@@ -100,7 +101,7 @@ def get_all_description_text(driver_loc: WebDriver):
 def get_all_tags_text(driver_loc: WebDriver):
     old_text = ".."
     while True:
-        x_path = "/html/body/div[1]/div[1]/div[2]/main/div[1]/div[1]/div/div/div/div/div[7]/div/div/div[2]"
+        x_path = "/html/body/div[1]/div[1]/div[2]/main/div[1]/div[1]/div/div/div/div/div[7]/div/div/div[2]/div/div[1]/div/div/div/p"
         wait_for_element(driver_loc, x_path, 10)
         new_text = driver_loc.find_element(By.XPATH, x_path).get_attribute("innerText")
         if len(new_text) > len(old_text):
@@ -110,7 +111,7 @@ def get_all_tags_text(driver_loc: WebDriver):
 def get_all_title_text(driver_loc: WebDriver):
     old_text = ".."
     while True:
-        x_path = "/html/body/div[1]/div[1]/div[2]/main/div[1]/div[1]/div/div/div/div/div[9]/div/div/div[2]"
+        x_path = "/html/body/div[1]/div[1]/div[2]/main/div[1]/div[1]/div/div/div/div/div[9]/div/div/div[2]/div/div[1]/div/div/div/p"
         wait_for_element(driver_loc, x_path, 10)
         new_text = driver_loc.find_element(By.XPATH, x_path).get_attribute("innerText")
         if len(new_text) > len(old_text):
@@ -131,8 +132,11 @@ def parse_text_with_polish_special_char(in_str: str):
 def __parse_tags(tags: str):
     if "," in tags and "#" not in tags:
         return tags
+
     if "\n" in tags:
         tags = tags.replace('\n',',')
+    if "," not in tags:
+        tags = tags.replace(' ',',')
     if "#" in tags:
         tags = tags.replace('#','')
     return tags
@@ -152,20 +156,21 @@ def main():
     insert_password(driver)
 
     set_input_text_and_go(driver, parse_text)
-    time.sleep(3)
-    model.parsed_text = get_all_parsed_text(driver)         # todo: it takes "chatgpt 3.5 on the end... - fix it"
+    time.sleep(15)
+    model.parsed_text = get_all_parsed_text(driver)
     save_obj(model)
     time.sleep(1)
 
     set_input_text_and_go(driver, description_text)
-    time.sleep(3)
+    time.sleep(5)
     model.description_text = get_all_description_text(driver)
     save_obj(model)
     time.sleep(1)
 
     set_input_text_and_go(driver, tags_text)
-    time.sleep(3)
+    time.sleep(5)
     model.tags_text = get_all_tags_text(driver)
+    model.tags_text = __parse_tags(model.tags_text)
     save_obj(model)
     time.sleep(1)
 

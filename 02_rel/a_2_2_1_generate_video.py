@@ -2,7 +2,8 @@ import random
 import cv2 as cv
 from moviepy.editor import *
 from mutagen.mp3 import MP3
-from news_model import *
+import os
+import time
 from PIL import Image
 
 frames = 25
@@ -39,13 +40,13 @@ def get_subtitles_list(file_path: str):
     with open(file_path, "r", encoding="utf-8") as f:
         text = f.readlines()
         for i in range(len(text)):
-            if text[i][0].isdigit():
+            if "-->" in text[i]:
                 tmp = text[i].split("-->")
                 start_ms = convert_to_ms(tmp[0])
                 end_ms = convert_to_ms(tmp[1])
                 tmp_txt = ""
                 for j in range(1, len(text) - i):
-                    if text[i + j][0].isdigit() or i + j == len(text) - 1:
+                    if "-->" in text[i + j] or i + j == len(text) - 1:
                         tmp_txt = tmp_txt.replace("\n", "").replace("-", "")
                         res.append([start_ms, end_ms, update_text(tmp_txt)])
                         break
@@ -55,7 +56,7 @@ def get_subtitles_list(file_path: str):
 
 def get_audio_files():
     folder = "data/audios"
-    folder = "02_rel/data/audios"
+    # folder = "02_rel/data/audios"
     files_in_folder = os.listdir(folder)
     files_in_folder = [a.split(".")[0] for a in files_in_folder if ".mp3" in a]
 
@@ -76,7 +77,7 @@ def get_audio_files():
 
 def get_subtitles() -> list[list[str]]:  # start | end | text
     folder = "data/audios"
-    folder = "02_rel/data/audios"
+    # folder = "02_rel/data/audios"
     # folder = os.path.abspath(folder)
     files_in_folder = os.listdir(folder)
     files_in_folder = [a.split(".")[0] for a in files_in_folder if ".mp3" in a]
@@ -124,7 +125,7 @@ def generate_background_clips():
     video_length_ms = get_video_end_time(subtitles)
 
     folder = "data/videos/background_videos"
-    folder = "02_rel/data/videos/background_videos"
+    # folder = "02_rel/data/videos/background_videos"
     file_name = folder + "/" + os.listdir(folder)[random.randrange(len(os.listdir(folder)))]
 
     random_start_time_ms = random.randint(video_length_ms + 1, get_video_length(file_name) - 10)
@@ -157,7 +158,7 @@ def generate_subtitles_clip():
 
 def generate_bird_clip():
     folder = "data/images/animated_bird"
-    folder = "02_rel/data/images/animated_bird"
+    # folder = "02_rel/data/images/animated_bird"
     bird_clips = []
     bird_width = 400
     bird_height = 400
@@ -191,7 +192,7 @@ def generate_screenshot_clip():
     video_length_ms = get_video_end_time(subtitles)
 
     folder = "data/images"
-    folder = "02_rel/data/images"
+    # folder = "02_rel/data/images"
     files_in_folder = os.listdir(folder)
     files_in_folder = [folder + "/" + a for a in files_in_folder if "." in a]
     screenshots_clips = []
@@ -227,8 +228,8 @@ def main():
     video = CompositeVideoClip(all_clips, size=(width, height))
     video.audio = audio_clip
 
-    # video.write_videofile('data/result.mp4')
-    video.write_videofile('02_rel/data/result.mp4')
+    # video.write_videofile('02_rel/data/result.mp4')
+    video.write_videofile('data/result.mp4')
 
 
 if __name__ == "__main__":

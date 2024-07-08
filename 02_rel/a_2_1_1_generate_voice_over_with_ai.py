@@ -1,7 +1,7 @@
 import asyncio
 import edge_tts
 from unidecode import unidecode
-
+import time
 from news_model import *
 
 

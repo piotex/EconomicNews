@@ -1,6 +1,6 @@
 import random
 from datetime import timedelta
-
+import time
 import requests
 from bs4 import BeautifulSoup, ResultSet
 from news_model import *

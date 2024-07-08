@@ -1,7 +1,5 @@
 from dataclasses import dataclass
 import json
-import os
-import time
 from datetime import datetime
 
 
@@ -19,6 +17,8 @@ class NewsModel:
     description_text: str = ""
     tags_text: str = ""
     title_text: str = ""
+
+    youtube_url: str = ""
 
 
 

@@ -1,15 +1,14 @@
 import shutil
 import requests
 from bs4 import BeautifulSoup
-
+import os
+import time
 from news_model import *
 from pytube import YouTube
 
 main_url = "https://www.bankier.pl"
 obj_list_path = "../data/obj_list.json"
-bankier_urls = [
-
-]
+bankier_urls = []
 
 
 # download resources from github ...

@@ -1,11 +1,9 @@
 import chromedriver_autoinstaller
-from selenium.webdriver.common.by import By
 from selenium import webdriver
 from selenium.webdriver.chrome.webdriver import WebDriver
 from news_model import *
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
+import time
 
 
 def get_init_driver() -> WebDriver:

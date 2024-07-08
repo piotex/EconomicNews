@@ -1,4 +1,5 @@
 from news_model import *
+import time
 
 obj_list_path = "data/obj_list.json"
 

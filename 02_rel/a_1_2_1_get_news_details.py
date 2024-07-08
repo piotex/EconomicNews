@@ -1,6 +1,7 @@
 import random
 from bs4 import BeautifulSoup
 import requests
+import time
 from news_model import *
 
 obj_list_path = "data/obj_list.json"
