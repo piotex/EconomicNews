@@ -69,20 +69,28 @@ def set_input_text_and_go(driver_loc: WebDriver, input_text: str):
     if "\n" not in input_text:
         input_text += "\n"
     x_path = "/html/body/div[1]/div[1]/div[2]/main/div[1]/div[2]/div[1]/div/form/div/div[2]/div/div/div[2]/textarea"
-    for c in input_text:
-        driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(c)
-        driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(Keys.ARROW_RIGHT)
-        time.sleep(random.uniform(0.001, 0.005))
+    driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(input_text)
+    # for c in input_text:
+    #     driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(c)
+    #     driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(Keys.ARROW_RIGHT)
+    #     time.sleep(random.uniform(0.001, 0.005))
     time.sleep(1)
 
 
-
+def get_x_start(driver_loc: WebDriver):
+    x_start_l = [
+        "/html/body/div[1]/div[1]/div[2]/main",
+        "/html/body/div[1]/div[1]/div/main"
+    ]
+    for x_start in x_start_l:
+        driver_loc.find_element(By.XPATH, x_start)
+        return x_start
 
 def get_all_parsed_text(driver_loc: WebDriver):
     old_text = ".."
     while True:
-        x_path = "/html/body/div[1]/div[1]/div[2]/main/div[1]/div[1]/div/div/div/div/div[3]/div/div/div[2]/div/div[1]/div/div/div/p"
-        wait_for_element(driver_loc, x_path, 10)
+        x_path = f"{get_x_start(driver_loc)}/div[1]/div[1]/div/div/div/div/div[3]/div/div/div[2]/div/div[1]/div/div/div"
+        wait_for_element(driver_loc, x_path, 45)
         new_text = driver_loc.find_element(By.XPATH, x_path).get_attribute("innerText")
         if len(new_text) > len(old_text):
             old_text = new_text
@@ -91,8 +99,8 @@ def get_all_parsed_text(driver_loc: WebDriver):
 def get_all_description_text(driver_loc: WebDriver):
     old_text = ".."
     while True:
-        x_path = "/html/body/div[1]/div[1]/div[2]/main/div[1]/div[1]/div/div/div/div/div[5]/div/div/div[2]/div/div[1]/div/div/div/p"
-        wait_for_element(driver_loc, x_path, 10)
+        x_path = f"{get_x_start(driver_loc)}/div[1]/div[1]/div/div/div/div/div[5]/div/div/div[2]/div/div[1]/div/div/div"
+        wait_for_element(driver_loc, x_path, 30)
         new_text = driver_loc.find_element(By.XPATH, x_path).get_attribute("innerText")
         if len(new_text) > len(old_text):
             old_text = new_text
@@ -101,8 +109,8 @@ def get_all_description_text(driver_loc: WebDriver):
 def get_all_tags_text(driver_loc: WebDriver):
     old_text = ".."
     while True:
-        x_path = "/html/body/div[1]/div[1]/div[2]/main/div[1]/div[1]/div/div/div/div/div[7]/div/div/div[2]/div/div[1]/div/div/div/p"
-        wait_for_element(driver_loc, x_path, 10)
+        x_path = f"{get_x_start(driver_loc)}/div[1]/div[1]/div/div/div/div/div[7]/div/div/div[2]/div/div[1]/div/div/div"
+        wait_for_element(driver_loc, x_path, 30)
         new_text = driver_loc.find_element(By.XPATH, x_path).get_attribute("innerText")
         if len(new_text) > len(old_text):
             old_text = new_text
@@ -111,8 +119,8 @@ def get_all_tags_text(driver_loc: WebDriver):
 def get_all_title_text(driver_loc: WebDriver):
     old_text = ".."
     while True:
-        x_path = "/html/body/div[1]/div[1]/div[2]/main/div[1]/div[1]/div/div/div/div/div[9]/div/div/div[2]/div/div[1]/div/div/div/p"
-        wait_for_element(driver_loc, x_path, 10)
+        x_path = f"{get_x_start(driver_loc)}/div[1]/div[1]/div/div/div/div/div[9]/div/div/div[2]/div/div[1]/div/div/div"
+        wait_for_element(driver_loc, x_path, 30)
         new_text = driver_loc.find_element(By.XPATH, x_path).get_attribute("innerText")
         if len(new_text) > len(old_text):
             old_text = new_text
@@ -156,7 +164,7 @@ def main():
     insert_password(driver)
 
     set_input_text_and_go(driver, parse_text)
-    time.sleep(15)
+    time.sleep(30)
     model.parsed_text = get_all_parsed_text(driver)
     save_obj(model)
     time.sleep(1)
@@ -178,6 +186,8 @@ def main():
     time.sleep(3)
     model.title_text = get_all_title_text(driver)
     save_obj(model)
+
+    driver.close()
 
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 import time
-from git import Repo
 
+from repo.repo import Repo
 
 obj_list_path = "../data/obj_list.json"
 

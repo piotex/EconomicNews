@@ -141,11 +141,7 @@ def select_not_for_kids(driver_loc: WebDriver):
 
 
 def click_show_more(driver_loc: WebDriver):
-    for i in range(1, 10, 1):
-        driver_loc.execute_script(f"window.scrollTo(0, {i * 1000})")
-        time.sleep(0.5)
     x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[1]/ytcp-ve/ytcp-video-metadata-editor/div/div/ytcp-button/ytcp-button-shape/button"
-    wait_for_element(driver_loc, x_path, 100)
     driver_loc.find_element(By.XPATH, x_path).click()
     time.sleep(1)
     for i in range(1, 10, 1):
@@ -187,7 +183,7 @@ def set_tags(driver_loc: WebDriver, tags: str):
     for i in range(4, 7):
         try:
             x_path = f"/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[1]/ytcp-ve/ytcp-video-metadata-editor/div/ytcp-video-metadata-editor-advanced/div[{i}]/ytcp-form-input-container/div[1]/div/ytcp-free-text-chip-bar/ytcp-chip-bar/div/input"
-            wait_for_element(driver_loc, x_path, 10)
+            # wait_for_element(driver_loc, x_path, 10)
             driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(tags)
             return 0
         except:
@@ -229,6 +225,7 @@ def click_todays_date(driver_loc: WebDriver):
     x_path = "/html/body/ytcp-date-picker/tp-yt-paper-dialog/ytcp-scrollable-calendar/div/tp-yt-iron-list/div/div[3]/div[2]/span[4]"  # 04-07-24
     x_path = "/html/body/ytcp-date-picker/tp-yt-paper-dialog/ytcp-scrollable-calendar/div/tp-yt-iron-list/div/div[3]/div[2]/span[5]"  # 05-07-24
     x_path = "/html/body/ytcp-date-picker/tp-yt-paper-dialog/ytcp-scrollable-calendar/div/tp-yt-iron-list/div/div[3]/div[2]/span[7]"  # 07-07-24
+    x_path = "/html/body/ytcp-date-picker/tp-yt-paper-dialog/ytcp-scrollable-calendar/div/tp-yt-iron-list/div/div[3]/div[3]/span[1]"  # 08-07-24 // 1 elem in row
     driver_loc.find_element(By.XPATH, x_path).click()
     time.sleep(1)
 
@@ -340,17 +337,16 @@ def click_next_from_verification_to_visibility(driver_loc: WebDriver):
 
 def click_publish(driver_loc: WebDriver):
     x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[1]/ytcp-uploads-review/div[2]/div[1]/ytcp-video-visibility-select/div[2]/tp-yt-paper-radio-group/tp-yt-paper-radio-button[3]/div[1]/div[1]"
-    wait_for_element(driver_loc, x_path, 100)
+    wait_for_element(driver_loc, x_path, 30)
     driver_loc.find_element(By.XPATH, x_path).click()
     time.sleep(1)
 
     x_path_l = [
-        "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[2]/div/div[2]/ytcp-button[3]/div"
-        "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[2]/div/div[2]/ytcp-button[3]/ytcp-button-shape/button"
+        "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[2]/div/div[2]/ytcp-button[3]/div",
+        "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[2]/div/div[2]/ytcp-button[3]/ytcp-button-shape/button",
     ]
     for x_path in x_path_l:
         try:
-            wait_for_element(driver_loc, x_path, 100)
             driver_loc.find_element(By.XPATH, x_path).click()
             time.sleep(10)
             return 0
@@ -422,6 +418,7 @@ def main():
     model.youtube_url = href
     save_obj(model)
 
+    driver.close()
 
 if __name__ == "__main__":
     start_time = time.time()

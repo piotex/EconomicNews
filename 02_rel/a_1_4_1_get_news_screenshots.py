@@ -92,6 +92,7 @@ def find_xpath_idx(driver: WebDriver):
 
 
 def make_screenshots(driver: WebDriver):
+    css_updates = "'padding: 15px;font-size: 30px;'"
     idx = find_xpath_idx(driver)
 
     x_paths = [
@@ -109,7 +110,7 @@ def make_screenshots(driver: WebDriver):
         screenshot_path = f"data/images/screenshot-{i + 1}.png"
         try:
             element = driver.find_element(By.XPATH, x_path)
-            driver.execute_script(f"arguments[0].setAttribute('style', 'padding: 15px')", element)
+            driver.execute_script(f"arguments[0].setAttribute('style', {css_updates})", element)
             driver.find_element(By.XPATH, x_path).screenshot(screenshot_path)
         except:
             pass
