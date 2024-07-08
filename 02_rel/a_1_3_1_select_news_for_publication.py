@@ -13,7 +13,7 @@ def find_not_processed_news(news_model_list: list[NewsModel]) -> NewsModel:
         lines = f.readlines()
         lines = [l.strip().replace('\n', '') for l in lines]
     for news in news_model_list:
-        if news not in lines:
+        if news.url not in lines:
             return news
     raise Exception("=== All news already processed ===")
 

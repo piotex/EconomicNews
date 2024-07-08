@@ -129,8 +129,7 @@ def generate_background_clips():
     file_name = folder + "/" + os.listdir(folder)[random.randrange(len(os.listdir(folder)))]
 
     random_start_time_ms = random.randint(video_length_ms + 1, get_video_length(file_name) - 10)
-    background_clip = VideoFileClip(file_name).subclip((random_start_time_ms / 1000),
-                                                       (random_start_time_ms / 1000) + (video_length_ms / 1000))
+    background_clip = VideoFileClip(file_name).subclip((random_start_time_ms / 1000), (random_start_time_ms / 1000) + (video_length_ms / 1000)+1)
     background_clip = background_clip.resize((width, height))
 
     return [background_clip]
@@ -210,8 +209,7 @@ def generate_audio_clip():
     audio_files_clips = []
     audio_files = get_audio_files()
     for audio_file in audio_files:
-        audio_clip = AudioFileClip(audio_file[2]).set_start(audio_file[0] / 1000).set_duration(
-            (audio_file[1] / 1000) - (audio_file[0] / 1000))
+        audio_clip = AudioFileClip(audio_file[2]).set_start(audio_file[0] / 1000)#.set_duration((audio_file[1] / 1000) - (audio_file[0] / 1000))
         audio_files_clips.append(audio_clip)
     new_audio_clip = CompositeAudioClip(audio_files_clips)
     return new_audio_clip
