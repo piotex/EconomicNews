@@ -8,6 +8,7 @@ import a_1_5_1_parse_article_with_ai as a_1_5_1_parse_article_with_ai
 import a_2_1_1_generate_voice_over_with_ai as a_2_1_1_generate_voice_over_with_ai
 import a_2_2_1_generate_video as a_2_2_1_generate_video
 import a_3_1_1_publish_video_on_youtube as a_3_1_1_publish_video_on_youtube
+import a_4_1_1_update_published_news as a_4_1_1_update_published_news
 
 
 def get_time(start_time):
@@ -21,23 +22,25 @@ def get_time(start_time):
 if __name__ == "__main__":
     start_time = time.time()
     a_0_1_1_init_files_and_dirs.main()
-    print(f"a_0_1_1_init_files_and_dirs time: {get_time(start_time)}")
-    a_1_1_1_get_news_from_main_pages.main()
-    print(f"a_1_1_1_get_news_from_main_pages time: {get_time(start_time)}")
-    a_1_2_1_get_news_details.main()
-    print(f"a_1_2_1_get_news_details time: {get_time(start_time)}")
-    a_1_3_1_select_news_for_publication.main()
-    print(f"a_1_3_1_select_news_for_publication time: {get_time(start_time)}")
-    a_1_4_1_get_news_screenshots.main()
-    print(f"a_1_4_1_get_news_screenshots time: {get_time(start_time)}")
-    a_1_5_1_parse_article_with_ai.main()
-    print(f"a_1_5_1_parse_article_with_ai time: {get_time(start_time)}")
-    a_2_1_1_generate_voice_over_with_ai.main()
-    print(f"a_2_1_1_generate_voice_over_with_ai time: {get_time(start_time)}")
-    a_2_2_1_generate_video.main()
-    print(f"a_2_2_1_generate_video time: {get_time(start_time)}")
+    # print(f"a_0_1_1_init_files_and_dirs time: {get_time(start_time)}")
+    # a_1_1_1_get_news_from_main_pages.main()
+    # print(f"a_1_1_1_get_news_from_main_pages time: {get_time(start_time)}")
+    # a_1_2_1_get_news_details.main()
+    # print(f"a_1_2_1_get_news_details time: {get_time(start_time)}")
+    # a_1_3_1_select_news_for_publication.main()
+    # print(f"a_1_3_1_select_news_for_publication time: {get_time(start_time)}")
+    # a_1_4_1_get_news_screenshots.main()
+    # print(f"a_1_4_1_get_news_screenshots time: {get_time(start_time)}")
+    # a_1_5_1_parse_article_with_ai.main()
+    # print(f"a_1_5_1_parse_article_with_ai time: {get_time(start_time)}")
+    # a_2_1_1_generate_voice_over_with_ai.main()
+    # print(f"a_2_1_1_generate_voice_over_with_ai time: {get_time(start_time)}")
+    # a_2_2_1_generate_video.main()
+    # print(f"a_2_2_1_generate_video time: {get_time(start_time)}")
     a_3_1_1_publish_video_on_youtube.main()
     print(f"a_3_1_1_publish_video_on_youtube time: {get_time(start_time)}")
+    a_4_1_1_update_published_news.main()
+    print(f"a_4_1_1_update_published_news time: {get_time(start_time)}")
     print(f"")
     print(f"#####################################")
     print(f"Total time: {int(time.time() - start_time / 60)}m {int(time.time() - start_time - int(time.time() - start_time / 60) * 60)}s")

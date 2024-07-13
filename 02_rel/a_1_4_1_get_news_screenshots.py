@@ -107,7 +107,7 @@ def make_screenshots(driver: WebDriver):
         # f"/html/body/div[1]/div[{idx}]/main/article/section",
     ]
     for i, x_path in enumerate(x_paths):
-        screenshot_path = f"data/images/screenshot-{i + 1}.png"
+        screenshot_path = f"data/images/screenshots/screenshot-{i + 1}.png"
         try:
             element = driver.find_element(By.XPATH, x_path)
             driver.execute_script(f"arguments[0].setAttribute('style', {css_updates})", element)

@@ -190,8 +190,8 @@ def generate_screenshot_clip():
 
     video_length_ms = get_video_end_time(subtitles)
 
-    folder = "data/images"
-    # folder = "02_rel/data/images"
+    folder = "data/images/screenshots"
+    # folder = "02_rel/data/images/screenshots"
     files_in_folder = os.listdir(folder)
     files_in_folder = [folder + "/" + a for a in files_in_folder if "." in a]
     screenshots_clips = []

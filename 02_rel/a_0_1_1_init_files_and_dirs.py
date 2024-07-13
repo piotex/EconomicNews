@@ -23,7 +23,13 @@ def init_folders():
         'data/videos/background_videos',
         'data/images',
         'data/images/animated_bird',
+        'data/images/screenshots',
     ]
+    if os.path.exists(folders[2]):
+        shutil.rmtree(folders[2])
+    if os.path.exists(folders[7]):
+        shutil.rmtree(folders[7])
+
     for folder in folders:
         if os.path.exists(folder):
             # shutil.rmtree(folder)
