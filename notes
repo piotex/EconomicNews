@@ -1,5 +1,9 @@
-https://imagemagick.org/script/download.php
+cd C:\Users\pkubon\kn\0-git-repos\EconomicNews\02_rel\data\videos\background_videos         &&
+    scp "Minecraft Parkour Gameplay No Copyright (4K).mp4" peter@192.168.56.103:/home/peter/Desktop/EconomicNews/02_rel/data/videos/background_videos
 
+
+
+https://imagemagick.org/script/download.php
 https://imagemagick.org/archive/binaries/ImageMagick-7.1.1-34-portable-Q16-x64.zip
 
 add to environment variables:

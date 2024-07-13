@@ -112,10 +112,11 @@ def insert_video_title(driver_loc: WebDriver, title: str):
 def insert_video_description(driver_loc: WebDriver, description: str):
     x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[1]/ytcp-ve/ytcp-video-metadata-editor/div/ytcp-video-metadata-editor-basics/div[2]/ytcp-video-description/div/ytcp-social-suggestions-textbox/ytcp-form-input-container/div[1]/div[2]/div/ytcp-social-suggestion-input/div"
     wait_for_element(driver_loc, x_path, 100)
-    for c in description:
-        driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(c)
-        driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(Keys.ARROW_RIGHT)
-        time.sleep(random.uniform(0.001, 0.005))
+    driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(str)
+    # for c in description:
+    #     driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(c)
+    #     driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(Keys.ARROW_RIGHT)
+    #     time.sleep(random.uniform(0.001, 0.005))
 
 
 def select_playlist(driver_loc: WebDriver):

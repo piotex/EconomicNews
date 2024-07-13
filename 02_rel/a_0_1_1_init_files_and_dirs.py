@@ -26,8 +26,10 @@ def init_folders():
     ]
     for folder in folders:
         if os.path.exists(folder):
-            shutil.rmtree(folder)
-        os.makedirs(folder)
+            # shutil.rmtree(folder)
+            pass
+        else:
+            os.makedirs(folder)
 
 
 def init_files():
@@ -98,8 +100,8 @@ def download_files_from_youtube():
 def main():
     init_folders()
     init_files()
-    download_files_from_github()
-    download_files_from_youtube()
+    # download_files_from_github()
+    # download_files_from_youtube()
 
 
 if __name__ == "__main__":

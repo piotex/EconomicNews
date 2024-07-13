@@ -1,20 +1,32 @@
 import time
-
-from repo.repo import Repo
+import news_model
 
 obj_list_path = "../data/obj_list.json"
 
+
 def main():
-    path = r"C:\Users\pkubon\kn\0-git-repos\hosted-files\.git"
-    commit_msg = "jenkins: update published news"
-    try:
-        repo = Repo(path)
-        repo.git.add(update=True)
-        repo.index.commit(commit_msg)
-        origin = repo.remote(name='origin')
-        origin.push()
-    except:
-        pass
+    pathh = "data/urls/processed_news.txt"
+    tmp_obj = news_model.load_obj()
+    with open(pathh, "r") as f:
+        data = f.readlines()
+
+    data = [x.replace("\n", "").replace("\r", "") for x in data]
+    data.append(tmp_obj.url)
+    data = [x+"\n" for x in data]
+
+    with open(pathh, "w") as f:
+        f.writelines(data)
+
+    # path = r"C:\Users\pkubon\kn\0-git-repos\hosted-files\.git"
+    # commit_msg = "jenkins: update published news"
+    # try:
+    #     repo = Repo(path)
+    #     repo.git.add(update=True)
+    #     repo.index.commit(commit_msg)
+    #     origin = repo.remote(name='origin')
+    #     origin.push()
+    # except:
+    #     pass
 
 
 if __name__ == "__main__":
