@@ -59,7 +59,7 @@ def insert_password(driver_loc: WebDriver):
     x_path = "/html/body/div[1]/main/section/div/div/div/form/div[1]/div/div[2]/div/input"  # pwd input
     wait_for_element(driver_loc, x_path, 10)
     driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(pwd)
-    time.sleep(10)
+    time.sleep(5)
 
     x_path = "/html/body/div[4]/div/div/div/div[2]/div/div[2]/button"
     x_path = "/html/body/div[5]/div/div/div/div[1]/button"
@@ -69,12 +69,16 @@ def set_input_text_and_go(driver_loc: WebDriver, input_text: str):
     if "\n" not in input_text:
         input_text += "\n"
     x_path = "/html/body/div[1]/div[1]/div[2]/main/div[1]/div[2]/div[1]/div/form/div/div[2]/div/div/div[2]/textarea"
-    driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(input_text)
+    driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(input_text.replace("\n",""))
+    time.sleep(random.uniform(1, 3))
+    x_path = "/html/body/div[1]/div[1]/div[2]/main/div[1]/div[2]/div[1]/div/form/div/div[2]/div/div/button"
+    driver_loc.find_element(by=By.XPATH, value=x_path).click()
+    time.sleep(5)
+
     # for c in input_text:
     #     driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(c)
     #     driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(Keys.ARROW_RIGHT)
     #     time.sleep(random.uniform(0.001, 0.005))
-    time.sleep(1)
 
 
 def get_x_start(driver_loc: WebDriver):
@@ -90,7 +94,7 @@ def get_all_parsed_text(driver_loc: WebDriver):
     old_text = ".."
     while True:
         x_path = f"{get_x_start(driver_loc)}/div[1]/div[1]/div/div/div/div/div[3]/div/div/div[2]/div/div[1]/div/div/div"
-        wait_for_element(driver_loc, x_path, 45)
+        wait_for_element(driver_loc, x_path, 120)
         new_text = driver_loc.find_element(By.XPATH, x_path).get_attribute("innerText")
         if len(new_text) > len(old_text):
             old_text = new_text
@@ -100,7 +104,7 @@ def get_all_description_text(driver_loc: WebDriver):
     old_text = ".."
     while True:
         x_path = f"{get_x_start(driver_loc)}/div[1]/div[1]/div/div/div/div/div[5]/div/div/div[2]/div/div[1]/div/div/div"
-        wait_for_element(driver_loc, x_path, 30)
+        wait_for_element(driver_loc, x_path, 120)
         new_text = driver_loc.find_element(By.XPATH, x_path).get_attribute("innerText")
         if len(new_text) > len(old_text):
             old_text = new_text
@@ -110,7 +114,7 @@ def get_all_tags_text(driver_loc: WebDriver):
     old_text = ".."
     while True:
         x_path = f"{get_x_start(driver_loc)}/div[1]/div[1]/div/div/div/div/div[7]/div/div/div[2]/div/div[1]/div/div/div"
-        wait_for_element(driver_loc, x_path, 30)
+        wait_for_element(driver_loc, x_path, 120)
         new_text = driver_loc.find_element(By.XPATH, x_path).get_attribute("innerText")
         if len(new_text) > len(old_text):
             old_text = new_text
@@ -120,7 +124,7 @@ def get_all_title_text(driver_loc: WebDriver):
     old_text = ".."
     while True:
         x_path = f"{get_x_start(driver_loc)}/div[1]/div[1]/div/div/div/div/div[9]/div/div/div[2]/div/div[1]/div/div/div"
-        wait_for_element(driver_loc, x_path, 30)
+        wait_for_element(driver_loc, x_path, 120)
         new_text = driver_loc.find_element(By.XPATH, x_path).get_attribute("innerText")
         if len(new_text) > len(old_text):
             old_text = new_text
@@ -149,6 +153,19 @@ def __parse_tags(tags: str):
         tags = tags.replace('#','')
     return tags
 
+def limit_words(in_text: str):
+    limit = 100
+    list_txt = in_text.split(" ")
+    res_txt = ""
+    counter = 0
+    for a in list_txt:
+        if counter >= limit:
+            return res_txt
+        counter += 1
+        res_txt += a + " "
+    return res_txt
+
+
 def main():
     model = load_obj()
     [parse_text, description_text, tags_text, title_text] = get_chatgpt_input()
@@ -164,8 +181,9 @@ def main():
     insert_password(driver)
 
     set_input_text_and_go(driver, parse_text)
-    time.sleep(30)
+    time.sleep(10)
     model.parsed_text = get_all_parsed_text(driver)
+    model.parsed_text = limit_words(model.parsed_text)
     save_obj(model)
     time.sleep(1)
 
