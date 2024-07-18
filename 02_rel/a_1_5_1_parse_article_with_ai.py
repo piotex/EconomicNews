@@ -181,7 +181,7 @@ def main():
     insert_password(driver)
 
     set_input_text_and_go(driver, parse_text)
-    time.sleep(10)
+    time.sleep(15)
     model.parsed_text = get_all_parsed_text(driver)
     model.parsed_text = limit_words(model.parsed_text)
     save_obj(model)
