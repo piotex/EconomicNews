@@ -195,18 +195,21 @@ def set_language(driver_loc: WebDriver):
     x_path = "/html/body/ytcp-uploads-dialog/tp-yt-paper-dialog/div/ytcp-animatable[1]/ytcp-ve/ytcp-video-metadata-editor/div/ytcp-video-metadata-editor-advanced/div[7]/div[3]/ytcp-form-language-input/ytcp-form-select/ytcp-select/ytcp-text-dropdown-trigger/ytcp-dropdown-trigger/div/div[3]/tp-yt-iron-icon"
     driver_loc.find_element(By.XPATH, x_path).click()
     time.sleep(1)
-    x_path_l = [
-        "/html/body/ytcp-text-menu/tp-yt-paper-dialog/tp-yt-paper-listbox/tp-yt-paper-item[170]/ytcp-ve/tp-yt-paper-item-body/div/div/div/yt-formatted-string",
-        "/html/body/ytcp-text-menu[2]/tp-yt-paper-dialog/tp-yt-paper-listbox/tp-yt-paper-item[170]/ytcp-ve/tp-yt-paper-item-body/div/div/div/yt-formatted-string",
-        "/html/body/ytcp-text-menu[3]/tp-yt-paper-dialog/tp-yt-paper-listbox/tp-yt-paper-item[170]/ytcp-ve/tp-yt-paper-item-body/div/div/div/yt-formatted-string",
-    ]
-    for x_path in x_path_l:
-        try:
-            driver_loc.find_element(By.XPATH, x_path).click()
-            time.sleep(1)
-            return 0
-        except:
-            pass
+    for i in range(155,175,1):
+        x_path_l = [
+            f"/html/body/ytcp-text-menu/tp-yt-paper-dialog/tp-yt-paper-listbox/tp-yt-paper-item[{i}]/ytcp-ve/tp-yt-paper-item-body/div/div/div/yt-formatted-string",
+            f"/html/body/ytcp-text-menu[2]/tp-yt-paper-dialog/tp-yt-paper-listbox/tp-yt-paper-item[{i}]/ytcp-ve/tp-yt-paper-item-body/div/div/div/yt-formatted-string",
+            f"/html/body/ytcp-text-menu[3]/tp-yt-paper-dialog/tp-yt-paper-listbox/tp-yt-paper-item[{i}]/ytcp-ve/tp-yt-paper-item-body/div/div/div/yt-formatted-string",
+        ]
+        for x_path in x_path_l:
+            try:
+                txt = driver_loc.find_element(By.XPATH, x_path).text
+                if txt == "Polish" or txt == "Polski":
+                    driver_loc.find_element(By.XPATH, x_path).click()
+                    time.sleep(1)
+                    return 0
+            except:
+                pass
 
 
 def click_not_published_in_usa_tv(driver_loc: WebDriver):
@@ -358,11 +361,14 @@ def click_publish(driver_loc: WebDriver):
 
 
 def get_share_link(driver_loc: WebDriver):
-    x_path = "/html/body/ytcp-video-share-dialog/ytcp-dialog/tp-yt-paper-dialog/div[2]/div/div/div/a"
-    wait_for_element(driver_loc, x_path, 100)
-    href = driver_loc.find_element(By.XPATH, x_path).get_attribute('href')
-    return href
-
+    try:
+        x_path = "/html/body/ytcp-video-share-dialog/ytcp-dialog/tp-yt-paper-dialog/div[2]/div/div/div/a"
+        wait_for_element(driver_loc, x_path, 100)
+        href = driver_loc.find_element(By.XPATH, x_path).get_attribute('href')
+        return href
+    except:
+        pass
+    return "-"
 
 def parse_text_with_polish_special_char(in_str: str):
     return unidecode(in_str)
