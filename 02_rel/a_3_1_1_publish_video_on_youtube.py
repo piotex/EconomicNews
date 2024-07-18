@@ -227,6 +227,7 @@ def click_todays_date(driver_loc: WebDriver):
     x_path = "/html/body/ytcp-date-picker/tp-yt-paper-dialog/ytcp-scrollable-calendar/div/tp-yt-iron-list/div/div[3]/div[2]/span[5]"  # 05-07-24
     x_path = "/html/body/ytcp-date-picker/tp-yt-paper-dialog/ytcp-scrollable-calendar/div/tp-yt-iron-list/div/div[3]/div[2]/span[7]"  # 07-07-24
     x_path = "/html/body/ytcp-date-picker/tp-yt-paper-dialog/ytcp-scrollable-calendar/div/tp-yt-iron-list/div/div[3]/div[3]/span[1]"  # 08-07-24 // 1 elem in row
+    x_path = "/html/body/ytcp-date-picker/tp-yt-paper-dialog/ytcp-scrollable-calendar/div/tp-yt-iron-list/div/div[3]/div[4]/span[5]"  # 18-07-24 // 5 elem in row
     driver_loc.find_element(By.XPATH, x_path).click()
     time.sleep(1)
 
@@ -283,7 +284,8 @@ def click_set_category(driver_loc: WebDriver):
     time.sleep(1)
     for i in range(3, 6, 1):
         try:
-            x_path = f"/html/body/ytcp-text-menu[{i}]/tp-yt-paper-dialog/tp-yt-paper-listbox/tp-yt-paper-item[11]/ytcp-ve/tp-yt-paper-item-body/div/div/div/yt-formatted-string"
+            x_path = f"/html/body/ytcp-text-menu[{i}]/tp-yt-paper-dialog/tp-yt-paper-listbox/tp-yt-paper-item[11]/ytcp-ve/tp-yt-paper-item-body/div/div/div/yt-formatted-string"    # people and blogs
+            x_path = f"/html/body/ytcp-text-menu[{i}]/tp-yt-paper-dialog/tp-yt-paper-listbox/tp-yt-paper-item[9]/ytcp-ve/tp-yt-paper-item-body/div/div/div/yt-formatted-string"       # news and politics
             driver_loc.find_element(By.XPATH, x_path).click()
             time.sleep(1)
         except:
@@ -373,9 +375,9 @@ def send_video(driver_loc: WebDriver):
     click_create_button(driver_loc)
     click_send_file(driver_loc)
     send_file_from_disk(driver_loc)
-    insert_video_title(driver_loc, parse_text_with_polish_special_char(model.title_text[:95]))
+    insert_video_title(driver_loc, parse_text_with_polish_special_char(model.title_text[:95].replace('"','')))
     insert_video_description(driver_loc,
-                             parse_text_with_polish_special_char(model.description_text))  # TODO:  click playlist !!!
+                             parse_text_with_polish_special_char(model.description_text).replace('"',''))  # TODO:  click playlist !!!
     select_not_for_kids(driver_loc)
     click_show_more(driver_loc)
     # # click_my_video_contain_paied_promotion(driver_loc)
