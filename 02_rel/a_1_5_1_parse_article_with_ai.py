@@ -49,7 +49,7 @@ def insert_email(driver_loc: WebDriver):
     x_path = "/html/body/div/div/main/section/div[2]/div[1]/input"  # email input
     wait_for_element(driver_loc, x_path, 10)
     driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(usr)
-    time.sleep(2)
+    time.sleep(5)
 
 
 def insert_password(driver_loc: WebDriver):
@@ -59,7 +59,7 @@ def insert_password(driver_loc: WebDriver):
     x_path = "/html/body/div[1]/main/section/div/div/div/form/div[1]/div/div[2]/div/input"  # pwd input
     wait_for_element(driver_loc, x_path, 10)
     driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(pwd)
-    time.sleep(5)
+    time.sleep(10)
 
     x_path = "/html/body/div[4]/div/div/div/div[2]/div/div[2]/button"
     x_path = "/html/body/div[5]/div/div/div/div[1]/button"
