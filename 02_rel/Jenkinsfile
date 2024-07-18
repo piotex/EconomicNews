@@ -8,21 +8,30 @@ pipeline {
         //         """
         //     }
         // }
-
+        // stage('Run main') {
+        //     // pip cache purge
+        //     steps {
+        //         bat """
+        //             cd EconomicNews/02_rel
+        //             pip install virtualenv
+        //             python3 -m virtualenv .
+        //             cd Scripts
+        //             call activate.bat
+        //             cd ../
+        //             cd ../
+        //             pip install -r requirements.txt
+        //             pip install Unidecode
+        //             cd 02_rel
+        //             python3 main.py
+        //         """
+        //     }
+        // }
         stage('Run main') {
             // pip cache purge
             steps {
                 bat """
-                    cd EconomicNews/02_rel
-                    pip install virtualenv
-                    python3 -m virtualenv .
-                    cd Scripts
-                    call activate.bat
-                    cd ../
-                    cd ../
-                    pip install -r requirements.txt
-                    pip install Unidecode
-                    cd 02_rel
+                    set IMAGEMAGICK_BINARY=C:\\Users\\pkubo\\Desktop\\ImageMagick-7.1.1-34-portable-Q16-x64\\magick.exe
+                    cd "C:\\devops_sandbox\\git\\EconomicNews\\02_rel"
                     python3 main.py
                 """
             }
