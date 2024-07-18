@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import os
 import time
 from news_model import *
-from pytube import YouTube
+# from pytube import YouTube
 
 main_url = "https://www.bankier.pl"
 obj_list_path = "../data/obj_list.json"
@@ -89,18 +89,18 @@ def download_files_from_github():
         download_files_from_github_folder(url_dest[0], url_dest[1])
 
 
-def download_files_from_youtube():
-    with open("data/urls/youtube_background_urls.txt", 'r', encoding="utf-8") as f:
-        urls = f.readlines()
-    urls = [u.strip().replace("\n", "") for u in urls]
-
-    for url in urls:
-        yt = YouTube(url)
-        a1 = yt.streams
-        a3 = a1.filter(file_extension="mp4")
-        a4 = a3.filter(type="video")
-        a5 = a4.order_by("resolution").desc()  # highest first
-        a6 = a5.first().download(output_path="data/videos/background_videos")
+# def download_files_from_youtube():
+#     with open("data/urls/youtube_background_urls.txt", 'r', encoding="utf-8") as f:
+#         urls = f.readlines()
+#     urls = [u.strip().replace("\n", "") for u in urls]
+#
+#     for url in urls:
+#         yt = YouTube(url)
+#         a1 = yt.streams
+#         a3 = a1.filter(file_extension="mp4")
+#         a4 = a3.filter(type="video")
+#         a5 = a4.order_by("resolution").desc()  # highest first
+#         a6 = a5.first().download(output_path="data/videos/background_videos")
 
 
 def main():

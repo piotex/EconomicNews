@@ -1,0 +1,31 @@
+pipeline {
+    agent { label 'windows'}
+    stages {
+        // stage('Checkout') {
+        //     steps {
+        //         bat """
+        //             git clone https://github.com/piotex/EconomicNews.git
+        //         """
+        //     }
+        // }
+
+        stage('Run main') {
+            // pip cache purge
+            steps {
+                bat """
+                    cd EconomicNews/02_rel
+                    pip install virtualenv
+                    python3 -m virtualenv .
+                    cd Scripts
+                    call activate.bat
+                    cd ../
+                    cd ../
+                    pip install -r requirements.txt
+                    pip install Unidecode
+                    cd 02_rel
+                    python3 main.py
+                """
+            }
+        }
+    }
+}
