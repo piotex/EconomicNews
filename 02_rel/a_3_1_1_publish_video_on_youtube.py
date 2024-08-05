@@ -231,6 +231,7 @@ def click_todays_date(driver_loc: WebDriver):
     x_path = "/html/body/ytcp-date-picker/tp-yt-paper-dialog/ytcp-scrollable-calendar/div/tp-yt-iron-list/div/div[3]/div[2]/span[7]"  # 07-07-24
     x_path = "/html/body/ytcp-date-picker/tp-yt-paper-dialog/ytcp-scrollable-calendar/div/tp-yt-iron-list/div/div[3]/div[3]/span[1]"  # 08-07-24 // 1 elem in row
     x_path = "/html/body/ytcp-date-picker/tp-yt-paper-dialog/ytcp-scrollable-calendar/div/tp-yt-iron-list/div/div[3]/div[4]/span[5]"  # 18-07-24 // 5 elem in row
+    x_path = "/html/body/ytcp-date-picker/tp-yt-paper-dialog/ytcp-scrollable-calendar/div/tp-yt-iron-list/div/div[3]/div[3]/span[2]"  # 05-08-24
     driver_loc.find_element(By.XPATH, x_path).click()
     time.sleep(1)
 
@@ -241,17 +242,38 @@ def set_film_location(driver_loc: WebDriver):
     driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(txt)
     time.sleep(1)
     x_path_l = [
-        "/html/body/ytcp-text-menu[3]/tp-yt-paper-dialog/tp-yt-paper-listbox/tp-yt-paper-item[3]/ytcp-ve/tp-yt-paper-item-body/div/div/div/yt-formatted-string",
-        "/html/body/ytcp-text-menu/tp-yt-paper-dialog/tp-yt-paper-listbox/tp-yt-paper-item[3]/ytcp-ve/tp-yt-paper-item-body/div/div/div/yt-formatted-string"
-        "/html/body/ytcp-text-menu[1]/tp-yt-paper-dialog/tp-yt-paper-listbox/tp-yt-paper-item[3]/ytcp-ve/tp-yt-paper-item-body/div/div/div/yt-formatted-string",
-        "/html/body/ytcp-text-menu[2]/tp-yt-paper-dialog/tp-yt-paper-listbox/tp-yt-paper-item[3]/ytcp-ve/tp-yt-paper-item-body/div/div/div/yt-formatted-string",
+        "/html/body/ytcp-text-menu/tp-yt-paper-dialog/tp-yt-paper-listbox/tp-yt-paper-item[3]/ytcp-ve/tp-yt-paper-item-body/div/div/div/yt-formatted-string/span[1]",
+        "/html/body/ytcp-text-menu/tp-yt-paper-dialog/tp-yt-paper-listbox/tp-yt-paper-item[3]/ytcp-ve/tp-yt-paper-item-body/div/div/div/yt-formatted-string/",
+        "/html/body/ytcp-text-menu/tp-yt-paper-dialog/tp-yt-paper-listbox/tp-yt-paper-item[3]/ytcp-ve/tp-yt-paper-item-body/div/div/div/",
+        "/html/body/ytcp-text-menu/tp-yt-paper-dialog/tp-yt-paper-listbox/tp-yt-paper-item[3]/ytcp-ve/tp-yt-paper-item-body/div/div",
+        "/html/body/ytcp-text-menu/tp-yt-paper-dialog/tp-yt-paper-listbox/tp-yt-paper-item[3]/ytcp-ve/tp-yt-paper-item-body/div",
+        "/html/body/ytcp-text-menu/tp-yt-paper-dialog/tp-yt-paper-listbox/tp-yt-paper-item[3]/ytcp-ve/tp-yt-paper-item-body",
     ]
     for x_path in x_path_l:
         try:
             driver_loc.find_element(By.XPATH, x_path).click()
             time.sleep(1)
+            return True
         except:
             pass
+
+    for i in range(1,4,1):
+        x_path_l = [
+            f"/html/body/ytcp-text-menu[{i}]/tp-yt-paper-dialog/tp-yt-paper-listbox/tp-yt-paper-item[3]/ytcp-ve/tp-yt-paper-item-body/div/div/div/yt-formatted-string/span[1]",
+            f"/html/body/ytcp-text-menu[{i}]/tp-yt-paper-dialog/tp-yt-paper-listbox/tp-yt-paper-item[3]/ytcp-ve/tp-yt-paper-item-body/div/div/div/yt-formatted-string",
+            f"/html/body/ytcp-text-menu[{i}]/tp-yt-paper-dialog/tp-yt-paper-listbox/tp-yt-paper-item[3]/ytcp-ve/tp-yt-paper-item-body/div/div/div",
+            f"/html/body/ytcp-text-menu[{i}]/tp-yt-paper-dialog/tp-yt-paper-listbox/tp-yt-paper-item[3]/ytcp-ve/tp-yt-paper-item-body/div/div/",
+            f"/html/body/ytcp-text-menu[{i}]/tp-yt-paper-dialog/tp-yt-paper-listbox/tp-yt-paper-item[3]/ytcp-ve/tp-yt-paper-item-body/div/",
+            f"/html/body/ytcp-text-menu[{i}]/tp-yt-paper-dialog/tp-yt-paper-listbox/tp-yt-paper-item[3]/ytcp-ve/tp-yt-paper-item-body",
+        ]
+        for x_path in x_path_l:
+            try:
+                driver_loc.find_element(By.XPATH, x_path).click()
+                time.sleep(1)
+                return True
+            except:
+                pass
+    a = 0
 
 
 def click_standard_licence(driver_loc: WebDriver):
@@ -396,14 +418,14 @@ def send_video(driver_loc: WebDriver):
 
     set_film_location(driver_loc)
     click_todays_date(driver_loc)  # TODO: poprawić wybór daty
-    click_not_published_in_usa_tv(driver_loc)
-    set_language(driver_loc)
+    ############################################################################ click_not_published_in_usa_tv(driver_loc)
+    ############################################################################ set_language(driver_loc)
 
     # # click_standard_licence(driver_loc)
     # # click_allow_to_insert_on_different_pages(driver_loc)
     # # click_publish_in_subscription_section(driver_loc)
     # # click_allow_remix(driver_loc)
-    click_set_category(driver_loc)
+    ############################################################################ click_set_category(driver_loc)
     # click_allow_comments(driver_loc)
     # click_show_likes(driver_loc)
 
