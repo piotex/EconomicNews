@@ -6,6 +6,8 @@ from news_model import *
 from seleniumbase import Driver
 from selenium.webdriver.common.keys import Keys
 import time
+from selenium.webdriver.chrome.options import Options
+
 
 
 def wait_for_element(driver: WebDriver, x_path: str, max_wait_time_s: float):
@@ -21,7 +23,7 @@ def wait_for_element(driver: WebDriver, x_path: str, max_wait_time_s: float):
 
 
 def get_init_driver() -> WebDriver:
-    driver = Driver(uc=True)
+    driver = Driver(uc=True, chromium_arg="--disable-search-engine-choice-screen")
     time.sleep(0.5)
     driver.maximize_window()
     time.sleep(0.5)

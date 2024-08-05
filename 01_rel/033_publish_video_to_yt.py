@@ -21,7 +21,7 @@ def wait_for_element(driver: WebDriver, x_path: str, max_wait_time_s: float):
         time.sleep(1 / 100)
     return 1
 def get_init_driver() -> WebDriver:
-    driver = Driver(uc=True)
+    driver = Driver(uc=True, chromium_arg="--disable-search-engine-choice-screen")
     time.sleep(0.5)
     driver.maximize_window()
     time.sleep(0.5)
