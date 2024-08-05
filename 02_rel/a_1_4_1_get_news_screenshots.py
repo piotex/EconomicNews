@@ -4,11 +4,15 @@ from selenium.webdriver.chrome.webdriver import WebDriver
 from news_model import *
 from selenium.webdriver.common.by import By
 import time
+from selenium.webdriver.chrome.options import Options
+
 
 
 def get_init_driver() -> WebDriver:
     chromedriver_autoinstaller.install()
-    driver = webdriver.Chrome()
+    chrome_options = Options()
+    chrome_options.add_argument("--disable-search-engine-choice-screen")
+    driver = webdriver.Chrome(options=chrome_options)
     time.sleep(0.5)
     driver.maximize_window()
     return driver
