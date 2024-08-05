@@ -435,9 +435,9 @@ def send_video(driver_loc: WebDriver):
     click_next_from_verification_to_visibility(driver_loc)
     click_publish(driver_loc)
 
-    href = get_share_link(driver_loc)
-    return href
-
+    # href = get_share_link(driver_loc)
+    # return href
+    return "----"
 
 def main():
     driver = get_init_driver()
