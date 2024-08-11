@@ -182,6 +182,9 @@ def main():
     insert_email(driver)
     insert_password(driver)
 
+    print("=== Waiting to solve captcha... ===")
+    a = input()
+
     set_input_text_and_go(driver, parse_text)
     time.sleep(15)
     model.parsed_text = get_all_parsed_text(driver)

@@ -232,6 +232,7 @@ def click_todays_date(driver_loc: WebDriver):
     x_path = "/html/body/ytcp-date-picker/tp-yt-paper-dialog/ytcp-scrollable-calendar/div/tp-yt-iron-list/div/div[3]/div[3]/span[1]"  # 08-07-24 // 1 elem in row
     x_path = "/html/body/ytcp-date-picker/tp-yt-paper-dialog/ytcp-scrollable-calendar/div/tp-yt-iron-list/div/div[3]/div[4]/span[5]"  # 18-07-24 // 5 elem in row
     x_path = "/html/body/ytcp-date-picker/tp-yt-paper-dialog/ytcp-scrollable-calendar/div/tp-yt-iron-list/div/div[3]/div[3]/span[2]"  # 05-08-24
+    x_path = "/html/body/ytcp-date-picker/tp-yt-paper-dialog/ytcp-scrollable-calendar/div/tp-yt-iron-list/div/div[3]/div[4]/span[1]"  # 11-08-24
     driver_loc.find_element(By.XPATH, x_path).click()
     time.sleep(1)
 
