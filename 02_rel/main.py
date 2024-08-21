@@ -22,21 +22,21 @@ def get_time(start_time):
 if __name__ == "__main__":
     main_start_time = time.time()
 
-    start_time = time.time()
-    a_0_1_1_init_files_and_dirs.main()
-    print(f"a_0_1_1_init_files_and_dirs time: {get_time(start_time)}")
-
-    start_time = time.time()
-    a_1_1_1_get_news_from_main_pages.main()
-    print(f"a_1_1_1_get_news_from_main_pages time: {get_time(start_time)}")
-
-    start_time = time.time()
-    a_1_2_1_get_news_details.main()
-    print(f"a_1_2_1_get_news_details time: {get_time(start_time)}")
-
-    start_time = time.time()
-    a_1_3_1_select_news_for_publication.main()
-    print(f"a_1_3_1_select_news_for_publication time: {get_time(start_time)}")
+    # start_time = time.time()
+    # a_0_1_1_init_files_and_dirs.main()
+    # print(f"a_0_1_1_init_files_and_dirs time: {get_time(start_time)}")
+    #
+    # start_time = time.time()
+    # a_1_1_1_get_news_from_main_pages.main()
+    # print(f"a_1_1_1_get_news_from_main_pages time: {get_time(start_time)}")
+    #
+    # start_time = time.time()
+    # a_1_2_1_get_news_details.main()
+    # print(f"a_1_2_1_get_news_details time: {get_time(start_time)}")
+    #
+    # start_time = time.time()
+    # a_1_3_1_select_news_for_publication.main()
+    # print(f"a_1_3_1_select_news_for_publication time: {get_time(start_time)}")
 
     start_time = time.time()
     a_1_4_1_get_news_screenshots.main()

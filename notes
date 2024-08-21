@@ -49,3 +49,10 @@ sudo reboot
 ```
 
 
+=== venv ===
+```
+deactivate
+
+venv\Scripts\activate
+
+```

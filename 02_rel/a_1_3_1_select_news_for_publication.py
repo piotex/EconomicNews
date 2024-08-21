@@ -8,14 +8,16 @@ def sort_obj_list_by_comments(news_model_list: list[NewsModel]) -> list[NewsMode
     return sorted(news_model_list, key=lambda model: model.comments_count, reverse=True)
 
 
-def find_not_processed_news(news_model_list: list[NewsModel]) -> NewsModel:
+def find_not_processed_news(news_model_list: list[NewsModel]) -> list[NewsModel]:
     with open("data/urls/processed_news.txt", "r", encoding="utf-8") as f:
         lines = f.readlines()
         lines = [l.strip().replace('\n', '') for l in lines]
+    res = []
     for news in news_model_list:
         if news.url not in lines:
-            return news
-    raise Exception("=== All news already processed ===")
+            res.append(news)
+    return res
+    # raise Exception("=== All news already processed ===")
 
 
 def filter_news_by_comments(news_model_list: list[NewsModel]) -> list[NewsModel]:
@@ -28,11 +30,11 @@ def filter_news_by_comments(news_model_list: list[NewsModel]) -> list[NewsModel]
 
 def main():
     main_list_of_obj = load_obj_list()
-    main_list_of_obj = filter_news_by_comments(main_list_of_obj)
-    news = find_not_processed_news(main_list_of_obj)
-    save_obj(news)
-
+    main_list_of_obj = find_not_processed_news(main_list_of_obj)
+    # save_obj(news)
     main_list_of_obj = sort_obj_list_by_comments(main_list_of_obj)
+    main_list_of_obj = filter_news_by_comments(main_list_of_obj)
+    main_list_of_obj = main_list_of_obj[0:6]
     save_obj_list(main_list_of_obj)
 
 
