@@ -1,21 +1,24 @@
 import time
-import news_model
+from news_model import *
 
 obj_list_path = "../data/obj_list.json"
 
 
 def main():
-    pathh = "data/urls/processed_news.txt"
-    tmp_obj = news_model.load_obj()
-    with open(pathh, "r") as f:
-        data = f.readlines()
+    processed_news_path = "data/urls/processed_news.txt"
+    news_model_list = load_obj_list()
+    for news_model in news_model_list:
+        with open(processed_news_path, "r") as f:
+            processed_news = f.readlines()
 
-    data = [x.replace("\n", "").replace("\r", "") for x in data]
-    data.append(tmp_obj.url)
-    data = [x+"\n" for x in data]
+        processed_news = [x.replace("\n", "").replace("\r", "") for x in processed_news]
+        processed_news.append(news_model.url)
+        processed_news = [x+"\n" for x in processed_news]
 
-    with open(pathh, "w") as f:
-        f.writelines(data)
+        with open(processed_news_path, "w") as f:
+            f.writelines(processed_news)
+
+
 
     # path = r"C:\Users\pkubon\kn\0-git-repos\hosted-files\.git"
     # commit_msg = "jenkins: update published news"

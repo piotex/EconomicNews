@@ -49,14 +49,14 @@ if __name__ == "__main__":
     # start_time = time.time()
     # a_2_1_1_generate_voice_over_with_ai.main()
     # print(f"a_2_1_1_generate_voice_over_with_ai time: {get_time(start_time)}")
+    #
+    # start_time = time.time()
+    # a_2_2_1_generate_video.main()
+    # print(f"a_2_2_1_generate_video time: {get_time(start_time)}")
 
-    start_time = time.time()
-    a_2_2_1_generate_video.main()
-    print(f"a_2_2_1_generate_video time: {get_time(start_time)}")
-
-    start_time = time.time()
-    a_3_1_1_publish_video_on_youtube.main()
-    print(f"a_3_1_1_publish_video_on_youtube time: {get_time(start_time)}")
+    # start_time = time.time()
+    # a_3_1_1_publish_video_on_youtube.main()
+    # print(f"a_3_1_1_publish_video_on_youtube time: {get_time(start_time)}")
 
     start_time = time.time()
     a_4_1_1_update_published_news.main()

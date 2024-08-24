@@ -55,15 +55,13 @@ def get_subtitles_list(file_path: str):
         return res
 
 
-def get_audio_files():
-    folder = "data/audios"
-    # folder = "02_rel/data/audios"
-    files_in_folder = os.listdir(folder)
+def get_audio_files(audios_path: str):
+    files_in_folder = os.listdir(audios_path)
     files_in_folder = [a.split(".")[0] for a in files_in_folder if ".mp3" in a]
 
     audio_files = []
     for file in files_in_folder:
-        file_name = folder + "/" + file + ".mp3"
+        file_name = audios_path + "/" + file + ".mp3"
         file_name = os.path.abspath(file_name)
         start = 0
         end = get_audio_length(file_name)
@@ -76,17 +74,13 @@ def get_audio_files():
     return audio_files
 
 
-def get_subtitles() -> list[list[str]]:  # start | end | text
-    folder = "data/audios"
-    # folder = "02_rel/data/audios"
-    # folder = os.path.abspath(folder)
-    files_in_folder = os.listdir(folder)
+def get_subtitles(audios_path: str) -> list[list[str]]:  # start | end | text
+    files_in_folder = os.listdir(audios_path)
     files_in_folder = [a.split(".")[0] for a in files_in_folder if ".mp3" in a]
     subtitles_list = []
     for file in files_in_folder:
-        new_subtitles = get_subtitles_list(folder + "/" + file + ".vvt")
-
-        file_name = folder + "/" + file + ".mp3"
+        new_subtitles = get_subtitles_list(audios_path + "/" + file + ".vvt")
+        file_name = audios_path + "/" + file + ".mp3"
         end = get_audio_length(file_name)
         new_subtitles[-1][1] = end
 
@@ -121,8 +115,8 @@ def get_audio_length(filename):
     return int(MP3(filename).info.length * 1000)
 
 
-def generate_background_clips():
-    subtitles = get_subtitles()
+def generate_background_clips(audios_path: str):
+    subtitles = get_subtitles(audios_path)
     video_length_ms = get_video_end_time(subtitles)
 
     folder = "data/videos/background_videos"
@@ -136,10 +130,10 @@ def generate_background_clips():
     return [background_clip]
 
 
-def generate_subtitles_clip():
+def generate_subtitles_clip(audios_path: str):
     font_size = 65
     text_clips = []
-    subtitles = get_subtitles()
+    subtitles = get_subtitles(audios_path)
     for subtitle in subtitles:
         start_ms = int(subtitle[0])
         end_ms = int(subtitle[1])
@@ -156,7 +150,7 @@ def generate_subtitles_clip():
     return text_clips
 
 
-def generate_bird_clip():
+def generate_bird_clip(audios_path: str):
     folder = "data/images/animated_bird"
     # folder = "02_rel/data/images/animated_bird"
     bird_clips = []
@@ -164,7 +158,7 @@ def generate_bird_clip():
     bird_height = 400
     old_start_ms = random.randint(1000, 2000)
     old_file_name = ""
-    subtitles = get_subtitles()
+    subtitles = get_subtitles(audios_path)
     video_length_ms = get_video_end_time(subtitles)
     while old_start_ms < video_length_ms:
         rand_pos_x = random.randint(0, width - bird_width)
@@ -186,15 +180,13 @@ def generate_bird_clip():
     return bird_clips
 
 
-def generate_screenshot_clip():
-    subtitles = get_subtitles()
+def generate_screenshot_clip(audios_path: str, screenshots_path: str):
+    subtitles = get_subtitles(audios_path)
 
     video_length_ms = get_video_end_time(subtitles)
 
-    folder = "data/images/screenshots"
-    # folder = "02_rel/data/images/screenshots"
-    files_in_folder = os.listdir(folder)
-    files_in_folder = [folder + "/" + a for a in files_in_folder if "." in a]
+    files_in_folder = os.listdir(screenshots_path)
+    files_in_folder = [screenshots_path + "/" + a for a in files_in_folder if "." in a]
     screenshots_clips = []
     for i, file in enumerate(files_in_folder):
         screenshot_length = int(video_length_ms / len(files_in_folder))
@@ -206,9 +198,9 @@ def generate_screenshot_clip():
     return screenshots_clips
 
 
-def generate_audio_clip():
+def generate_audio_clip(audios_path: str):
     audio_files_clips = []
-    audio_files = get_audio_files()
+    audio_files = get_audio_files(audios_path)
     for audio_file in audio_files:
         audio_clip = AudioFileClip(audio_file[2]).set_start(audio_file[0] / 1000)#.set_duration((audio_file[1] / 1000) - (audio_file[0] / 1000))
         audio_files_clips.append(audio_clip)
@@ -219,19 +211,25 @@ def generate_audio_clip():
 def main():
     model_list = load_obj_list()
     for i, model in enumerate(model_list):
-        raise NotImplemented() # ... - napisać support dla każdego elementu w liście
-        background_clip = generate_background_clips()
-        subtitles_clip = generate_subtitles_clip()
-        bird_clip = generate_bird_clip()
-        screenshot_clip = generate_screenshot_clip()
-        audio_clip = generate_audio_clip()
+        audios_path = f"data/audios/{i}"
+        screenshots_path = f"data/images/screenshots/{i}"
+        # folder = "02_rel/data/images/screenshots"
+
+        background_clip = generate_background_clips(audios_path)
+        subtitles_clip = generate_subtitles_clip(audios_path)
+        bird_clip = generate_bird_clip(audios_path)
+        screenshot_clip = generate_screenshot_clip(audios_path, screenshots_path)
+        audio_clip = generate_audio_clip(audios_path)
 
         all_clips = background_clip + screenshot_clip + bird_clip + subtitles_clip
         video = CompositeVideoClip(all_clips, size=(width, height))
         video.audio = audio_clip
 
+        video_path = f'data/videos/for_publication/{i}/result.mp4'
         # video.write_videofile('02_rel/data/result.mp4')
-        video.write_videofile('data/result.mp4')
+        video.write_videofile(video_path)
+        model.video_path = video_path
+        save_obj_list(model_list)
 
 
 if __name__ == "__main__":

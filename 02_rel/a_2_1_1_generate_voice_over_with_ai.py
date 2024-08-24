@@ -7,6 +7,8 @@ from news_model import *
 
 async def edge_tts_generate_to_file(text: str, path:str, voice_model:str) -> None:
     speed = "+25%"
+    if voice_model == "pl-PL-MarekNeural":
+        speed = "+35%"
 
     communicate = edge_tts.Communicate(text, voice_model, rate=speed)
     await communicate.save(path+".mp3")

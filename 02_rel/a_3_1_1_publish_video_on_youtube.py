@@ -93,10 +93,9 @@ def click_send_file(driver_loc: WebDriver):
     driver_loc.find_element(By.XPATH, x_path).click()
 
 
-def send_file_from_disk(driver_loc: WebDriver):
+def send_file_from_disk(driver_loc: WebDriver, video_path):
     button = driver_loc.find_element(By.XPATH, "//input[@type='file']")
-    file_path = "data/result.mp4"
-    file_path = os.path.abspath(file_path)
+    file_path = os.path.abspath(video_path)
     button.send_keys(file_path)
     time.sleep(10)
 
@@ -233,6 +232,7 @@ def click_todays_date(driver_loc: WebDriver):
     x_path = "/html/body/ytcp-date-picker/tp-yt-paper-dialog/ytcp-scrollable-calendar/div/tp-yt-iron-list/div/div[3]/div[4]/span[5]"  # 18-07-24 // 5 elem in row
     x_path = "/html/body/ytcp-date-picker/tp-yt-paper-dialog/ytcp-scrollable-calendar/div/tp-yt-iron-list/div/div[3]/div[3]/span[2]"  # 05-08-24
     x_path = "/html/body/ytcp-date-picker/tp-yt-paper-dialog/ytcp-scrollable-calendar/div/tp-yt-iron-list/div/div[3]/div[4]/span[1]"  # 11-08-24
+    x_path = "/html/body/ytcp-date-picker/tp-yt-paper-dialog/ytcp-scrollable-calendar/div/tp-yt-iron-list/div/div[3]/div[5]/span[7]"  # 24.08-24
     driver_loc.find_element(By.XPATH, x_path).click()
     time.sleep(1)
 
@@ -397,16 +397,13 @@ def parse_text_with_polish_special_char(in_str: str):
     return unidecode(in_str)
 
 
-def send_video(driver_loc: WebDriver):
-    model = load_obj()
-
+def send_video(driver_loc: WebDriver, model: NewsModel):
     go_to_youtube_studio(driver_loc)
     click_create_button(driver_loc)
     click_send_file(driver_loc)
-    send_file_from_disk(driver_loc)
+    send_file_from_disk(driver_loc, model.video_path)
     insert_video_title(driver_loc, parse_text_with_polish_special_char(model.title_text[:95].replace('"','')))
-    insert_video_description(driver_loc,
-                             parse_text_with_polish_special_char(model.description_text).replace('"',''))  # TODO:  click playlist !!!
+    insert_video_description(driver_loc, parse_text_with_polish_special_char(model.description_text).replace('"',''))  # TODO:  click playlist !!!
     select_not_for_kids(driver_loc)
     click_show_more(driver_loc)
     # # click_my_video_contain_paied_promotion(driver_loc)
@@ -440,17 +437,20 @@ def send_video(driver_loc: WebDriver):
     # return href
     return "----"
 
+
 def main():
     driver = get_init_driver()
     accept_cookies_youtube(driver)
     login(driver)
-    href = send_video(driver)
+    model_list = load_obj_list()
 
-    model = load_obj()
-    model.youtube_url = href
-    save_obj(model)
+    for model in model_list:
+        href = send_video(driver, model)
+        model.youtube_url = href
+        save_obj(model)
 
     driver.close()
+
 
 if __name__ == "__main__":
     start_time = time.time()

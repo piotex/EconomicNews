@@ -18,6 +18,7 @@ class NewsModel:
     tags_text: str = ""
     title_text: str = ""
 
+    video_path: str = ""
     youtube_url: str = ""
 
 
