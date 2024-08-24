@@ -32,7 +32,9 @@ async def wrapper_edge_tts_generate_to_file(elem: NewsModel, file_path: str):
     text_list = [a.replace("\n",'') for a in text_list if a != ""]
 
     for i, text in enumerate(text_list):
-        await edge_tts_generate_to_file(text, f"{file_path}/{i}_{unidecode(text.replace(' ','_'))[:15]}",voice_models[i%len(voice_models)])
+        file_name = "audio_file_name" # unidecode(text.replace(' ','_').replace('"','').replace("'",'').replace('"',''))[:15]
+        path = f"{file_path}/{i}_{file_name}"
+        await edge_tts_generate_to_file(text, path, voice_models[i % len(voice_models)])
 
 
 def text_to_speech(elem: NewsModel, file_path: str):
