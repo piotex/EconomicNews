@@ -21,11 +21,22 @@ def find_not_processed_news(news_model_list: list[NewsModel]) -> list[NewsModel]
 
 
 def filter_news_by_comments(news_model_list: list[NewsModel]) -> list[NewsModel]:
+    news_for_publication = 6
     min_comments_count = 3
     news_model_list = sort_obj_list_by_comments(news_model_list)
     if news_model_list[0].comments_count < min_comments_count:
         raise Exception("=== Boring News ===")
-    return news_model_list
+
+    unique_news = []
+    unique_news_dict = {}
+    for news in news_model_list:
+        if news.url not in unique_news_dict:
+            unique_news.append(news)
+            unique_news_dict[news.url] = news
+        if len(unique_news) >= news_for_publication:
+            return unique_news
+
+    return unique_news
 
 
 def main():
@@ -34,8 +45,6 @@ def main():
     # save_obj(news)
     main_list_of_obj = sort_obj_list_by_comments(main_list_of_obj)
     main_list_of_obj = filter_news_by_comments(main_list_of_obj)
-    main_list_of_obj = main_list_of_obj[0:6]
-    raise Exception("Newsy sie powielają! - unique na url")
     save_obj_list(main_list_of_obj)
 
 

@@ -48,6 +48,7 @@ def insert_email(driver_loc: WebDriver):
         lines = f.readlines()
     usr = lines[0] if "\n" in lines[0] else lines[0] + "\n"
     x_path = "/html/body/div/div/main/section/div[2]/div[1]/input"  # email input
+    x_path = "/html/body/div/main/section/div[2]/div[1]/input"
     wait_for_element(driver_loc, x_path, 10)
     driver_loc.find_element(by=By.XPATH, value=x_path).send_keys(usr)
     time.sleep(5)
@@ -95,6 +96,7 @@ def get_all_parsed_text(driver_loc: WebDriver):
     old_text = ".."
     while True:
         x_path = f"{get_x_start(driver_loc)}/div[1]/div[1]/div/div/div/div/div[3]/div/div/div[2]/div/div[1]/div/div/div"
+        x_path = f"{get_x_start(driver_loc)}/div[1]/div[1]/div/div/div/div/article[2]/div/div/div[2]/div/div[1]/div/div/div"
         wait_for_element(driver_loc, x_path, 120)
         new_text = driver_loc.find_element(By.XPATH, x_path).get_attribute("innerText")
         if len(new_text) > len(old_text):
@@ -105,6 +107,7 @@ def get_all_description_text(driver_loc: WebDriver):
     old_text = ".."
     while True:
         x_path = f"{get_x_start(driver_loc)}/div[1]/div[1]/div/div/div/div/div[5]/div/div/div[2]/div/div[1]/div/div/div"
+        x_path = f"{get_x_start(driver_loc)}/div[1]/div[1]/div/div/div/div/article[4]/div/div/div[2]/div/div[1]/div/div/div"
         wait_for_element(driver_loc, x_path, 120)
         new_text = driver_loc.find_element(By.XPATH, x_path).get_attribute("innerText")
         if len(new_text) > len(old_text):
@@ -115,6 +118,7 @@ def get_all_tags_text(driver_loc: WebDriver):
     old_text = ".."
     while True:
         x_path = f"{get_x_start(driver_loc)}/div[1]/div[1]/div/div/div/div/div[7]/div/div/div[2]/div/div[1]/div/div/div"
+        x_path = f"{get_x_start(driver_loc)}/div[1]/div[1]/div/div/div/div/article[6]/div/div/div[2]/div/div[1]/div/div/div"
         wait_for_element(driver_loc, x_path, 120)
         new_text = driver_loc.find_element(By.XPATH, x_path).get_attribute("innerText")
         if len(new_text) > len(old_text):
@@ -125,6 +129,7 @@ def get_all_title_text(driver_loc: WebDriver):
     old_text = ".."
     while True:
         x_path = f"{get_x_start(driver_loc)}/div[1]/div[1]/div/div/div/div/div[9]/div/div/div[2]/div/div[1]/div/div/div"
+        x_path = f"{get_x_start(driver_loc)}/div[1]/div[1]/div/div/div/div/article[8]/div/div/div[2]/div/div[1]/div/div/div"
         wait_for_element(driver_loc, x_path, 120)
         new_text = driver_loc.find_element(By.XPATH, x_path).get_attribute("innerText")
         if len(new_text) > len(old_text):
@@ -184,28 +189,28 @@ def main():
     a = input()
     res = []
     for i, model in enumerate(model_list):
-        parse_text = parse_text_with_polish_special_char(parse_text+model.article_text[:3000])
         go_to_home_page(driver)
         time.sleep(2)
 
-        set_input_text_and_go(driver, parse_text)
+        parse_text_2 = parse_text_with_polish_special_char(parse_text+model.article_text[:3000])
+        set_input_text_and_go(driver, parse_text_2)
         time.sleep(15)
         model.parsed_text = get_all_parsed_text(driver)
         model.parsed_text = limit_words(model.parsed_text)
-        save_obj(model)
+        save_obj_list(res)
         time.sleep(1)
 
         set_input_text_and_go(driver, description_text)
         time.sleep(5)
         model.description_text = get_all_description_text(driver)
-        save_obj(model)
+        save_obj_list(res)
         time.sleep(1)
 
         set_input_text_and_go(driver, tags_text)
         time.sleep(5)
         model.tags_text = get_all_tags_text(driver)
         model.tags_text = __parse_tags(model.tags_text)
-        save_obj(model)
+        save_obj_list(res)
         time.sleep(1)
 
         set_input_text_and_go(driver, title_text)

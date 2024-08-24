@@ -15,41 +15,38 @@ bankier_urls = []
 
 
 def init_folders():
+    folders_to_rm = [
+        'data/audios',
+        'data/images/screenshots',
+        'data/videos/for_publication',
+    ]
+    for folder in folders_to_rm:
+        if os.path.exists(folder):
+            shutil.rmtree(folder)
+
     folders = [
         'data',
         'data/urls',
         'data/audios',
         'data/videos',
+        'data/videos/for_publication',
         'data/videos/background_videos',
         'data/images',
         'data/images/animated_bird',
         'data/images/screenshots',
     ]
-    # if os.path.exists(folders[2]):
-    #     shutil.rmtree(folders[2])
-    # if os.path.exists(folders[3]):
-    #     shutil.rmtree(folders[3])
-    # if os.path.exists(folders[7]):
-    #     shutil.rmtree(folders[7])
-
     for folder in folders:
-        if os.path.exists(folder):
-            # shutil.rmtree(folder)
-            pass
-        else:
+        if not os.path.exists(folder):
             os.makedirs(folder)
 
     for i in range(0,6):
         folders = [
             f'data/images/screenshots/{i}',
             f'data/audios/{i}',
-            f'data/videos/{i}',
+            f'data/videos/for_publication/{i}',
         ]
         for folder in folders:
-            if os.path.exists(folder):
-                # shutil.rmtree(folder)
-                pass
-            else:
+            if not os.path.exists(folder):
                 os.makedirs(folder)
 
 
