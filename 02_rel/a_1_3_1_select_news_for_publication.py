@@ -35,6 +35,7 @@ def main():
     main_list_of_obj = sort_obj_list_by_comments(main_list_of_obj)
     main_list_of_obj = filter_news_by_comments(main_list_of_obj)
     main_list_of_obj = main_list_of_obj[0:6]
+    raise Exception("Newsy sie powielają! - unique na url")
     save_obj_list(main_list_of_obj)
 
 

@@ -24,27 +24,27 @@ async def edge_tts_generate_to_file(text: str, path:str, voice_model:str) -> Non
         file.write(sub_maker.generate_subs())
 
 
-async def wrapper_edge_tts_generate_to_file(elem: NewsModel):
+async def wrapper_edge_tts_generate_to_file(elem: NewsModel, file_path: str):
     voice_models = ["pl-PL-MarekNeural","pl-PL-ZofiaNeural"]
     text_list = elem.parsed_text.split(".")
     text_list = [a.replace("\n",'') for a in text_list if a != ""]
 
     for i, text in enumerate(text_list):
-        await edge_tts_generate_to_file(text, f"data/audios/{i}_{unidecode(text.replace(' ','_'))[:15]}",voice_models[i%len(voice_models)])
+        await edge_tts_generate_to_file(text, f"{file_path}/{i}_{unidecode(text.replace(' ','_'))[:15]}",voice_models[i%len(voice_models)])
 
 
-def text_to_speech(elem: NewsModel):
+def text_to_speech(elem: NewsModel, file_path: str):
     try:
-        asyncio.run(wrapper_edge_tts_generate_to_file(elem))
+        asyncio.run(wrapper_edge_tts_generate_to_file(elem, file_path))
     except Exception as exxx:
         print(f"ERROR: {exxx}")
         pass
 
 
 def main():
-    m_obj = load_obj()
-    text_to_speech(m_obj)
-    save_obj(m_obj)
+    model_list = load_obj_list()
+    for i, model in enumerate(model_list):
+        text_to_speech(model, f"data/audios/{i}")
 
 
 if __name__ == "__main__":

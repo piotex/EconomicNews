@@ -1,10 +1,11 @@
-import random
-import cv2 as cv
-from moviepy.editor import *
-from mutagen.mp3 import MP3
 import os
 import time
+import random
+import cv2 as cv
 from PIL import Image
+from news_model import *
+from mutagen.mp3 import MP3
+from moviepy.editor import *
 
 frames = 25
 width = 1080
@@ -216,18 +217,21 @@ def generate_audio_clip():
 
 
 def main():
-    background_clip = generate_background_clips()
-    subtitles_clip = generate_subtitles_clip()
-    bird_clip = generate_bird_clip()
-    screenshot_clip = generate_screenshot_clip()
-    audio_clip = generate_audio_clip()
+    model_list = load_obj_list()
+    for i, model in enumerate(model_list):
+        raise NotImplemented() # ... - napisać support dla każdego elementu w liście
+        background_clip = generate_background_clips()
+        subtitles_clip = generate_subtitles_clip()
+        bird_clip = generate_bird_clip()
+        screenshot_clip = generate_screenshot_clip()
+        audio_clip = generate_audio_clip()
 
-    all_clips = background_clip + screenshot_clip + bird_clip + subtitles_clip
-    video = CompositeVideoClip(all_clips, size=(width, height))
-    video.audio = audio_clip
+        all_clips = background_clip + screenshot_clip + bird_clip + subtitles_clip
+        video = CompositeVideoClip(all_clips, size=(width, height))
+        video.audio = audio_clip
 
-    # video.write_videofile('02_rel/data/result.mp4')
-    video.write_videofile('data/result.mp4')
+        # video.write_videofile('02_rel/data/result.mp4')
+        video.write_videofile('data/result.mp4')
 
 
 if __name__ == "__main__":

@@ -95,7 +95,7 @@ def find_xpath_idx(driver: WebDriver):
     raise Exception("=== Can't find idx ===")
 
 
-def make_screenshots(driver: WebDriver):
+def make_screenshots(driver: WebDriver, screenshot_path: str):
     css_updates = "'padding: 15px;font-size: 30px;'"
     idx = find_xpath_idx(driver)
 
@@ -111,25 +111,26 @@ def make_screenshots(driver: WebDriver):
         # f"/html/body/div[1]/div[{idx}]/main/article/section",
     ]
     for i, x_path in enumerate(x_paths):
-        screenshot_path = f"data/images/screenshots/screenshot-{i + 1}.png"
+        in_screenshot_path = f"{screenshot_path}/screenshot-{i + 1}.png"
         try:
             element = driver.find_element(By.XPATH, x_path)
             driver.execute_script(f"arguments[0].setAttribute('style', {css_updates})", element)
-            driver.find_element(By.XPATH, x_path).screenshot(screenshot_path)
+            driver.find_element(By.XPATH, x_path).screenshot(in_screenshot_path)
         except:
             pass
 
 
 def main():
-    model = load_obj()
+    model_list = load_obj_list()
     driver = get_init_driver()
-    driver.get(model.url)
-    time.sleep(1)
-    close_cookies(driver)
-    close_break_message(driver)
-    close_advertisement(driver)
-    open_news_full_width(driver)
-    make_screenshots(driver)
+    for i, model in enumerate(model_list):
+        driver.get(model.url)
+        time.sleep(1)
+        close_cookies(driver)
+        close_break_message(driver)
+        close_advertisement(driver)
+        open_news_full_width(driver)
+        make_screenshots(driver, f"data/images/screenshots/{i}")
 
 
 if __name__ == "__main__":

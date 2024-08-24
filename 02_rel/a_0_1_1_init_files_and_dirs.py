@@ -25,10 +25,12 @@ def init_folders():
         'data/images/animated_bird',
         'data/images/screenshots',
     ]
-    if os.path.exists(folders[2]):
-        shutil.rmtree(folders[2])
-    if os.path.exists(folders[7]):
-        shutil.rmtree(folders[7])
+    # if os.path.exists(folders[2]):
+    #     shutil.rmtree(folders[2])
+    # if os.path.exists(folders[3]):
+    #     shutil.rmtree(folders[3])
+    # if os.path.exists(folders[7]):
+    #     shutil.rmtree(folders[7])
 
     for folder in folders:
         if os.path.exists(folder):
@@ -36,6 +38,19 @@ def init_folders():
             pass
         else:
             os.makedirs(folder)
+
+    for i in range(0,6):
+        folders = [
+            f'data/images/screenshots/{i}',
+            f'data/audios/{i}',
+            f'data/videos/{i}',
+        ]
+        for folder in folders:
+            if os.path.exists(folder):
+                # shutil.rmtree(folder)
+                pass
+            else:
+                os.makedirs(folder)
 
 
 def init_files():

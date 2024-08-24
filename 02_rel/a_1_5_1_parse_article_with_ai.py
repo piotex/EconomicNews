@@ -9,7 +9,6 @@ import time
 from selenium.webdriver.chrome.options import Options
 
 
-
 def wait_for_element(driver: WebDriver, x_path: str, max_wait_time_s: float):
     max_wait_time_s *= 100
     for time_s in range(1, int(max_wait_time_s), 1):
@@ -169,9 +168,8 @@ def limit_words(in_text: str):
 
 
 def main():
-    model = load_obj()
+    model_list = load_obj_list()
     [parse_text, description_text, tags_text, title_text] = get_chatgpt_input()
-    parse_text = parse_text_with_polish_special_char(parse_text+model.article_text[:3000])
     description_text = parse_text_with_polish_special_char(description_text)
     tags_text = parse_text_with_polish_special_char(tags_text)
     title_text = parse_text_with_polish_special_char(title_text)
@@ -184,32 +182,39 @@ def main():
 
     print("=== Waiting to solve captcha... ===")
     a = input()
+    res = []
+    for i, model in enumerate(model_list):
+        parse_text = parse_text_with_polish_special_char(parse_text+model.article_text[:3000])
+        go_to_home_page(driver)
+        time.sleep(2)
 
-    set_input_text_and_go(driver, parse_text)
-    time.sleep(15)
-    model.parsed_text = get_all_parsed_text(driver)
-    model.parsed_text = limit_words(model.parsed_text)
-    save_obj(model)
-    time.sleep(1)
+        set_input_text_and_go(driver, parse_text)
+        time.sleep(15)
+        model.parsed_text = get_all_parsed_text(driver)
+        model.parsed_text = limit_words(model.parsed_text)
+        save_obj(model)
+        time.sleep(1)
 
-    set_input_text_and_go(driver, description_text)
-    time.sleep(5)
-    model.description_text = get_all_description_text(driver)
-    save_obj(model)
-    time.sleep(1)
+        set_input_text_and_go(driver, description_text)
+        time.sleep(5)
+        model.description_text = get_all_description_text(driver)
+        save_obj(model)
+        time.sleep(1)
 
-    set_input_text_and_go(driver, tags_text)
-    time.sleep(5)
-    model.tags_text = get_all_tags_text(driver)
-    model.tags_text = __parse_tags(model.tags_text)
-    save_obj(model)
-    time.sleep(1)
+        set_input_text_and_go(driver, tags_text)
+        time.sleep(5)
+        model.tags_text = get_all_tags_text(driver)
+        model.tags_text = __parse_tags(model.tags_text)
+        save_obj(model)
+        time.sleep(1)
 
-    set_input_text_and_go(driver, title_text)
-    time.sleep(3)
-    model.title_text = get_all_title_text(driver)
-    save_obj(model)
+        set_input_text_and_go(driver, title_text)
+        time.sleep(3)
+        model.title_text = get_all_title_text(driver)
+        res.append(model)
+        save_obj_list(res)
 
+    save_obj_list(res)
     driver.close()
 
 

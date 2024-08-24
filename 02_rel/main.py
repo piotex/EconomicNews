@@ -37,7 +37,7 @@ if __name__ == "__main__":
     # start_time = time.time()
     # a_1_3_1_select_news_for_publication.main()
     # print(f"a_1_3_1_select_news_for_publication time: {get_time(start_time)}")
-
+    #
     start_time = time.time()
     a_1_4_1_get_news_screenshots.main()
     print(f"a_1_4_1_get_news_screenshots time: {get_time(start_time)}")
